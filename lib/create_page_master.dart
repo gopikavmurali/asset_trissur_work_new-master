@@ -30,6 +30,8 @@ class _create_pageState extends State<create_page> {
   final descriptionTextController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController assetController = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -40,7 +42,7 @@ class _create_pageState extends State<create_page> {
           leading: GestureDetector(
               onTap: (){
                 Navigator.pop(context);
-                //Navigator.push(context, MaterialPageRoute(builder: (context)=>admin_user(user_name: '',)));
+
               },
               child: const Icon(Icons.arrow_back_outlined,color: Colors.black,)),
           backgroundColor: Colors.white,

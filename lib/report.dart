@@ -16,8 +16,7 @@ class _report_pageState extends State<report_page> {
   //late final String idController = "jgjgjgnhc";
   @override
   Widget build(BuildContext context) {
-    var count;
-    var nameController;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,

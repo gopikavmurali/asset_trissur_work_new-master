@@ -5,13 +5,15 @@ import 'package:asset_trissur_work_new/constants.dart';
 import 'package:asset_trissur_work_new/login_page.dart';
 import 'package:asset_trissur_work_new/report.dart';
 import 'package:asset_trissur_work_new/complaints.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'descriptiion_page.dart';
 import 'create_page_master.dart';
-
+import 'item_request.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class user_home extends StatefulWidget {
@@ -31,10 +33,20 @@ class _user_homeState extends State<user_home> {
   TextEditingController assetController = TextEditingController();
 
 
+  void addcomplaints() {
+    FirebaseFirestore.instance.collection("usercomplaints").add({
+      "values": complaintController.text,
+      "date": Timestamp.now(),
+    });
+
+  }
+ // void addcomplaints() async{}
+ //  await  FirebaseFirestore.instnce.collection("complaints").add({
+ //    "complaint": complaintController.text
+ //   });
 
   @override
   Widget build(BuildContext context) {
-    var text;
     return WillPopScope(
 
       onWillPop: () async => false,
@@ -60,9 +72,6 @@ class _user_homeState extends State<user_home> {
                 child: Icon(Icons.logout_outlined,color: Colors.black,)),
             SizedBox(width: 10,),
 
-            //Icons.notification_important,
-
-            //Center(child: Text("Logout  ",style: TextStyle(color: Color(0xFF468c90),fontSize: 20)))
           ],
 
 
@@ -71,7 +80,8 @@ class _user_homeState extends State<user_home> {
           child: Column(
             children: [
               Form
-                (child: Container(
+                (
+                  child: Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
@@ -80,157 +90,167 @@ class _user_homeState extends State<user_home> {
                     end: Alignment.bottomRight,
                     colors:  [Colors.white,Colors.white,],),
                   borderRadius:BorderRadius.circular(10),color: Colors.white,),
-                child: Stack(
-                  children: [
+                child:
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Opacity(
                           opacity: 0.7,
-                          child: Container(
-                            height: MediaQuery.of(context).size.height,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(color: Colors.white),
-                            //child: Text(qrCode)
+                          child: Column(
+                            children: [
+                              //scan qr code
+                              Padding(
+                                padding: const EdgeInsets.only(left:30,bottom:15,right: 30,top: 30),
+                                child:
+                                GestureDetector(
+                                  onTap: scanQRCode,
+
+                                  child: Container(
+                                      height: 40,
+                                      width: MediaQuery.of(context).size.width*2,
+                                      decoration: BoxDecoration(
+                                          gradient: const LinearGradient(
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                            colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
+
+                                          borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+
+
+                                      child: Center(child: Text("Scan QR Code",style:buildTextStyle()))
+                                  ),
+                                ),
+
+                              ),
+                              //or
+                              Padding(
+                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                child: Text("OR",style: TextStyle(color: Colors.black),),
+                              ),
+                              //asset id
+                              Padding(
+                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                child:
+                                Container(
+                                  height: 40,
+                                  width: MediaQuery.of(context).size.width*2,
+                                  decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                          colors:[ Colors.white,Colors.white]
+
+                                        //colors: [Color(0xFF64C9CF), Color(0xFF468c90),],
+                                      ),
+
+                                      borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+
+
+                                  child: TextField(
+                                    controller: nameController,
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: "Asset Id",
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              //scanned result
+                              Padding(
+                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                child:
+                                Container(
+                                    height: 40,
+                                    width: MediaQuery.of(context).size.width*2,
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(05),
+                                        border: Border.all(color: Colors.black26,)
+                                    ),
+
+
+                                    child: Center(child: Text(qrCode))
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                child:
+                                GestureDetector(
+                                  onTap: (){
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context)=> item_req()));
+                                  },
+                                  child: Container(
+                                      height: 40,
+                                      width: MediaQuery.of(context).size.width*2,
+                                      decoration: BoxDecoration(
+                                        gradient: const LinearGradient(
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                          colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
+
+                                        borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff),),
+
+
+                                      child: Center(child: Text(" Item Request",style:buildTextStyle()))
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 40,),
+                              //complaint caption
+                              Padding(
+                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                child: Text("Enter your Complaints",style: headingText(),),
+                              ),
+                              //enter your complaints
+                              Padding(
+                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                child: Container(
+                                  height: 250,
+                                  width: 320,
+                                  //decoration: BoxDecoration(border: Border.all(color: Colors.black26)),
+                                  child: TextField(
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      //labelText: "Update Notes"
+                                    ),
+                                    maxLines: 50,
+                                    controller: complaintController,
+                                  ),
+                                ),
+                              ),
+
+                              //update button
+                              Padding(
+                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                child:
+                                GestureDetector(
+                                  onTap: (){
+                                    addcomplaints();
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context)=>
+                                            complaints(
+                                              descriptionTextController: complaintController.text,
+                                          )));
+                                  },
+                                  child: Container(
+                                      height: 40,
+                                      width: MediaQuery.of(context).size.width*2,
+                                      decoration: BoxDecoration(
+                                        gradient: const LinearGradient(
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                          colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
+
+                                        borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff),),
+
+
+                                      child: Center(child: Text("Send",style:buildTextStyle()))
+                                  ),
+                                ),
+                              ),
+                            ],
                           )
                       ),
                     ),
-
-
-
-
-                  //scan qr code
-                    Padding(
-                      padding: const EdgeInsets.only(top:20.0,left: 50,right: 50),
-                      child:
-                      GestureDetector(
-                        onTap: scanQRCode,
-
-                        child: Container(
-                            height: 40,
-                            width: MediaQuery.of(context).size.width*2,
-                            decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
-
-                                borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
-
-
-                            child: Center(child: Text("Scan QR Code",style:buildTextStyle()))
-                        ),
-                      ),
-
-                    ),
-                    //or
-                    Padding(
-                      padding: EdgeInsets.only(top:70.0,left: 200),
-                      child: Text("OR",style: TextStyle(color: Colors.black),),
-                    ),
-                    //asset id
-                    Padding(
-                      padding: const EdgeInsets.only(top:100.0,left: 50,right: 50),
-                      child:
-                      Container(
-                        height: 40,
-                        width: MediaQuery.of(context).size.width*2,
-                        decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors:[ Colors.white,Colors.white]
-
-                              //colors: [Color(0xFF64C9CF), Color(0xFF468c90),],
-                            ),
-
-                            borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
-
-
-                        child: TextField(
-                          controller: nameController,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: "Asset Id",
-                          ),
-                        ),
-                      ),
-                    ),
-                    //scanned result
-                    Padding(
-                      padding: const EdgeInsets.only(top:160.0,left: 50,right: 50),
-                      child:
-                      Container(
-                          height: 40,
-                          width: MediaQuery.of(context).size.width*2,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(05),
-                              border: Border.all(color: Colors.black26,)
-                          ),
-
-
-                          child: Center(child: Text(qrCode))
-                      ),
-                    ),
-
-                    //move to outside
-                    // ->
-                    //back to stock
-                    //history
-                    //create
-                    //update notes box
-                    Padding(
-                      padding: const EdgeInsets.only(top:320,left: 50,right: 50),
-                      child: Container(
-                        height: 250,
-                        width: 320,
-                        //decoration: BoxDecoration(border: Border.all(color: Colors.black26)),
-                        child: TextField(
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            //labelText: "Update Notes"
-                          ),
-                          maxLines: 50,
-                          controller: complaintController,
-                        ),
-                      ),
-                    ),
-                    //complaint caption
-                    Padding(
-                      padding: const EdgeInsets.only(top:280.0,left:100),
-                      child: Text("Enter your Complaints",style: headingText(),),
-                    ),
-                    //update button
-                    Padding(
-                      padding: const EdgeInsets.only(top:600.0,left: 50,right: 50),
-                      child:
-                      GestureDetector(
-                        onTap: (){
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context)=> complaints(descriptionTextController: complaintController.text,
-                                descriptionController: '',)));
-                        },
-                        child: Container(
-                            height: 40,
-                            width: MediaQuery.of(context).size.width*2,
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
-
-                              borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff),),
-
-
-                            child: Center(child: Text("Send",style:buildTextStyle()))
-                        ),
-                      ),
-                    ),
-
-
-
-
-                  ],
-                ),
-              ) )],
+                  ) )],
           ),
         ),
       ),

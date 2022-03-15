@@ -25,12 +25,11 @@ class _create_page_headState extends State<create_page_head> {
               onTap: (){
                 Navigator.pop(context);
 
-                //Navigator.push(context, MaterialPageRoute(builder: (context)=>admin_user(user_name: '',)));
               },
               child: const Icon(Icons.arrow_back_outlined,color: Colors.black,)),
           backgroundColor: Colors.white,
           elevation: 0,
-          //leading: const Icon(Icons.person,color: Colors.black,),
+
           title: Text("Create Page",style: TextStyle(color: Colors.black,fontSize: 25),),
           actions: [
             GestureDetector(

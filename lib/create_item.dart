@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import'package:flutter/material.dart';
 import 'package:asset_trissur_work_new/constants.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,6 +18,15 @@ class _create_itemState extends State<create_item> {
   var item ;
   int index =0;
 
+   void cleartext(){
+     itemController.clear();
+   }
+
+  void additem(){
+    FirebaseFirestore.instance.collection("items").add({
+      "values" : itemController.text,
+    });
+  }
 
 
   @override
@@ -111,6 +121,8 @@ class _create_itemState extends State<create_item> {
                     padding: const EdgeInsets.only(top:180.0,left: 120),
                     child: GestureDetector(
                       onTap: (){
+                        additem();
+                        cleartext();
                         setState(() {
                           item =itemController.text;
                           index++;
@@ -124,7 +136,6 @@ class _create_itemState extends State<create_item> {
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [Color(0xFF64C9CF),  Color(0xFF468c90),],),
-
                               borderRadius: BorderRadius.circular(5),color: Color(0xFF5663ff)),
                           child: Center(child: Text("Add",style:buildTextStyle()))
 

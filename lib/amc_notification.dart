@@ -1,8 +1,7 @@
-import 'package:asset_trissur_work_new/notification_model.dart';
+import 'package:asset_trissur_work_new/amc_notification_model.dart';
 import 'package:asset_trissur_work_new/pending_list.dart';
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flutter/material.dart';
-
 import 'constants.dart';
 import 'login_page.dart';
 
@@ -15,15 +14,10 @@ class amc_notify extends StatefulWidget {
 }
 
 class _amc_notifyState extends State<amc_notify> {
+
   late DateTime _selectedDate ;
   String selected = "Accept";
-  TextEditingController pendingController = TextEditingController();
-
-
-
-
-
-
+  //TextEditingController pendingController = TextEditingController();
   static List<String> product_id = [
     'product_id','product_id','product_id',
     'product_id',
@@ -53,7 +47,8 @@ class _amc_notifyState extends State<amc_notify> {
 
   ];
   bool isSelected = false;
-  final List<notify_model> notification_data= List.generate( amc_date.length, (index) => notify_model
+  final List<notify_model> notification_data= List.generate(
+      amc_date.length, (index) => notify_model
     (
       '${amc_date[index]}',false,
       '${pro_name[index]}',
@@ -100,7 +95,6 @@ class _amc_notifyState extends State<amc_notify> {
           return Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
-
             ),
             child: ListTile(
               leading: Text(notification_data[index].pro_id),
@@ -109,8 +103,6 @@ class _amc_notifyState extends State<amc_notify> {
                 child: Row(
                   children: [
                     Text(notification_data[index].pro_name),
-
-
                   ],
                 ),
               ),
@@ -124,15 +116,8 @@ class _amc_notifyState extends State<amc_notify> {
               ),
               trailing:  GestureDetector(
                 onTap: () {
-
                   setState(() {
                     notification_data[index].isSelected=true;
-                    // if (notification_data[index].isSelected) {
-                    //      notification_data[index].isSelected = false;
-                    //         } else{
-                    //     notification_data[index].isSelected = true;
-                    //                }
-                    //color = 'Completed';
                   });
                 },
 
@@ -150,7 +135,9 @@ class _amc_notifyState extends State<amc_notify> {
 
             ),
           );
-          }, separatorBuilder: (BuildContext context, int index) { return Divider(); },),
+          }, separatorBuilder: (BuildContext context, int index) {
+          return Divider();
+          },),
     );
 
   }

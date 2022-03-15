@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import'package:flutter/material.dart';
 import 'package:asset_trissur_work_new/constants.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +16,17 @@ class _asset_headState extends State<asset_head> {
 
   var asset_head;
   int index =0;
-  TextEditingController itemnameController = TextEditingController();
+  TextEditingController assetheadController = TextEditingController();
+
+   void addassethead(){
+     FirebaseFirestore.instance.collection("assethead").add({
+       "values": assetheadController.text,
+     });
+   }
+
+   void cleartext(){
+     assetheadController.clear();
+   }
 
 
 
@@ -41,19 +52,7 @@ class _asset_headState extends State<asset_head> {
               },
               child: Icon(Icons.logout_outlined,color: Colors.black,)),
           SizedBox(width: 10,),
-          // PopupMenuButton(
-          //     icon: const Icon(Icons.menu_outlined,color: Colors.black,),
-          //     itemBuilder: (context) => [
-          //
-          //       PopupMenuItem(child:
-          //       FlatButton(
-          //           onPressed: () {
-          //             Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
-          //           },
-          //           child: Text("Logout",style: dropStyle())),
-          //         value: 2,)
-          //
-          //     ])
+
         ],
 
 
@@ -115,7 +114,7 @@ class _asset_headState extends State<asset_head> {
 
 
                       child: TextField(
-                        controller: itemnameController,
+                        controller: assetheadController,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                          // labelText: 'Item Name',
@@ -128,8 +127,10 @@ class _asset_headState extends State<asset_head> {
                     padding: const EdgeInsets.only(top:180.0,left: 120),
                     child: GestureDetector(
                       onTap: (){
+                        addassethead();
+                        cleartext();
                         setState(() {
-                          asset_head = itemnameController.text;
+                          asset_head = assetheadController.text;
                           index++;
                         });
                       },

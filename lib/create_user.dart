@@ -45,42 +45,9 @@ class _create_userState extends State<create_user> {
     });
   }
 
-
-
-  // void calculate(){
-  //   if(selectedSubject == "User")
-  //   {
-  //     showDialog(context: context, builder:(ctx) => const AlertDialog(
-  //       title: Text(" User Created Succesfully",style: TextStyle(color: Colors.black45),),
-  //       content: Text("Continue",
-  //         style: TextStyle(color: Colors.green,
-  //             fontWeight: FontWeight.w900,fontSize: 20),),
-  //       actions: [
-  //         // GestureDetector(
-  //         //     onTap: (){
-  //         //       Navigator.push(context, MaterialPageRoute(builder: (context)=>user_log(user_name: '',)));
-  //         //     },
-  //         //
-  //         //     child: const Text("Continue",style: TextStyle(color:Colors.green,fontSize: 25,
-  //         //         fontWeight: FontWeight.w600))),
-  //       ],
-  //
-  //     ) );
-  //   }
-  //   else{
-  //     showDialog(context: context, builder:(ctx) => const AlertDialog(
-  //       title: Text("User Creation Failed",style: TextStyle(color: Colors.red),),
-  //       content: Text("User Creation Failed",style: TextStyle(color: Colors.red,fontWeight: FontWeight.w900,fontSize: 20),),
-  //     )
-  //     );
-  //   }
-  // }
-
-
   void validate(){
-    if(formkey.currentState!.validate()&& selectedSubject=="User")
+    if(formkey.currentState!.validate()&& selectedSubject=="User"|| selectedSubject=="Asset head")
     {
-
       //Alert box code for showing status
       showDialog(context: context, builder:(ctx) => AlertDialog(
         title: Text("User Created Succesfully",style: TextStyle(color: Colors.black),),
@@ -89,22 +56,11 @@ class _create_userState extends State<create_user> {
             clearText();
             clearDrop();
             Navigator.pop(context);
-
           },
           child: const Text("Continue",
             style: TextStyle(color: Colors.green,
                 fontWeight: FontWeight.w900,fontSize: 20),),
         ),
-        // actions: [
-        //   GestureDetector(
-        //
-        //
-        //       child: Center(
-        //         child: Text("",style: TextStyle(color:Colors.green,fontSize: 25,
-        //             fontWeight: FontWeight.w600)),
-        //       )),
-        // ],
-
       )
       );
     }
@@ -130,8 +86,6 @@ class _create_userState extends State<create_user> {
               Form(
               key: formkey,
                   child: Container(
-
-
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
@@ -155,9 +109,6 @@ class _create_userState extends State<create_user> {
                           ),
 
                         ),
-
-                        //Logo of the app
-
                         Padding(
                           padding: const EdgeInsets.only(top:80.0,left: 8),
                           child:
@@ -166,14 +117,11 @@ class _create_userState extends State<create_user> {
                               width: 200,
                               child: Image.asset('images/room_logo.jpg',fit: BoxFit.cover,)),
                         ),
-
-
-                        const Padding(
+                        Padding(
                             padding: EdgeInsets.fromLTRB(30,145,40,10),
                             child: Text("Assets Management System",
                               style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600),)),
-
-                        const Padding(
+                        Padding(
                             padding: EdgeInsets.fromLTRB(30,180,40,10),
                             child: Text("Create User",
                               style: TextStyle(fontSize: 25,),)),
@@ -312,7 +260,6 @@ class _create_userState extends State<create_user> {
                             ),),
 
                         ),
-
                         Padding(
                           padding: const EdgeInsets.fromLTRB(30,530,40,10),
                           child: Container(
@@ -323,8 +270,6 @@ class _create_userState extends State<create_user> {
 
 
                               child: DropdownButton<String>(
-                                // isDense: true,
-                                // isExpanded: false,
 
                                 elevation: 10,
 
@@ -352,8 +297,6 @@ class _create_userState extends State<create_user> {
                             ),
                           ),
                         ),
-
-
                         Padding(
                           padding: const EdgeInsets.only(top: 700,left:0,right: 0),
                           child: Row(
@@ -403,63 +346,6 @@ class _create_userState extends State<create_user> {
                               ),],
                           ),
                         ),
-
-
-
-
-
-
-                        // Padding(
-                        //   padding: const EdgeInsets.fromLTRB(200,600,20,30),
-                        //   child: GestureDetector(
-                        //     onTap: validate,
-                        //     // onTap: calculate,(){
-                        //     //   Navigator.push(context, MaterialPageRoute(builder: (context)=>user_log()));
-                        //     // },
-                        //     child: Container(
-                        //       height: 40,
-                        //       width: 150,
-                        //       decoration: BoxDecoration(
-                        //           gradient: const LinearGradient(
-                        //             begin: Alignment.topLeft,
-                        //             end: Alignment.bottomRight,
-                        //             colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
-                        //
-                        //           borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
-                        //       child: const Center(
-                        //         child: Text('Create   →',style: TextStyle(color: Colors.white,fontSize: 20),),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        // Padding(
-                        //   padding: const EdgeInsets.fromLTRB(30,600,100,30),
-                        //   child: GestureDetector(
-                        //     onTap:  (){
-                        //       Navigator.pop(context);
-                        //     },
-                        //     child: Container(
-                        //       height: 50,
-                        //       width: 150,
-                        //       decoration: BoxDecoration(border: Border.all(color: Color(0xFF468c90)),
-                        //         // gradient: const LinearGradient(
-                        //         //   begin: Alignment.topLeft,
-                        //         //   end: Alignment.bottomRight,
-                        //         //   colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
-                        //
-                        //         borderRadius: BorderRadius.circular(10),
-                        //         //color: Color(0xFF5663ff)
-                        //       ),
-                        //       child: const Center(
-                        //         child: Text('Cancel',style: TextStyle(color:Color(0xFF468c90),fontSize: 20),),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        //
-
-
-
                       ],
                     ),
                   ))

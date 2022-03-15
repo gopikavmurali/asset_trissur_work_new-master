@@ -8,7 +8,6 @@ class updation extends StatefulWidget {
   final String descriptionController;
   const updation({Key? key,
     required this.descriptionController}) : super(key: key);
-  //const updattion({Key? key}) : super(key: key);
 
   @override
   _updationState createState() => _updationState();

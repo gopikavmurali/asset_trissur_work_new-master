@@ -1,3 +1,4 @@
+import 'package:asset_trissur_work_new/pending_model.dart';
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
@@ -14,7 +15,26 @@ class pending_list extends StatefulWidget {
 }
 
 class _pending_listState extends State<pending_list> {
-  final List<String> pending_list =["hello","ok bye","how r u"];
+  static List<String> item_name= [
+    'item name1','item name2',
+    'item name3','item name4','item name5',
+    'item name6','item name7','item name8','item name9','item name10'
+  ];
+
+  static List<String> department = [
+    'department 1','department 2',
+    'department 3','department 4','department 5',
+    'department 6','department 7','department 8','department 9','department 10'];
+
+  final List<pending_model> notification_data= List.generate(
+      item_name.length, (index) => pending_model(
+    false,
+    '${item_name[index]}',
+    '${department[index]}',
+
+  ));
+
+
   bool isSelected = false;
   String done = "Done";
   @override
@@ -49,12 +69,13 @@ class _pending_listState extends State<pending_list> {
                 return  ListTile(
                  leading: Padding(
                    padding: const EdgeInsets.only(top: 20.0),
-                  child: Text("Department"),
+                  child: Text(notification_data[index].department),
                   ),
                   title: Padding(
                    padding: const EdgeInsets.only(top: 30.0),
                   child:
-                  Text("Item Name",style: TextStyle(color: Colors.black),),
+                  Text(notification_data[index].item_name),
+                  //Text("Item Name",style: TextStyle(color: Colors.black),),
                     ),
                       subtitle: Padding(
                         padding: const EdgeInsets.only(top: 20.0),
@@ -63,8 +84,7 @@ class _pending_listState extends State<pending_list> {
                   trailing: GestureDetector(
                     onTap: (){
                       setState(() {
-                       // pending_list[index].active_color =true;
-                        done = "donee";
+                        notification_data[index].isSelected=true;
                       });
                     },
                     child: Container(
@@ -72,7 +92,8 @@ class _pending_listState extends State<pending_list> {
                       width: 70,
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(05),
                           //color: pending_list[index].active_color? Colors.black26:Colors.lightGreen
-                        color: done == 'Done' ? Colors.lightGreen: Colors.black26,
+                          color: notification_data[index].isSelected?
+                          Colors.black26:Colors.lightGreen
                       ),
                       child: Center(child: Text("Done",style: buildTextStyle(),)),
                     ),
@@ -82,22 +103,8 @@ class _pending_listState extends State<pending_list> {
                 separatorBuilder: (ctx,index){
               return Divider();
              },
-               itemCount:3,
+               itemCount:item_name.length,
     ),
     ));
   }
 }
-
-//
-// color: _allDevices[index].isSelected
-// ? Colors.green
-//     : Colors.blue,
-// onPressed: () {
-// setState(() {
-// if (_allDevices[index].isSelected) {
-// _allDevices[index].isSelected = false;
-// } else{
-// _allDevices[index].isSelected = true;
-// }
-// });
-// },

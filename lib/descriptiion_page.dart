@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:asset_trissur_work_new/constants.dart';
 import 'package:asset_trissur_work_new/report.dart';
 import 'package:asset_trissur_work_new/asset_master_home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 
+import 'image_picker_two.dart';
 import 'login_page.dart';
 
 class admin_log_2 extends StatefulWidget {
@@ -26,6 +28,9 @@ class _admin_log_2State extends State<admin_log_2> {
   String selecteddepatmnt = "Department";
   final List<String> itemname = ["Item Name", "Computer", "Laptop","Fan","Fridge","Chair","Table"];
   String selecteditem = "Item Name";
+  final List<String> asset_types = ["Asset Types", "Current Assets", "Fixed Assets","Tangible Assets","Intangible Assets",
+    "Operating Assets","Non Operating Assets"];
+  String selectedtype = "Asset Types";
   late int count =0;
   late int number=0;
 
@@ -129,13 +134,32 @@ class _admin_log_2State extends State<admin_log_2> {
     dateController.dispose();
     super.dispose();
   }
+  void add_description(){
+    FirebaseFirestore.instance.collection("description").add({
+      "asset_id": idController.text,
+      "amc_end_date":amc_end_Controller.text,
+      "amc_start_date":amc_start_Controller.text,
+      "brand_name": brandController.text,
+      "configuration":configController.text,
+      "date_of_issue":dateIssueController.text,
+      "price": valueController.text,
+      "purchase_no":orderController.text,
+      "serial_no":serialController.text,
+      "supplier_name":supController.text,
+      "warranty":dateController.text,
+
+    });
+  }
+  void cleartext(){
+    depController.clear();
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white12,
         elevation: 0,
-        title: Text("Asset User", style: buildheading()),
+        title: Text("Asset Master", style: buildheading()),
         leading: GestureDetector(
           onTap: (){
             Navigator.pop(context);
@@ -154,7 +178,6 @@ class _admin_log_2State extends State<admin_log_2> {
           SizedBox(width: 10,)
 
         ],
-
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -185,6 +208,62 @@ class _admin_log_2State extends State<admin_log_2> {
                   ),
                 ),
                 //item name dropdown
+                // ListTile(
+                //   minLeadingWidth : 01,
+                //   minVerticalPadding: 10,
+                //   horizontalTitleGap: 08,
+                //
+                //   title: Text("Item Name",style: buildFontlink(),),
+                //   leading: Icon(Icons.arrow_right),
+                //   trailing: Container(
+                //     width: 210,
+                //     height: 35,
+                //     decoration: BoxDecoration(
+                //         border: Border.all(color: Colors.black26),
+                //         borderRadius: BorderRadius.circular(5)),
+                //
+                //     child:  StreamBuilder(
+                //       stream: FirebaseFirestore.instance.collection("items").snapshots(),
+                //       builder: (context,AsyncSnapshot snapshot){
+                //         if(!snapshot.hasData)
+                //         {
+                //           return CircularProgressIndicator();
+                //         }
+                //         else
+                //           {
+                //
+                //             return
+                //               DropdownButtonHideUnderline(
+                //
+                //
+                //                 child: DropdownButton<String>(
+                //                   elevation: 10,
+                //                   iconEnabledColor: Colors.black,
+                //                   value: selecteditem,
+                //                   onChanged: (value){
+                //                     setState(() {
+                //                       selecteditem= value!;
+                //                     });
+                //                   },
+                //
+                //                   items: snapshot.data.documents.map((document){
+                //                     final dynamic data = document.data();
+                //                     return DropdownMenuItem<String>(
+                //                     value: data["id"].toString(),
+                //                      child: Text("names")
+                //                      //child: Text(document["values"].toString)
+                //                     );
+                //                 }
+                //                 ).toList(),
+                //               ));
+                //           }
+                //
+                //
+                //       }
+                //     ),
+                //
+                //   ),
+                // ),
                 ListTile(
                   minLeadingWidth : 01,
                   minVerticalPadding: 10,
@@ -278,7 +357,7 @@ class _admin_log_2State extends State<admin_log_2> {
 
                   ),
                 ),
-                //...............................
+                //AMC start date
                 ListTile(
                   minLeadingWidth : 01,
                   minVerticalPadding: 10,
@@ -312,6 +391,7 @@ class _admin_log_2State extends State<admin_log_2> {
                     ),
                   ),
                 ),
+                //AMC end date
                 ListTile(
                   minLeadingWidth : 01,
                   minVerticalPadding: 10,
@@ -444,48 +524,55 @@ class _admin_log_2State extends State<admin_log_2> {
                     ),
                   ),
                 ),
-                //warranty
+                //asset types
                 ListTile(
                   minLeadingWidth : 01,
                   minVerticalPadding: 10,
-                  horizontalTitleGap: 08,
+                  horizontalTitleGap: 06,
 
-                  title: Text("Warranty",style: buildFontlink(),),
-                  leading: const Icon(Icons.arrow_right),
+                  title: Text("Asset Types",style: buildFontlink(),),
+                  leading: Icon(Icons.arrow_right),
                   trailing: Container(
-                    width: 210,
+                    width: 212,
                     height: 35,
-                    child: TextField(
-                      style: const TextStyle(color: Colors.black),
-                      controller: warController,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Warranty',labelStyle: TextStyle(color: Colors.black26)
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black26),
+                        borderRadius: BorderRadius.circular(5)),
+
+                    child:  DropdownButtonHideUnderline(
+
+
+                      child: DropdownButton<String>(
+                        // isDense: true,
+                        // isExpanded: false,
+
+                        elevation: 10,
+
+                        iconEnabledColor: Colors.black,
+                        value: selectedtype,
+                        onChanged: (value){
+                          setState(() {
+                            selectedtype = value!;
+                          });
+                        },
+
+                        items: asset_types.map<DropdownMenuItem<String>>((value){
+
+                          return DropdownMenuItem(
+
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Text(    value),
+                            ),
+                            value: value,
+
+                          );
+                        }).toList(),
                       ),
                     ),
+
                   ),
                 ),
-                //floor /level
-                // ListTile(
-                //   minLeadingWidth : 01,
-                //   minVerticalPadding: 10,
-                //   horizontalTitleGap: 08,
-                //
-                //   title: Text("Floor/Level",style: buildFontlink(),),
-                //   leading: const Icon(Icons.arrow_right),
-                //   trailing: Container(
-                //     width: 210,
-                //     height: 35,
-                //     child: TextField(
-                //       style: const TextStyle(color: Colors.black),
-                //       controller: floorController,
-                //       decoration: const InputDecoration(
-                //           border: OutlineInputBorder(),
-                //           labelText: 'Floor',labelStyle: TextStyle(color: Colors.black26)
-                //       ),
-                //     ),
-                //   ),
-                // ),
                 //asset head
                 ListTile(
                   minLeadingWidth : 01,
@@ -532,14 +619,7 @@ class _admin_log_2State extends State<admin_log_2> {
                         }).toList(),
                       ),
                     ),
-                    // child: TextField(
-                    //   style: TextStyle(color: Colors.red),
-                    //   controller: idController,
-                    //   decoration: InputDecoration(
-                    //     border: OutlineInputBorder(),
-                    //     //labelText: 'User Name',
-                    //   ),
-                    // ),
+
                   ),
                 ),
                 //supplier name
@@ -563,8 +643,6 @@ class _admin_log_2State extends State<admin_log_2> {
                     ),
                   ),
                 ),
-                //type
-                
                 //price
                 ListTile(
                   minLeadingWidth : 01,
@@ -617,7 +695,6 @@ class _admin_log_2State extends State<admin_log_2> {
                     ),
                   ),
                 ),
-
                 //configuaration notes
                 ListTile(
                   minLeadingWidth : 01,
@@ -643,9 +720,60 @@ class _admin_log_2State extends State<admin_log_2> {
                     ),
                   ),
                 ),
+                //choose image
+                ListTile(
+                  minLeadingWidth : 01,
+                  minVerticalPadding: 10,
+                  horizontalTitleGap: 08,
+
+                  title: Text("Choose  Image",style: buildFontlink(),),
+                  leading: const Icon(Icons.arrow_right),
+                  trailing: Container(
+                    width: 210,
+                    height: 40,
+                    child:  InkWell(
+                      onTap:(){
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context)=>image_picking()));
+                      },
+                      child: Container(
+                        height: 40,
+                        width: MediaQuery.of(context).size.width/2.5,
+                        decoration: BoxDecoration(border: Border.all(color: Color(0xFF468c90)),
+                          // gradient: const LinearGradient(
+                          //   begin: Alignment.topLeft,
+                          //   end: Alignment.bottomRight,
+                          //   colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
+
+                          borderRadius: BorderRadius.circular(10),
+                          //color: Color(0xFF5663ff)
+                        ),
+                        child: Center(
+                          child: Text('Pick Image',style: TextStyle(color:Color(0xFF468c90),fontSize: 14),),
+                        ),
+                      ),
+                      // child: Container(
+                      //   height: 30,
+                      //   // width: MediaQuery.of(context).size.width/4,
+                      //   decoration: BoxDecoration(
+                      //       gradient: const LinearGradient(
+                      //         begin: Alignment.topLeft,
+                      //         end: Alignment.bottomRight,
+                      //         colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
+                      //
+                      //       borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+                      //   child:  Center(
+                      //     child: Text('Pick Image',style: buildTextStyle(),),
+                      //   ),
+                      // ),
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 20,),
                 GestureDetector(
-                  onTap: () => buildSetState(),
+                  onTap: (){
+                    add_description();
+                  },
                   child: Container(
                     height: 35,
                     width: 250,
@@ -667,7 +795,6 @@ class _admin_log_2State extends State<admin_log_2> {
                 ),
                 SizedBox(height: 20,),
 
-                const SizedBox(height: 20,),
 
 
 
@@ -692,11 +819,6 @@ class _admin_log_2State extends State<admin_log_2> {
 
   }
 
-  void buildSetState() => setState(() {
 
-    alert();
-
-
-  });
 
 }

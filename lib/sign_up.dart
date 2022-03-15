@@ -51,13 +51,7 @@ class _sign_upState extends State<sign_up> {
 
             },
             child: Text("Continue",style: TextStyle(color: Colors.green,fontWeight: FontWeight.w900,fontSize: 20),)),
-       // actions: [
-       //   GestureDetector(
-       //     onTap: (){
-       //       Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
-       //     },
-       //       child: Text("Login",style: TextStyle(color: Colors.green,fontWeight: FontWeight.w900,fontSize: 20),))
-       // ],
+
 
       )
       );
@@ -66,8 +60,7 @@ class _sign_upState extends State<sign_up> {
       showDialog(context: context, builder:(ctx) => const AlertDialog(
         title: Text("User Creation Failed",
           style: TextStyle(color: Colors.red,fontWeight: FontWeight.w900,fontSize: 20),),
-        // content: Text("User Creation Failed",
-        //   style: TextStyle(color: Colors.red,fontWeight: FontWeight.w900,fontSize: 20),),
+
       )
       );
     }
@@ -302,54 +295,6 @@ class _sign_upState extends State<sign_up> {
                           ),
                         ),
 
-                        // Padding(
-                        //   padding: const EdgeInsets.only(top: 700,left: 100,right: 40),
-                        //   child: GestureDetector(
-                        //     //onTap: validatethis,
-                        //     onTap: validate,// (){
-                        //        //Navigator.push(context, MaterialPageRoute(builder: (context)=>create_page()));
-                        //     // },
-                        //     child: Container(
-                        //       height: 40,
-                        //       width: 150,
-                        //       decoration: BoxDecoration(
-                        //           gradient: const LinearGradient(
-                        //             begin: Alignment.topLeft,
-                        //             end: Alignment.bottomRight,
-                        //             colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
-                        //
-                        //           borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
-                        //       child: const Center(
-                        //         child: Text('Create   →',style: TextStyle(color: Colors.white,fontSize: 25),),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        // Padding(
-                        //   padding: const EdgeInsets.only(top: 700,left: 30,right: 50),
-                        //   //padding: const EdgeInsets.fromLTRB(30,700,100,30),
-                        //   child: GestureDetector(
-                        //     onTap:  (){
-                        //     Navigator.pop(context);
-                        //      },
-                        //     child: Container(
-                        //       height: 40,
-                        //       width: 150,
-                        //       decoration: BoxDecoration(border: Border.all(color: Color(0xFF468c90)),
-                        //           // gradient: const LinearGradient(
-                        //           //   begin: Alignment.topLeft,
-                        //           //   end: Alignment.bottomRight,
-                        //           //   colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
-                        //
-                        //           borderRadius: BorderRadius.circular(10),
-                        //           //color: Color(0xFF5663ff)
-                        //       ),
-                        //       child: const Center(
-                        //         child: Text('Cancel',style: TextStyle(color:Color(0xFF468c90),fontSize: 20),),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
 
 
 

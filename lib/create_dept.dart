@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import'package:flutter/material.dart';
 import 'package:asset_trissur_work_new/constants.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +20,21 @@ class _create_depState extends State<create_dep> {
 
   TextEditingController depController = TextEditingController();
 
+  // void adddepartments() async{
+  //
+  //  await  FirebaseFirestore.instance.collection("departments").add({
+  //     "values": depController.text,
+  //   });
+
+
+  void adddepartments(){
+    FirebaseFirestore.instance.collection("departments").add({
+      "values": depController.text,
+    });
+  }
+  void cleartext(){
+    depController.clear();
+  }
 
 
   @override
@@ -30,7 +46,6 @@ class _create_depState extends State<create_dep> {
         leading: GestureDetector(
             onTap: (){
               Navigator.pop(context);
-
               //Navigator.push(context, MaterialPageRoute(builder: (context)=>admin_user(user_name: '',)));
             },
             child: const Icon(Icons.arrow_back_outlined,color: Colors.black,)),
@@ -43,18 +58,7 @@ class _create_depState extends State<create_dep> {
               },
               child: Icon(Icons.logout_outlined,color: Colors.black,)),
           SizedBox(width: 10,),
-          // PopupMenuButton(
-          //     icon: const Icon(Icons.menu_outlined,color: Colors.black,),
-          //     itemBuilder: (context) => [
-          //
-          //       PopupMenuItem(child:
-          //       FlatButton(
-          //           onPressed: () {
-          //             Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
-          //           },
-          //           child: Text("Logout",style: dropStyle())),
-          //         value: 2,)
-          //     ])
+
         ],
 
 
@@ -128,6 +132,8 @@ class _create_depState extends State<create_dep> {
                     padding: const EdgeInsets.only(top:180.0,left: 120),
                     child: GestureDetector(
                        onTap: (){
+                         adddepartments();
+                         cleartext();
                       setState(() {
                         department = depController.text;
                         index++;
@@ -153,19 +159,59 @@ class _create_depState extends State<create_dep> {
                     child: Text("List of Departments",style: buildFontlink(),),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 350.0,left: 40,right: 40),
-                    child: Container(
-                      height: 100,
-                      width: MediaQuery.of(context).size.width*2,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.black45)),
-                      child:
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0,left: 8),
-                        child: Text("$index. $department",style: headingText(),),
-                      ),
+                    padding: const EdgeInsets.only(top: 350,left: 20),
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("departments").snapshots(),
+                        builder: (BuildContext context,AsyncSnapshot<QuerySnapshot>snapshot)
+                        {
+                          if (!snapshot.hasData)
+                          {
+                            return CircularProgressIndicator();
+                          }
+                          else
+                          {
+
+                            return  Expanded(
+                              child: ListView(
+                                children: snapshot.data!.docs.map((document) {
+                                  final dynamic data = document.data();
+                                  return Dismissible(
+                                    key: Key(document.id),
+                                    onDismissed: (direction){
+                                      //onDelete(document.id);
+                                    },
+                                    background: Container(
+                                      color: Colors.red,
+                                      child: Icon(Icons.delete),
+                                    ),
+                                    child: ListTile(
+                                      title: Text(data["values"].toString()),
+                                      leading:Icon(Icons.arrow_right)
+                                    ),
+                                  );
+                                }).toList(),
+
+                              ),
+                            );
+                          }
+                        }
+
                     ),
                   )
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top: 350.0,left: 40,right: 40),
+                  //   child: Container(
+                  //     height: 100,
+                  //     width: MediaQuery.of(context).size.width*2,
+                  //     decoration: BoxDecoration(borderRadius: BorderRadius.circular(5),
+                  //         border: Border.all(color: Colors.black45)),
+                  //     child:
+                  //     Padding(
+                  //       padding: const EdgeInsets.only(top: 8.0,left: 8),
+                  //       child: Text("$index. $department",style: headingText(),),
+                  //     ),
+                  //   ),
+                  // )
 
                 ],
               ),
@@ -175,3 +221,5 @@ class _create_depState extends State<create_dep> {
     );
   }
 }
+
+

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import'package:flutter/material.dart';
 import 'package:asset_trissur_work_new/constants.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,7 +18,11 @@ class _create_serviceState extends State<create_service> {
   int index =0;
   var service_centre;
 
-
+  void addservicecenter(){
+    FirebaseFirestore.instance.collection("servicecenter").add({
+      "values" : serviceController.text,
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,6 +131,7 @@ class _create_serviceState extends State<create_service> {
                     padding: const EdgeInsets.only(top:180.0,left: 120),
                     child: GestureDetector(
                       onTap: (){
+                        addservicecenter();
                         setState(() {
                           service_centre = serviceController.text;
                           index++;

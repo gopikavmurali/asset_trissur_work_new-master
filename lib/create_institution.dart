@@ -41,18 +41,7 @@ class _create_instState extends State<create_inst> {
               },
               child: Icon(Icons.logout_outlined,color: Colors.black,)),
           SizedBox(width: 10,),
-          // PopupMenuButton(
-          //     icon: const Icon(Icons.menu_outlined,color: Colors.black,),
-          //     itemBuilder: (context) => [
-          //
-          //       PopupMenuItem(child:
-          //       FlatButton(
-          //           onPressed: () {
-          //             Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
-          //           },
-          //           child: Text("Logout",style: dropStyle())),
-          //         value: 2,)
-          //     ])
+
            ],
 
 

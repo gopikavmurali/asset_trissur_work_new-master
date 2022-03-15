@@ -7,7 +7,7 @@ TextStyle buildTextStyle() =>
     TextStyle(color: Colors.white,fontSize: 14);
 
 TextStyle headingText() =>
-    TextStyle(fontSize: 20,fontStyle: FontStyle.normal,color: Colors.black45);
+    TextStyle(fontSize: 18,fontStyle: FontStyle.normal,color: Colors.black45);
 
 TextStyle dropStyle() => 
     TextStyle(fontWeight: FontWeight.w600);
@@ -95,5 +95,20 @@ Widget ContainerPending({required int height,
   );
 
 
-}
 
+
+
+}
+//
+// else if (formkey.currentState!.validate()) {
+//   try {
+//     await FirebaseAuth.instance.signInWithEmailAndPassword(
+//         email: user_name.text, password: pass_word.text);
+//     errorMessage = "";
+//   } on FirebaseAuthException catch (error) {
+//     errorMessage = error.message!;
+//   }
+// }
+// setState(() {
+//
+// });

@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 
+import 'image_picker_two.dart';
 import 'login_page.dart';
 
 class history extends StatefulWidget {
@@ -27,6 +28,9 @@ class _historyState extends State<history> {
   String selecteddepatmnt = "Department";
   final List<String> itemname = ["Item Name", "Computer", "Laptop","Fan","Fridge","Chair","Table"];
   String selecteditem = "Item Name";
+  final List<String> asset_types = ["Asset Types", "Current Assets", "Fixed Assets","Tangible Assets","Intangible Assets",
+    "Operating Assets","Non Operating Assets"];
+  String selectedtype = "Asset Types";
   late int count =0;
   late int number=0;
 
@@ -66,9 +70,7 @@ class _historyState extends State<history> {
     showDialog(
         barrierDismissible: false,
         context: context, builder:(ctx) => Container(
-      // height: 700,
-      // width: 500,
-      // decoration: BoxDecoration(border: Border.all(color: Colors.white)),
+
       child: AlertDialog(
         //shape: BoxShape.rectangle,
 
@@ -311,7 +313,7 @@ class _historyState extends State<history> {
                   minVerticalPadding: 10,
                   horizontalTitleGap: 08,
 
-                  title: Text("AMC  Start Date",style: buildFontlink(),),
+                  title: Text("AMC Start Date",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
                   trailing: Container(
                     width: 210,
@@ -344,7 +346,7 @@ class _historyState extends State<history> {
                   minVerticalPadding: 10,
                   horizontalTitleGap: 08,
 
-                  title: Text("AMC  Start Date",style: buildFontlink(),),
+                  title: Text("AMC End Date",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
                   trailing: Container(
                     width: 210,
@@ -466,24 +468,53 @@ class _historyState extends State<history> {
                     ),
                   ),
                 ),
+                //asset type
                 ListTile(
                   minLeadingWidth : 01,
                   minVerticalPadding: 10,
-                  horizontalTitleGap: 08,
+                  horizontalTitleGap: 06,
 
-                  title: Text("Warranty",style: buildFontlink(),),
-                  leading: const Icon(Icons.arrow_right),
+                  title: Text("Asset Types",style: buildFontlink(),),
+                  leading: Icon(Icons.arrow_right),
                   trailing: Container(
-                    width: 210,
+                    width: 212,
                     height: 35,
-                    child: TextField(
-                      style: const TextStyle(color: Colors.black),
-                      controller: warController,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Warranty',labelStyle: TextStyle(color: Colors.black26)
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black26),
+                        borderRadius: BorderRadius.circular(5)),
+
+                    child:  DropdownButtonHideUnderline(
+
+
+                      child: DropdownButton<String>(
+                        // isDense: true,
+                        // isExpanded: false,
+
+                        elevation: 10,
+
+                        iconEnabledColor: Colors.black,
+                        value: selectedtype,
+                        onChanged: (value){
+                          setState(() {
+                            selectedtype = value!;
+                          });
+                        },
+
+                        items: asset_types.map<DropdownMenuItem<String>>((value){
+
+                          return DropdownMenuItem(
+
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Text(    value),
+                            ),
+                            value: value,
+
+                          );
+                        }).toList(),
                       ),
                     ),
+
                   ),
                 ),
 
@@ -613,26 +644,7 @@ class _historyState extends State<history> {
                     ),
                   ),
                 ),
-                // ListTile(
-                //   minLeadingWidth : 01,
-                //   minVerticalPadding: 10,
-                //   horizontalTitleGap: 08,
-                //
-                //   title: Text("Take a Picture",style: buildFontlink(),),
-                //   leading: const Icon(Icons.arrow_right),
-                //   trailing: Container(
-                //     width: 210,
-                //     height: 35,
-                //     child: TextField(
-                //       style: const TextStyle(color: Colors.black),
-                //       controller: supController,
-                //       decoration: const InputDecoration(
-                //         border: OutlineInputBorder(),
-                //         //labelText: 'User Name',
-                //       ),
-                //     ),
-                //   ),
-                // ),
+
                 ListTile(
                   minLeadingWidth : 01,
                   minVerticalPadding: 10,
@@ -654,6 +666,54 @@ class _historyState extends State<history> {
                         maxLines: 10,
                         controller: configController,
                       ),
+                    ),
+                  ),
+                ),
+                ListTile(
+                  minLeadingWidth : 01,
+                  minVerticalPadding: 10,
+                  horizontalTitleGap: 08,
+
+                  title: Text("Choose  Image",style: buildFontlink(),),
+                  leading: const Icon(Icons.arrow_right),
+                  trailing: Container(
+                    width: 210,
+                    height: 40,
+                    child:  InkWell(
+                      onTap:(){
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context)=>image_picking()));
+                      },
+                      child: Container(
+                        height: 40,
+                        width: MediaQuery.of(context).size.width/2.5,
+                        decoration: BoxDecoration(border: Border.all(color: Color(0xFF468c90)),
+                          // gradient: const LinearGradient(
+                          //   begin: Alignment.topLeft,
+                          //   end: Alignment.bottomRight,
+                          //   colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
+
+                          borderRadius: BorderRadius.circular(10),
+                          //color: Color(0xFF5663ff)
+                        ),
+                        child: Center(
+                          child: Text('Pick Image',style: TextStyle(color:Color(0xFF468c90),fontSize: 14),),
+                        ),
+                      ),
+                      // child: Container(
+                      //   height: 30,
+                      //   // width: MediaQuery.of(context).size.width/4,
+                      //   decoration: BoxDecoration(
+                      //       gradient: const LinearGradient(
+                      //         begin: Alignment.topLeft,
+                      //         end: Alignment.bottomRight,
+                      //         colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
+                      //
+                      //       borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+                      //   child:  Center(
+                      //     child: Text('Pick Image',style: buildTextStyle(),),
+                      //   ),
+                      // ),
                     ),
                   ),
                 ),

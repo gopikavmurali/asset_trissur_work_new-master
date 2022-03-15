@@ -59,7 +59,7 @@ class _service_historyState extends State<service_history> {
               child: Text("Service Message",style: TextStyle(color: Colors.black),),
             ),
 
-            //title: Text("${widget.descriptionTextController}"),
+
           );
         },
         separatorBuilder: (ctx,index){
