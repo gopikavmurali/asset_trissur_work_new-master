@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "840791199774",
+    "project_id": "assetmanagement-1d392",
+    "storage_bucket": "assetmanagement-1d392.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840791199774:android:d2aab4e62609fee1131e0f",
+        "android_client_info": {
+          "package_name": "com.example.asset_trissur_work_new"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "840791199774-45pnrt82gos1l41uilq0fkbc4ssu7tmi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDq8DjxFdzRfO3kdgqeRE54XCD1NONtWtM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "840791199774-45pnrt82gos1l41uilq0fkbc4ssu7tmi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
