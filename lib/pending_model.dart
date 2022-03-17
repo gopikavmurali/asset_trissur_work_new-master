@@ -1,20 +1,13 @@
-class pending_model{
+
+class pending_model {
   String
-      item_name,
+  item_name,
       department;
   bool isSelected = false;
 
-  pending_model(
-
-      this.isSelected,
+  pending_model(this.isSelected,
       this.item_name,
-      this.department,
-
-
-      );
-
-
-
+      this.department,);
 
 
 }

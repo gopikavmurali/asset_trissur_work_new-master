@@ -1,4 +1,5 @@
 
+
 import 'dart:io';
 import 'package:asset_trissur_work_new/amc_notification.dart';
 import 'package:asset_trissur_work_new/button_widget.dart';
@@ -9,6 +10,7 @@ import 'package:asset_trissur_work_new/notification_screen.dart';
 import 'package:asset_trissur_work_new/report.dart';
 import 'package:asset_trissur_work_new/complaints.dart';
 import 'package:asset_trissur_work_new/updation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +53,13 @@ class _asset_head_homeState extends State<asset_head_home> {
     Exercise(name: 'Change in Requirement'),
   ];
 
+  void addupdations() {
+    FirebaseFirestore.instance.collection("masterupdation").add({
+      "values": descriptionController.text,
+      "date": DateTime.now()
+    });
+
+  }
 
 
 
@@ -396,6 +405,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                                 child:
                                 GestureDetector(
                                   onTap: (){
+                                    addupdations();
                                     Navigator.push(context, MaterialPageRoute(
                                         builder: (context)=>updation(descriptionController: descriptionController.text,)));
                                   },

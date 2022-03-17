@@ -1,4 +1,6 @@
+
 import 'package:asset_trissur_work_new/user_home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
@@ -42,30 +44,92 @@ class _updationState extends State<updation> {
 
 
           ]),
-      body: SafeArea(child: ListView.separated(
-        itemBuilder: (ctx,index){
-          SizedBox(height:20);
-          return  ListTile(
-            leading: Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: Text("12-12-2021"),
-            ),
-            title: Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: Text("${widget.descriptionController}",style: TextStyle(color: Colors.black),),
-            ),
+        body: SafeArea(
+          child:  StreamBuilder(
+              stream: FirebaseFirestore.instance.collection("masterupdation").snapshots(),
+              builder: (BuildContext context,AsyncSnapshot<QuerySnapshot>snapshot)
+              {
+                if (!snapshot.hasData)
+                {
+                  return Center(child: CircularProgressIndicator());
+                }
+                else
+                {
 
-          );
-        },
-        separatorBuilder: (ctx,index){
-          return Divider();
-        },
-        itemCount: 3,
-      ),
+                  return  Expanded(
+                    child: ListView(
 
 
-      ),
+                      children: snapshot.data!.docs.map((document) {
+                        final dynamic data = document.data();
+                        return ListTile(
+                            title: Text(data["values"].toString()),
+                            leading: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              //child: Text(data["date"].toString()),
+                              child: Text("dd-mm-yyyy"),
+                            )
+                        );
+                        // return Container(
+                        //   height: 50,
+                        //   width: MediaQuery.of(context).size.width,
+                        //   child: Text("title:"+data["Title"]),
+                        // );
+                      }).toList(),
+
+                    ),
+                  );
+                }
+              }
+
+          ),
+          // child:ListView.builder(
+          //
+          //      itemCount: 10,
+          //      itemBuilder: (context,snapshot){
+          //
+          //        return ListTile(
+          //          leading: Padding(
+          //           padding: EdgeInsets.only(top: 20.0),
+          //            child: Text("12-12-2021"),
+          //            ),
+          //
+          //          title: Padding(
+          //             padding: EdgeInsets.only(top: 20.0),
+          //            child: Text("${widget.descriptionTextController}"
+          //                 "${widget.descriptionController}",style: TextStyle(color: Colors.black),),
+          //           ),
+          //
+          //     );
+          //       }
+          //     )
+        )
+      // body: SafeArea(
+      //   child: ListView.separated(
+      //   itemBuilder: (ctx,index){
+      //     SizedBox(height:20);
+      //     return  ListTile(
+      //       leading: Padding(
+      //         padding: const EdgeInsets.only(top: 20.0),
+      //         child: Text("12-12-2021"),
+      //       ),
+      //       title: Padding(
+      //         padding: const EdgeInsets.only(top: 20.0),
+      //         child: Text("${widget.descriptionController}",style: TextStyle(color: Colors.black),),
+      //       ),
+      //
+      //     );
+      //   },
+      //   separatorBuilder: (ctx,index){
+      //     return Divider();
+      //   },
+      //   itemCount: 3,
+      // ),
+      //
+      //
+      // ),
     );
 
   }
 }
+

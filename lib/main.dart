@@ -1,3 +1,4 @@
+
 import 'dart:math';
 
 import 'package:asset_trissur_work_new/defect_reason.dart';
@@ -52,7 +53,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: login()
+      home: drop()
     );
   }
 }
