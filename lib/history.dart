@@ -1,10 +1,10 @@
 
-import 'dart:io';
 
 import 'package:asset_trissur_work_new/constants.dart';
 import 'package:asset_trissur_work_new/report.dart';
 import 'package:asset_trissur_work_new/service_history.dart';
 import 'package:asset_trissur_work_new/asset_master_home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:barcode_widget/barcode_widget.dart';
@@ -13,7 +13,13 @@ import 'image_picker_two.dart';
 import 'login_page.dart';
 
 class history extends StatefulWidget {
-  const history({Key? key}) : super(key: key);
+  final String asset_type;
+
+  final String qrcode;
+  const history({Key? key,
+    required this.asset_type,
+
+    required this.qrcode}) : super(key: key);
 
 
   //const admin_log_2({Key? key}) : super(key: key);
@@ -66,7 +72,6 @@ class _historyState extends State<history> {
     }
 
   }
-
   void alert(){
     showDialog(
         barrierDismissible: false,
@@ -96,8 +101,6 @@ class _historyState extends State<history> {
         ),
         actions: [
           Row(
-
-
             children: [
               Container(
                   height: 40,
@@ -109,7 +112,7 @@ class _historyState extends State<history> {
               SizedBox(width: 10,),
               GestureDetector(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>history()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>history(asset_type: '', qrcode: '', )));
                 },
 
                 child:Container(
@@ -118,11 +121,9 @@ class _historyState extends State<history> {
                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),color: Colors.lightGreen),
                     child: Center(child: Text("Complete",style: buildTextStyle(),)),
                   ),
-
               )
             ],
           )
-
         ],
       ),
     )
@@ -133,6 +134,7 @@ class _historyState extends State<history> {
     dateController.dispose();
     super.dispose();
   }
+  
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,25 +155,24 @@ class _historyState extends State<history> {
               itemBuilder: (context) =>
               [
                 PopupMenuItem(
-
                   child: InkWell(
-                    onTap: (){  Navigator.push(context, MaterialPageRoute(builder: (context)=>history()));},
+                    onTap: (){  Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                        history(asset_type: '', qrcode: '', )));},
                       child: Text("Edit",style: dropStyle())),
                   value: 2,),
                 PopupMenuItem(
-
                     child: InkWell(
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
                       },
                         child: Text("Logout",style: dropStyle())))
               ]),
-
           SizedBox(width: 10,)
           //Center(child: Text("Logout  ",style: TextStyle(color: Color(0xFF468c90),fontSize: 20)))
         ],
-
       ),
+
+
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -188,71 +189,144 @@ class _historyState extends State<history> {
                   trailing: Container(
                     width: 210,
                     height: 35,
-                    child: TextField(
-                      style: const TextStyle(color: Colors.black),
-                      controller: idController,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Asset Id',labelStyle: TextStyle(color: Colors.black26)
-                        //hintStyle: TextStyle(color: Colors.red)
-                      ),
-                    ),
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("description").doc("5MepDMRTcSk49pMB2n5w").
+                            snapshots(),
+
+                        builder: (context ,AsyncSnapshot snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          }
+
+                          final userDoc = snapshot.data;
+                          return  Center(child: Text(userDoc!["asset_id"]));
+                        }),
+                    // child: TextField(
+                    //
+                    //
+                    //   style: const TextStyle(color: Colors.black),
+                    //   controller: idController,
+                    //   decoration: const InputDecoration(
+                    //       border: OutlineInputBorder(),
+                    //       labelText: 'Asset Id',labelStyle: TextStyle(color: Colors.black26)
+                    //     //hintStyle: TextStyle(color: Colors.red)
+                    //   ),
+                    // ),
                   ),
                 ),
+                // ListTile(
+                //   minLeadingWidth : 01,
+                //   minVerticalPadding: 10,
+                //   horizontalTitleGap: 08,
+                //
+                //   title: Text("Asset id",style: buildFontlink(),),
+                //   leading: const Icon(Icons.arrow_right),
+                //   trailing: Container(
+                //     width: 210,
+                //     height: 35,
+                //     child: Padding(
+                //       padding: const EdgeInsets.all(8.0),
+                //
+                //       child: StreamBuilder(
+                //           stream: FirebaseFirestore.instance.collection("description").
+                //           doc("5MepDMRTcSk49pMB2n5w").snapshots(),
+                //
+                //           builder: (context ,AsyncSnapshot snapshot) {
+                //             if (!snapshot.hasData) {
+                //               return CircularProgressIndicator();
+                //             }
+                //
+                //             final userDoc = snapshot.data;
+                //             return  Text(userDoc!["asset_id"]);
+                //           })
+                //     ),
+                //     // child: TextField(
+                //     //
+                //     //
+                //     //   style: const TextStyle(color: Colors.black),
+                //     //   controller: idController,
+                //     //   decoration: const InputDecoration(
+                //     //       border: OutlineInputBorder(),
+                //     //       labelText: 'Asset Id',labelStyle: TextStyle(color: Colors.black26)
+                //     //     //hintStyle: TextStyle(color: Colors.red)
+                //     //   ),
+                //     // ),
+                //   ),
+                // ),
                 ListTile(
-                  minLeadingWidth : 01,
-                  minVerticalPadding: 10,
-                  horizontalTitleGap: 08,
+                   minLeadingWidth : 01,
+                   minVerticalPadding: 10,
+                   horizontalTitleGap: 05,
 
                   title: Text("Item Name",style: buildFontlink(),),
                   leading: Icon(Icons.arrow_right),
                   trailing: Container(
-                    width: 210,
                     height: 35,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black26),
-                        borderRadius: BorderRadius.circular(5)),
+                  width: 210,
+                  // width: 35,
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("description").
+                            where("asset_id" , isEqualTo: "${widget.qrcode}").
+                        //doc("5MepDMRTcSk49pMB2n5w")
+                            snapshots(),
 
-                    child:  DropdownButtonHideUnderline(
+                        builder: (context ,AsyncSnapshot snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          }
 
+                          final userDoc = snapshot.data;
+                          return  Center(child: Text(userDoc!["asset_name"]));
 
-                      child: DropdownButton<String>(
-                        // isDense: true,
-                        // isExpanded: false,
-
-                        elevation: 10,
-
-                        iconEnabledColor: Colors.black,
-                        value: selecteditem,
-                        onChanged: (value){
-                          setState(() {
-                            selecteditem= value!;
-                          });
-                        },
-
-                        items: itemname.map<DropdownMenuItem<String>>((value){
-
-                          return DropdownMenuItem(
-
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(    value),
-                            ),
-                            value: value,
-
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    // child: TextField(
-                    //   style: TextStyle(color: Colors.red),
-                    //   controller: idController,
-                    //   decoration: InputDecoration(
-                    //     border: OutlineInputBorder(),
-                    //     //labelText: 'User Name',
-                    //   ),
-                    // ),
+                        }),
                   ),
+                  // trailing: Container(
+                  //   width: 210,
+                  //   height: 35,
+                  //   decoration: BoxDecoration(
+                  //       border: Border.all(color: Colors.black26),
+                  //       borderRadius: BorderRadius.circular(5)),
+                  //
+                  //   child:  DropdownButtonHideUnderline(
+                  //
+                  //
+                  //     child: DropdownButton<String>(
+                  //       // isDense: true,
+                  //       // isExpanded: false,
+                  //
+                  //       elevation: 10,
+                  //
+                  //       iconEnabledColor: Colors.black,
+                  //       value: selecteditem,
+                  //       onChanged: (value){
+                  //         setState(() {
+                  //           selecteditem= value!;
+                  //         });
+                  //       },
+                  //
+                  //       items: itemname.map<DropdownMenuItem<String>>((value){
+                  //
+                  //         return DropdownMenuItem(
+                  //
+                  //           child: Padding(
+                  //             padding: const EdgeInsets.only(left: 10.0),
+                  //             child: Text(    value),
+                  //           ),
+                  //           value: value,
+                  //
+                  //         );
+                  //       }).toList(),
+                  //     ),
+                  //   ),
+                  //   // child: TextField(
+                  //   //   style: TextStyle(color: Colors.red),
+                  //   //   controller: idController,
+                  //   //   decoration: InputDecoration(
+                  //   //     border: OutlineInputBorder(),
+                  //   //     //labelText: 'User Name',
+                  //   //   ),
+                  //   // ),
+                  // ),
                 ),
                 ListTile(
                   minLeadingWidth : 01,
@@ -262,52 +336,69 @@ class _historyState extends State<history> {
                   title: Text("Department",style: buildFontlink(),),
                   leading: Icon(Icons.arrow_right),
                   trailing: Container(
-                    width: 212,
                     height: 35,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black26),
-                        borderRadius: BorderRadius.circular(5)),
+                    width: 210,
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("description").
+                        doc("5MepDMRTcSk49pMB2n5w").snapshots(),
 
-                    child:  DropdownButtonHideUnderline(
+                        builder: (context ,AsyncSnapshot snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          }
 
-
-                      child: DropdownButton<String>(
-                        // isDense: true,
-                        // isExpanded: false,
-
-                        elevation: 10,
-
-                        iconEnabledColor: Colors.black,
-                        value: selecteddepatmnt,
-                        onChanged: (value){
-                          setState(() {
-                            selecteddepatmnt = value!;
-                          });
-                        },
-
-                        items: depatmnt.map<DropdownMenuItem<String>>((value){
-
-                          return DropdownMenuItem(
-
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(    value),
-                            ),
-                            value: value,
-
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    // child: TextField(
-                    //   style: TextStyle(color: Colors.red),
-                    //   controller: idController,
-                    //   decoration: InputDecoration(
-                    //     border: OutlineInputBorder(),
-                    //     //labelText: 'User Name',
-                    //   ),
-                    // ),
+                          final userDoc = snapshot.data;
+                          return  Center(child: Text(userDoc!["department"],
+                            style: TextStyle(color: Colors.black),));
+                        }),
                   ),
+                  // trailing: Container(
+                  //   width: 212,
+                  //   height: 35,
+                  //   decoration: BoxDecoration(
+                  //       border: Border.all(color: Colors.black26),
+                  //       borderRadius: BorderRadius.circular(5)),
+                  //
+                  //   child:  DropdownButtonHideUnderline(
+                  //
+                  //
+                  //     child: DropdownButton<String>(
+                  //       // isDense: true,
+                  //       // isExpanded: false,
+                  //
+                  //       elevation: 10,
+                  //
+                  //       iconEnabledColor: Colors.black,
+                  //       value: selecteddepatmnt,
+                  //       onChanged: (value){
+                  //         setState(() {
+                  //           selecteddepatmnt = value!;
+                  //         });
+                  //       },
+                  //
+                  //       items: depatmnt.map<DropdownMenuItem<String>>((value){
+                  //
+                  //         return DropdownMenuItem(
+                  //
+                  //           child: Padding(
+                  //             padding: const EdgeInsets.only(left: 10.0),
+                  //             child: Text(    value),
+                  //           ),
+                  //           value: value,
+                  //
+                  //         );
+                  //       }).toList(),
+                  //     ),
+                  //   ),
+                  //   // child: TextField(
+                  //   //   style: TextStyle(color: Colors.red),
+                  //   //   controller: idController,
+                  //   //   decoration: InputDecoration(
+                  //   //     border: OutlineInputBorder(),
+                  //   //     //labelText: 'User Name',
+                  //   //   ),
+                  //   // ),
+                  // ),
                 ),
                 ListTile(
                   minLeadingWidth : 01,
@@ -317,30 +408,46 @@ class _historyState extends State<history> {
                   title: Text("AMC Start Date",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
                   trailing: Container(
-                    width: 210,
                     height: 35,
-                    child: Container(
-                      width: 210,
-                      height: 35,
-                      child: TextField(
-                        readOnly: true,
-                        style: const TextStyle(color: Colors.black),
-                        controller: amc_start_Controller,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'yyyy-mm-dd',labelStyle: TextStyle(color: Colors.black26)
-                        ),
-                        onTap: () async {
-                          var date =  await showDatePicker(
-                              context: context,
-                              initialDate:DateTime.now(),
-                              firstDate:DateTime(1900),
-                              lastDate: DateTime(2100));
-                          amc_start_Controller.text = date.toString().substring(0,10);
-                        },
-                      ),
-                    ),
+                    width: 210,
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("description").
+                        doc("5MepDMRTcSk49pMB2n5w").snapshots(),
+
+                        builder: (context ,AsyncSnapshot snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          }
+
+                          final userDoc = snapshot.data;
+                          return  Center(child: Text(userDoc!["amc_start_date"]));
+                        }),
                   ),
+                  // trailing: Container(
+                  //   width: 210,
+                  //   height: 35,
+                  //   child: Container(
+                  //     width: 210,
+                  //     height: 35,
+                  //     child: TextField(
+                  //       readOnly: true,
+                  //       style: const TextStyle(color: Colors.black),
+                  //       controller: amc_start_Controller,
+                  //       decoration: const InputDecoration(
+                  //           border: OutlineInputBorder(),
+                  //           labelText: 'yyyy-mm-dd',labelStyle: TextStyle(color: Colors.black26)
+                  //       ),
+                  //       onTap: () async {
+                  //         var date =  await showDatePicker(
+                  //             context: context,
+                  //             initialDate:DateTime.now(),
+                  //             firstDate:DateTime(1900),
+                  //             lastDate: DateTime(2100));
+                  //         amc_start_Controller.text = date.toString().substring(0,10);
+                  //       },
+                  //     ),
+                  //   ),
+                  // ),
                 ),
                 ListTile(
                   minLeadingWidth : 01,
@@ -350,30 +457,47 @@ class _historyState extends State<history> {
                   title: Text("AMC End Date",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
                   trailing: Container(
-                    width: 210,
                     height: 35,
-                    child: Container(
-                      width: 210,
-                      height: 35,
-                      child: TextField(
-                        readOnly: true,
-                        style: const TextStyle(color: Colors.black),
-                        controller: amc_start_Controller,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'yyyy-mm-dd',labelStyle: TextStyle(color: Colors.black26)
-                        ),
-                        onTap: () async {
-                          var date =  await showDatePicker(
-                              context: context,
-                              initialDate:DateTime.now(),
-                              firstDate:DateTime(1900),
-                              lastDate: DateTime(2100));
-                          amc_start_Controller.text = date.toString().substring(0,10);
-                        },
-                      ),
-                    ),
+                    width: 210,
+
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("description").
+                        doc("5MepDMRTcSk49pMB2n5w").snapshots(),
+
+                        builder: (context ,AsyncSnapshot snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          }
+
+                          final userDoc = snapshot.data;
+                          return  Center(child: Text(userDoc!["amc_end_date"]));
+                        }),
                   ),
+                  // trailing: Container(
+                  //   width: 210,
+                  //   height: 35,
+                  //   child: Container(
+                  //     width: 210,
+                  //     height: 35,
+                  //     child: TextField(
+                  //       readOnly: true,
+                  //       style: const TextStyle(color: Colors.black),
+                  //       controller: amc_start_Controller,
+                  //       decoration: const InputDecoration(
+                  //           border: OutlineInputBorder(),
+                  //           labelText: 'yyyy-mm-dd',labelStyle: TextStyle(color: Colors.black26)
+                  //       ),
+                  //       onTap: () async {
+                  //         var date =  await showDatePicker(
+                  //             context: context,
+                  //             initialDate:DateTime.now(),
+                  //             firstDate:DateTime(1900),
+                  //             lastDate: DateTime(2100));
+                  //         amc_start_Controller.text = date.toString().substring(0,10);
+                  //       },
+                  //     ),
+                  //   ),
+                  // ),
                 ),
                 ListTile(
                   minLeadingWidth : 01,
@@ -383,17 +507,33 @@ class _historyState extends State<history> {
                   title: Text("Purchase Order No",style: buildFontlink(),),
                   leading: Icon(Icons.arrow_right),
                   trailing: Container(
-                    width: 210,
                     height: 35,
-                    child: TextField(
-                      style: const TextStyle(color: Colors.black),
-                      controller: orderController,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Order No',labelStyle: TextStyle(color: Colors.black26)
-                      ),
-                    ),
+                    width: 219,
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("description").
+                        doc("5MepDMRTcSk49pMB2n5w").snapshots(),
+
+                        builder: (context ,AsyncSnapshot snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          }
+
+                          final userDoc = snapshot.data;
+                          return  Center(child: Text(userDoc!["purchase_no"]));
+                        }),
                   ),
+                  // trailing: Container(
+                  //   width: 210,
+                  //   height: 35,
+                  //   child: TextField(
+                  //     style: const TextStyle(color: Colors.black),
+                  //     controller: orderController,
+                  //     decoration: const InputDecoration(
+                  //         border: OutlineInputBorder(),
+                  //         labelText: 'Order No',labelStyle: TextStyle(color: Colors.black26)
+                  //     ),
+                  //   ),
+                  // ),
                 ),
                 ListTile(
                   minLeadingWidth : 01,
@@ -403,17 +543,33 @@ class _historyState extends State<history> {
                   title: Text("Brand Name/Model No",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
                   trailing: Container(
-                    width: 210,
                     height: 35,
-                    child: TextField(
-                      style: const TextStyle(color: Colors.black),
-                      controller: brandController,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Brand Name',labelStyle: TextStyle(color: Colors.black26)
-                      ),
-                    ),
+                    width: 210,
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("description").
+                        doc("5MepDMRTcSk49pMB2n5w").snapshots(),
+
+                        builder: (context ,AsyncSnapshot snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          }
+
+                          final userDoc = snapshot.data;
+                          return  Center(child: Text(userDoc!["brand_name"]));
+                        }),
                   ),
+                  // trailing: Container(
+                  //   width: 210,
+                  //   height: 35,
+                  //   child: TextField(
+                  //     style: const TextStyle(color: Colors.black),
+                  //     controller: brandController,
+                  //     decoration: const InputDecoration(
+                  //         border: OutlineInputBorder(),
+                  //         labelText: 'Brand Name',labelStyle: TextStyle(color: Colors.black26)
+                  //     ),
+                  //   ),
+                  // ),
                 ),
                 ListTile(
                   minLeadingWidth : 01,
@@ -423,17 +579,33 @@ class _historyState extends State<history> {
                   title: Text("Serial No/Service Tag",style: buildFontlink(),),
                   leading: Icon(Icons.arrow_right),
                   trailing: Container(
-                    width: 210,
                     height: 35,
-                    child: TextField(
-                      style: TextStyle(color: Colors.black),
-                      controller: serialController,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Serial No',labelStyle: TextStyle(color: Colors.black26)
-                      ),
-                    ),
+                    width: 210,
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("description").
+                        doc("5MepDMRTcSk49pMB2n5w").snapshots(),
+
+                        builder: (context ,AsyncSnapshot snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          }
+
+                          final userDoc = snapshot.data;
+                          return  Center(child: Text(userDoc!["serial_no"]));
+                        }),
                   ),
+                  // trailing: Container(
+                  //   width: 210,
+                  //   height: 35,
+                  //   child: TextField(
+                  //     style: TextStyle(color: Colors.black),
+                  //     controller: serialController,
+                  //     decoration: const InputDecoration(
+                  //         border: OutlineInputBorder(),
+                  //         labelText: 'Serial No',labelStyle: TextStyle(color: Colors.black26)
+                  //     ),
+                  //   ),
+                  // ),
                 ),
                 ListTile(
                   minLeadingWidth : 01,
@@ -444,81 +616,118 @@ class _historyState extends State<history> {
                   leading: const Icon(Icons.arrow_right),
                   trailing: Container(
                     width: 210,
-                    height: 35,
-                    child: Container(
-                      width: 210,
                       height: 35,
-                      child: TextField(
-                        readOnly: true,
-                        style: const TextStyle(color: Colors.black),
-                        controller: dateController,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'yyyy-mm-dd',labelStyle: TextStyle(color: Colors.black26)
-                        ),
-                        onTap: () async {
-                          var date =  await showDatePicker(
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("description").
+                        doc("5MepDMRTcSk49pMB2n5w").snapshots(),
 
-                              context: context,
-                              initialDate:DateTime.now(),
-                              firstDate:DateTime(1900),
-                              lastDate: DateTime(2100));
-                          dateController.text = date.toString().substring(0,10);
-                        },
-                      ),
-                    ),
+                        builder: (context ,AsyncSnapshot snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          }
+
+                          final userDoc = snapshot.data;
+                          return  Center(child: Text(userDoc!["warranty"]));
+                        }),
                   ),
+                  // trailing: Container(
+                  //   width: 210,
+                  //   height: 35,
+                  //   child: Container(
+                  //     width: 210,
+                  //     height: 35,
+                  //     child: TextField(
+                  //       readOnly: true,
+                  //       style: const TextStyle(color: Colors.black),
+                  //       controller: dateController,
+                  //       decoration: const InputDecoration(
+                  //           border: OutlineInputBorder(),
+                  //           labelText: 'yyyy-mm-dd',labelStyle: TextStyle(color: Colors.black26)
+                  //       ),
+                  //       onTap: () async {
+                  //         var date =  await showDatePicker(
+                  //
+                  //             context: context,
+                  //             initialDate:DateTime.now(),
+                  //             firstDate:DateTime(1900),
+                  //             lastDate: DateTime(2100));
+                  //         dateController.text = date.toString().substring(0,10);
+                  //       },
+                  //     ),
+                  //   ),
+                  // ),
                 ),
                 //asset type
                 ListTile(
-                  minLeadingWidth : 01,
-                  minVerticalPadding: 10,
-                  horizontalTitleGap: 06,
+                    minLeadingWidth : 01,
+                    minVerticalPadding: 10,
+                    horizontalTitleGap: 06,
 
-                  title: Text("Asset Types",style: buildFontlink(),),
-                  leading: Icon(Icons.arrow_right),
-                  trailing: Container(
-                    width: 212,
-                    height: 35,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black26),
-                        borderRadius: BorderRadius.circular(5)),
+                    title: Text("Asset Types",style: buildFontlink(),),
+                    leading: Icon(Icons.arrow_right),
+                    trailing: Container(
+                      width: 210,
+                      height: 35,
+                      child: StreamBuilder(
+                          stream: FirebaseFirestore.instance.collection("description").
+                          doc("5MepDMRTcSk49pMB2n5w").snapshots(),
 
-                    child:  DropdownButtonHideUnderline(
+                          builder: (context ,AsyncSnapshot snapshot) {
+                            if (!snapshot.hasData) {
+                              return CircularProgressIndicator();
+                            }
 
-
-                      child: DropdownButton<String>(
-                        // isDense: true,
-                        // isExpanded: false,
-
-                        elevation: 10,
-
-                        iconEnabledColor: Colors.black,
-                        value: selectedtype,
-                        onChanged: (value){
-                          setState(() {
-                            selectedtype = value!;
-                          });
-                        },
-
-                        items: asset_types.map<DropdownMenuItem<String>>((value){
-
-                          return DropdownMenuItem(
-
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(    value),
-                            ),
-                            value: value,
-
-                          );
-                        }).toList(),
-                      ),
-                    ),
-
-                  ),
+                            final userDoc = snapshot.data;
+                            return  Center(child: Text(userDoc!["asset_types"]));
+                          }),)
+                  // trailing: Container(
+                  //   width: 212,
+                  //   height: 35,
+                  //   decoration: BoxDecoration(
+                  //       border: Border.all(color: Colors.black26),
+                  //       borderRadius: BorderRadius.circular(5)),
+                  //
+                  //   child:  DropdownButtonHideUnderline(
+                  //
+                  //
+                  //     child: DropdownButton<String>(
+                  //       // isDense: true,
+                  //       // isExpanded: false,
+                  //
+                  //       elevation: 10,
+                  //
+                  //       iconEnabledColor: Colors.black,
+                  //       value: selectedSubject,
+                  //       onChanged: (value){
+                  //         setState(() {
+                  //           selectedSubject = value!;
+                  //         });
+                  //       },
+                  //
+                  //       items: subjects.map<DropdownMenuItem<String>>((value){
+                  //
+                  //         return DropdownMenuItem(
+                  //
+                  //           child: Padding(
+                  //             padding: const EdgeInsets.only(left: 10.0),
+                  //             child: Text(    value),
+                  //           ),
+                  //           value: value,
+                  //
+                  //         );
+                  //       }).toList(),
+                  //     ),
+                  //   ),
+                  //   // child: TextField(
+                  //   //   style: TextStyle(color: Colors.red),
+                  //   //   controller: idController,
+                  //   //   decoration: InputDecoration(
+                  //   //     border: OutlineInputBorder(),
+                  //   //     //labelText: 'User Name',
+                  //   //   ),
+                  //   // ),
+                  // ),
                 ),
-
                 ListTile(
                   minLeadingWidth : 01,
                   minVerticalPadding: 10,
@@ -527,52 +736,67 @@ class _historyState extends State<history> {
                   title: Text("Asset Head",style: buildFontlink(),),
                   leading: Icon(Icons.arrow_right),
                   trailing: Container(
-                    width: 212,
+                    width: 210,
                     height: 35,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black26),
-                        borderRadius: BorderRadius.circular(5)),
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("description").
+                        doc("5MepDMRTcSk49pMB2n5w").snapshots(),
 
-                    child:  DropdownButtonHideUnderline(
+                        builder: (context ,AsyncSnapshot snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          }
 
-
-                      child: DropdownButton<String>(
-                        // isDense: true,
-                        // isExpanded: false,
-
-                        elevation: 10,
-
-                        iconEnabledColor: Colors.black,
-                        value: selectedSubject,
-                        onChanged: (value){
-                          setState(() {
-                            selectedSubject = value!;
-                          });
-                        },
-
-                        items: subjects.map<DropdownMenuItem<String>>((value){
-
-                          return DropdownMenuItem(
-
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(    value),
-                            ),
-                            value: value,
-
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    // child: TextField(
-                    //   style: TextStyle(color: Colors.red),
-                    //   controller: idController,
-                    //   decoration: InputDecoration(
-                    //     border: OutlineInputBorder(),
-                    //     //labelText: 'User Name',
-                    //   ),
-                    // ),
-                  ),
+                          final userDoc = snapshot.data;
+                          return  Center(child: Text(userDoc!["asset_head"]));
+                        }),)
+                  // trailing: Container(
+                  //   width: 212,
+                  //   height: 35,
+                  //   decoration: BoxDecoration(
+                  //       border: Border.all(color: Colors.black26),
+                  //       borderRadius: BorderRadius.circular(5)),
+                  //
+                  //   child:  DropdownButtonHideUnderline(
+                  //
+                  //
+                  //     child: DropdownButton<String>(
+                  //       // isDense: true,
+                  //       // isExpanded: false,
+                  //
+                  //       elevation: 10,
+                  //
+                  //       iconEnabledColor: Colors.black,
+                  //       value: selectedSubject,
+                  //       onChanged: (value){
+                  //         setState(() {
+                  //           selectedSubject = value!;
+                  //         });
+                  //       },
+                  //
+                  //       items: subjects.map<DropdownMenuItem<String>>((value){
+                  //
+                  //         return DropdownMenuItem(
+                  //
+                  //           child: Padding(
+                  //             padding: const EdgeInsets.only(left: 10.0),
+                  //             child: Text(    value),
+                  //           ),
+                  //           value: value,
+                  //
+                  //         );
+                  //       }).toList(),
+                  //     ),
+                  //   ),
+                  //   // child: TextField(
+                  //   //   style: TextStyle(color: Colors.red),
+                  //   //   controller: idController,
+                  //   //   decoration: InputDecoration(
+                  //   //     border: OutlineInputBorder(),
+                  //   //     //labelText: 'User Name',
+                  //   //   ),
+                  //   // ),
+                  // ),
                 ),
                 ListTile(
                   minLeadingWidth : 01,
@@ -584,17 +808,31 @@ class _historyState extends State<history> {
                   trailing: Container(
                     width: 210,
                     height: 35,
-                    child: TextField(
-                      style: TextStyle(color: Colors.black),
-                      controller: supController,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Supplier',labelStyle: TextStyle(color: Colors.black26)
-                      ),
-                    ),
-                  ),
-                ),
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("description").
+                        doc("5MepDMRTcSk49pMB2n5w").snapshots(),
 
+                        builder: (context ,AsyncSnapshot snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          }
+
+                          final userDoc = snapshot.data;
+                          return  Center(child: Text(userDoc!["supplier_name"]));
+                        }),)
+                  // trailing: Container(
+                  //   width: 210,
+                  //   height: 35,
+                  //   child: TextField(
+                  //     style: TextStyle(color: Colors.black),
+                  //     controller: supController,
+                  //     decoration: const InputDecoration(
+                  //         border: OutlineInputBorder(),
+                  //         labelText: 'Supplier',labelStyle: TextStyle(color: Colors.black26)
+                  //     ),
+                  //   ),
+                  // ),
+                ),
                 ListTile(
                   minLeadingWidth : 01,
                   minVerticalPadding: 10,
@@ -602,18 +840,33 @@ class _historyState extends State<history> {
 
                   title: Text("Price",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
-                  trailing:  Container(
+                  trailing: Container(
                     width: 210,
                     height: 35,
-                    child: TextField(
-                      style: const TextStyle(color: Colors.black),
-                      controller: valueController,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Price',labelStyle: TextStyle(color: Colors.black26)
-                      ),
-                    ),
-                  ),
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("description").
+                        doc("5MepDMRTcSk49pMB2n5w").snapshots(),
+
+                        builder: (context ,AsyncSnapshot snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          }
+
+                          final userDoc = snapshot.data;
+                          return  Center(child: Text(userDoc!["price"]));
+                        }),)
+                  // trailing:  Container(
+                  //   width: 210,
+                  //   height: 35,
+                  //   child: TextField(
+                  //     style: const TextStyle(color: Colors.black),
+                  //     controller: valueController,
+                  //     decoration: const InputDecoration(
+                  //         border: OutlineInputBorder(),
+                  //         labelText: 'Price',labelStyle: TextStyle(color: Colors.black26)
+                  //     ),
+                  //   ),
+                  // ),
                 ),
                 ListTile(
                   minLeadingWidth : 01,
@@ -623,29 +876,45 @@ class _historyState extends State<history> {
                   title: Text("Date of Issue",style: buildFontlink(),),
                   leading: Icon(Icons.arrow_right),
                   trailing: Container(
-                    width: 210,
                     height: 35,
-                    child: TextField(
-                      readOnly: true,
-                      style: const TextStyle(color: Colors.black),
-                      controller: dateIssueController,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'yyyy-mm-dd',labelStyle: TextStyle(color: Colors.black26)
-                      ),
-                      onTap: () async {
-                        var date =  await showDatePicker(
+                    width: 210,
 
-                            context: context,
-                            initialDate:DateTime.now(),
-                            firstDate:DateTime(1900),
-                            lastDate: DateTime(2100));
-                        dateIssueController.text = date.toString().substring(0,10);
-                      },
-                    ),
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("description").
+                        doc("5MepDMRTcSk49pMB2n5w").snapshots(),
+
+                        builder: (context ,AsyncSnapshot snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          }
+
+                          final userDoc = snapshot.data;
+                          return  Center(child: Text(userDoc!["date_of_issue"]));
+                        }),
                   ),
+                  // trailing: Container(
+                  //   width: 210,
+                  //   height: 35,
+                  //   child: TextField(
+                  //     readOnly: true,
+                  //     style: const TextStyle(color: Colors.black),
+                  //     controller: dateIssueController,
+                  //     decoration: const InputDecoration(
+                  //         border: OutlineInputBorder(),
+                  //         labelText: 'yyyy-mm-dd',labelStyle: TextStyle(color: Colors.black26)
+                  //     ),
+                  //     onTap: () async {
+                  //       var date =  await showDatePicker(
+                  //
+                  //           context: context,
+                  //           initialDate:DateTime.now(),
+                  //           firstDate:DateTime(1900),
+                  //           lastDate: DateTime(2100));
+                  //       dateIssueController.text = date.toString().substring(0,10);
+                  //     },
+                  //   ),
+                  // ),
                 ),
-
                 ListTile(
                   minLeadingWidth : 01,
                   minVerticalPadding: 10,
@@ -655,20 +924,35 @@ class _historyState extends State<history> {
                   leading: const Icon(Icons.arrow_right),
                   trailing: Container(
                     width: 210,
-                    height:150,
-                    child:  Container(
-                      height: 150,
-                      width: 200,
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          // labelText: "Update Notes"
-                        ),
-                        maxLines: 10,
-                        controller: configController,
-                      ),
-                    ),
-                  ),
+                    height: 35,
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("description").
+                        doc("5MepDMRTcSk49pMB2n5w").snapshots(),
+
+                        builder: (context ,AsyncSnapshot snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          }
+
+                          final userDoc = snapshot.data;
+                          return  Center(child: Text(userDoc!["configuration"]));
+                        }),)
+                  // trailing: Container(
+                  //   width: 210,
+                  //   height:150,
+                  //   child:  Container(
+                  //     height: 150,
+                  //     width: 200,
+                  //     child: TextField(
+                  //       decoration: const InputDecoration(
+                  //         border: OutlineInputBorder(),
+                  //         // labelText: "Update Notes"
+                  //       ),
+                  //       maxLines: 10,
+                  //       controller: configController,
+                  //     ),
+                  //   ),
+                  // ),
                 ),
                 ListTile(
                   minLeadingWidth : 01,

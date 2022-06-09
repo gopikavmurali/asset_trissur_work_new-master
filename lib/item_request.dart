@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
@@ -20,7 +21,11 @@ class _item_reqState extends State<item_req> {
 
   clearText(){
     requestController.clear();
-
+  }
+  void itemrreq(){
+    FirebaseFirestore.instance.collection("requestforitems").add({
+      "request": requestController.text,
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -140,6 +145,8 @@ class _item_reqState extends State<item_req> {
               child:
               GestureDetector(
                 onTap: (){
+
+                  itemrreq();
                   clearText();
                   // Navigator.push(context,
                   //     MaterialPageRoute(builder: (context)=> complaints(descriptionTextController: complaintController.text,

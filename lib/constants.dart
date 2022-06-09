@@ -56,12 +56,11 @@ String? validatePassword(value){
   if(value != null && value.isEmpty){
     return "Passwordn can't be blank";
   }
-  else if (value.length<6){
+  else if (value.length<6 ||value.length>6){
     return "Should have 6 characters ";
   }
-  else if (value.length>6 ){
-    return "Should have 6 characters";
-  }
+
+
 
 }
 

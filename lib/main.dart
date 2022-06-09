@@ -1,12 +1,12 @@
 
 import 'dart:math';
-
+import 'package:asset_trissur_work_new/condition.dart';
 import 'package:asset_trissur_work_new/defect_reason.dart';
 import 'package:asset_trissur_work_new/descriptiion_page.dart';
 import 'package:asset_trissur_work_new/amc_notification.dart';
 import 'package:asset_trissur_work_new/button_widget.dart';
 import 'package:asset_trissur_work_new/drop.dart';
-import 'package:asset_trissur_work_new/home_head.dart';
+import 'package:asset_trissur_work_new/asset_head_home.dart';
 import 'package:asset_trissur_work_new/notification_screen.dart';
 import 'package:asset_trissur_work_new/create_institution.dart';
 import 'package:asset_trissur_work_new/create_item.dart';
@@ -31,15 +31,21 @@ import 'login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'firebase_options.dart';
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   //initilization of Firebase app
   // other Firebase service initialization
   runApp(MyApp());
 }
+
+
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -53,7 +59,36 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: drop()
+      home: mainPage(),
     );
   }
 }
+
+
+class mainPage extends StatefulWidget {
+  const mainPage({Key? key}) : super(key: key);
+
+  @override
+  _mainPageState createState() => _mainPageState();
+}
+
+class _mainPageState extends State<mainPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: StreamBuilder<User?>(
+        stream:  FirebaseAuth.instance.authStateChanges(),
+        builder: (context,snapshot){
+          if(snapshot.hasData){
+            return asset_master_home(user_name: "", selectedPrivi: "");
+
+          }
+          else  {
+            return login();
+            }
+          }
+      ),
+    );
+  }
+}
+

@@ -135,7 +135,9 @@ class _create_serviceState extends State<create_service> {
                         setState(() {
                           service_centre = serviceController.text;
                           index++;
-                        });
+                        }
+                        );
+                        serviceController.clear();
                       },
                       child: Container(
                           height: 40,

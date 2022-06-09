@@ -14,6 +14,8 @@ import 'package:asset_trissur_work_new/report.dart';
 import 'package:asset_trissur_work_new/complaints.dart';
 import 'package:asset_trissur_work_new/updation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +30,9 @@ import 'package:image_picker/image_picker.dart';
 class asset_master_home extends StatefulWidget {
   final String user_name;
   final String selectedPrivi;
-  const asset_master_home({Key? key, required this.user_name, required this.selectedPrivi}) : super(key: key);
+  const asset_master_home({Key? key,
+    required this.user_name,
+    required this.selectedPrivi}) : super(key: key);
 
 
   @override
@@ -47,8 +51,9 @@ class _asset_master_homeState extends State<asset_master_home> {
   String selectedcentre = "Move To Outside";
   final List<String> department = ["Department","Dept 1","Dept  2","Dept 3"];
   String selecteddept = "Department";
-
+  int  selectedRadio = -1;
   int _counter = 0;
+  String reallocate = "Move To Outside";
   List<Exercise> reasons= [
     Exercise(name: 'Defective Product'),
     Exercise(name: 'Expired'),
@@ -57,13 +62,22 @@ class _asset_master_homeState extends State<asset_master_home> {
   void addupdations() {
     FirebaseFirestore.instance.collection("masterupdation").add({
       "values": descriptionController.text,
-      "date": DateTime.now()
+      //"date": DateTime,
+      "date": DateTime.now().toString(),
+      "id": nameController.text,
+      "service": selectedcentre,
+      "stock" : selectedstock,
+      "radioval": selectedRadio,
+      "reallocate": reallocate,
+      "result" : qrCode,
+
     });
 
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser!;
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -76,7 +90,8 @@ class _asset_master_homeState extends State<asset_master_home> {
                   //Navigator.push(context, MaterialPageRoute(builder: (context)=>admin_user(user_name: '',)));
                 },
                 child: const Icon(Icons.perm_identity,color: Colors.black,)),
-            title:  Text("${widget.user_name}",style: TextStyle(color: Colors.black),),
+           // title:  Text("${widget.user_name}",style: TextStyle(color: Colors.black),),
+            title:  Text(user.email!,style: TextStyle(color: Colors.black),),
             actions: [
               GestureDetector(
                   onTap: (){
@@ -94,7 +109,8 @@ class _asset_master_homeState extends State<asset_master_home> {
                   child: Icon(Icons.notification_important,color: Colors.black,)),
               SizedBox(width: 10,),
               GestureDetector(
-                  onTap: (){
+                  onTap: ()async {
+                    await FirebaseAuth.instance.signOut();
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
                   },
                   child: Icon(Icons.logout_outlined,color: Colors.black,)),
@@ -203,7 +219,10 @@ class _asset_master_homeState extends State<asset_master_home> {
                                 padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
                                 child: GestureDetector(
                                   onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>history()));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                        history(asset_type: '',
+                                          qrcode: '',
+                                        )));
                                   },
                                   child: Container(
                                       height: 40,
@@ -262,7 +281,7 @@ class _asset_master_homeState extends State<asset_master_home> {
                                   ),
                                 ),
                               ),
-                              //service center
+                              //service center move to outside
                               Padding(
                                 padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
                                 child: Container(
@@ -270,31 +289,36 @@ class _asset_master_homeState extends State<asset_master_home> {
                                   height: 40,
                                   decoration: BoxDecoration(borderRadius:BorderRadius.circular(05),
                                       border:Border.all(color: Colors.black45)),
-                                  child:   DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
-                                      // isDense: true,
-                                      // isExpanded: false,
-                                      elevation: 10,
-                                      iconEnabledColor: Colors.black,
-                                      value: selectedcentre,
-                                      onChanged: (value)
-                                      {
-                                        setState(() {
-                                          selectedcentre = value!;
-                                        });
-                                      },
-
-                                      items: outside.map<DropdownMenuItem<String>>((value){
-                                        return DropdownMenuItem(
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(left: 30.0),
-                                            child: Text(value,style: TextStyle(color:Colors.black45 ),),
-                                          ),
-                                          value: value,
-                                        );
+                                  child:   StreamBuilder(
+                                    stream: FirebaseFirestore.instance.collection("servicecenter").orderBy("values").snapshots(),
+                                    
+                                    builder: (context,AsyncSnapshot<QuerySnapshot>snapshot) {
+                                      if(!snapshot.hasData){
+                                        return CircularProgressIndicator();
                                       }
-                                      ).toList(),
-                                    ),
+                                      else {
+                                        return DropdownButtonHideUnderline(
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: DropdownButton<String>(
+                                                value: null,//selectedcentre,
+
+                                                 onChanged: (value) {
+                                                  print("$value");
+                                                  setState(() {
+                                                   selectedcentre = value!;
+                                                  });
+                                                 },
+                                                items: snapshot.data?.docs.map((QueryDocumentSnapshot document){
+                                                  final dynamic data =document.data();
+                                                  return DropdownMenuItem<String>(
+                                                    value: data.toString(),
+                                                      child: Text(document["values"].toString()));
+                                                }).toList(),
+                                              ),
+                                            ) );
+                                      }
+                                    }
                                   ),
                                 ),
                               ),
@@ -306,31 +330,37 @@ class _asset_master_homeState extends State<asset_master_home> {
                                   height: 40,
                                   decoration: BoxDecoration(borderRadius:BorderRadius.circular(05),
                                       border:Border.all(color: Colors.black45)),
-                                  child:   DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
-                                      // isDense: true,
-                                      // isExpanded: false,
-                                      elevation: 10,
-                                      iconEnabledColor: Colors.black,
-                                      value: selectedstock,
-                                      onChanged: (value)
-                                      {
-                                        setState(() {
-                                          selectedstock = value!;
-                                        });
-                                      },
+                                  child:   StreamBuilder(
+                                    stream: FirebaseFirestore.instance.collection("departments").snapshots(),
+                                      builder: (context,AsyncSnapshot<QuerySnapshot>snapshot) {
+                                       var department = snapshot.data;
+                                      print("department snapshot $department");
+                                        if(!snapshot.hasData){
+                                          return CircularProgressIndicator();
+                                        }
+                                        else {
+                                          return DropdownButtonHideUnderline(
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: DropdownButton<String>(
+                                                  value:null,
 
-                                      items: backtostock.map<DropdownMenuItem<String>>((value){
-                                        return DropdownMenuItem(
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(left: 30.0),
-                                            child: Text(value,style: TextStyle(color:Colors.black45 ),),
-                                          ),
-                                          value: value,
-                                        );
+                                                  onChanged: (value) {
+                                                    print("$value");
+                                                    setState(() {
+                                                      selectedstock = value!;
+                                                    });
+                                                  },
+                                                  items: snapshot.data?.docs.map((QueryDocumentSnapshot document){
+                                                    final dynamic data =document.data();
+                                                    return DropdownMenuItem<String>(
+                                                        value: data.toString(),
+                                                        child: Text(document["values"].toString()));
+                                                  }).toList(),
+                                                ),
+                                              ) );
+                                        }
                                       }
-                                      ).toList(),
-                                    ),
                                   ),
                                 ),
                               ),
@@ -362,6 +392,7 @@ class _asset_master_homeState extends State<asset_master_home> {
                                 child: GestureDetector(
                                   onTap: (){
                                     addupdations();
+                                    descriptionController.clear();
                                     Navigator.push(context, MaterialPageRoute(
                                         builder: (context)=>updation(descriptionController: descriptionController.text,)));
                                   },
@@ -433,7 +464,8 @@ class _asset_master_homeState extends State<asset_master_home> {
                         groupValue: selectedRadio,
                         onChanged:
                             (value) {
-                          setState(() => selectedRadio = value!);
+                          setState(() =>
+                          selectedRadio = value!);
                         },
                       );
                     }),
@@ -488,7 +520,9 @@ class _asset_master_homeState extends State<asset_master_home> {
 
                         child: GestureDetector(
                           onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>asset_master_home(user_name: "", selectedPrivi: "")));
+                            Navigator.pop(context);
+                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                            //     asset_master_home(user_name: "", selectedPrivi: "")));
                           },
                           child: Container(
                             height: 40,
@@ -508,7 +542,9 @@ class _asset_master_homeState extends State<asset_master_home> {
                       Expanded(
                         child: GestureDetector(
                           onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>asset_master_home(user_name: "", selectedPrivi: "")));
+                            Navigator.pop(context);
+                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                            //     asset_master_home(user_name: "", selectedPrivi: "")));
                           },
                           child: Container(
                             height: 40,
@@ -539,14 +575,13 @@ class _asset_master_homeState extends State<asset_master_home> {
 
   }
 
-  Future reallocation_alert_box(){
-    return showDialog(
+  Future reallocation_alert_box() async{
+    return  await showDialog(
         context: context,
         builder: (BuildContext context){
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState){
                 return AlertDialog(
-
                   title: Text("Reallocate Department"),
                   content: SingleChildScrollView(
                     child:
@@ -554,10 +589,19 @@ class _asset_master_homeState extends State<asset_master_home> {
                       children: [
                         Row(
                           children: [
-
                             Expanded(child: Text("Current Department:",style: TextStyle(color: Colors.black54),)),
-                            SizedBox(width: 10,),
-                            Text("Department Name",style: TextStyle(color: Colors.black),),
+                            SizedBox(width: 5,),
+                           StreamBuilder(
+                             stream: FirebaseFirestore.instance.collection("departments").doc("depart").snapshots(),
+                               builder: (context ,AsyncSnapshot snapshot) {
+                                 if (!snapshot.hasData) {
+                                   return CircularProgressIndicator();
+                                 }
+
+                                 final userDoc = snapshot.data;
+                                 return Text(userDoc["values"]);
+                               })
+                           // Text("Department Name",style: TextStyle(color: Colors.black),),
                           ],
                         ),
                         SizedBox(height: 20,),
@@ -576,28 +620,35 @@ class _asset_master_homeState extends State<asset_master_home> {
                             height: 40,
                             decoration: BoxDecoration(borderRadius:BorderRadius.circular(05),
                                 border:Border.all(color: Colors.black45)),
-                            child:   DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                elevation: 10,
-                                iconEnabledColor: Colors.black,
-                                value: selecteddept,
-                                onChanged: (value)
-                                {
-                                  setState(() {
-                                    selecteddept = value!;
-                                  });
-                                },
-                                items: department.map<DropdownMenuItem<String>>((value){
-                                  return DropdownMenuItem(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 30.0),
-                                      child: Text(value,style: TextStyle(color:Colors.black45 ),),
-                                    ),
-                                    value: value,
-                                  );
+                            child:  StreamBuilder(
+                                stream: FirebaseFirestore.instance.collection("departments").orderBy("values").snapshots(),
+                                builder: (context,AsyncSnapshot<QuerySnapshot>snapshot) {
+                                  if(!snapshot.hasData){
+                                    return CircularProgressIndicator();
+                                  }
+                                  else {
+                                    return DropdownButtonHideUnderline(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: DropdownButton<String>(
+                                            value: null,
+
+                                            onChanged: (value) {
+                                              print("$value");
+                                              setState(() {
+                                                reallocate = value!;
+                                              });
+                                            },
+                                            items: snapshot.data?.docs.map((QueryDocumentSnapshot document){
+                                              final dynamic data =document.data();
+                                              return DropdownMenuItem<String>(
+                                                  value: data.toString(),
+                                                  child: Text(document["values"].toString()));
+                                            }).toList(),
+                                          ),
+                                        ) );
+                                  }
                                 }
-                                ).toList(),
-                              ),
                             ),
                           ),
                         ),
@@ -616,7 +667,9 @@ class _asset_master_homeState extends State<asset_master_home> {
 
                             child: GestureDetector(
                               onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>asset_master_home(user_name: "", selectedPrivi: "")));
+                                Navigator.pop(context);
+                                // Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                //     asset_master_home(user_name: "", selectedPrivi: "")));
                               },
                               child: Container(
                                 height: 40,
@@ -636,7 +689,9 @@ class _asset_master_homeState extends State<asset_master_home> {
                           Expanded(
                             child: GestureDetector(
                               onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>asset_master_home(user_name: "", selectedPrivi: "")));
+                                Navigator.pop(context);
+                                // Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                //     asset_master_home(user_name: "", selectedPrivi: "")));
                               },
                               child: Container(
                                 height: 40,

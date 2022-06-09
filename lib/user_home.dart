@@ -7,6 +7,7 @@ import 'package:asset_trissur_work_new/login_page.dart';
 import 'package:asset_trissur_work_new/report.dart';
 import 'package:asset_trissur_work_new/complaints.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class user_home extends StatefulWidget {
 class _user_homeState extends State<user_home> {
   String qrCode = 'Scanned Result';
   TextEditingController complaintController = TextEditingController();
-  TextEditingController nameController = TextEditingController();
+  TextEditingController idController = TextEditingController();
   TextEditingController moveController = TextEditingController();
   TextEditingController assetController = TextEditingController();
 
@@ -39,12 +40,14 @@ class _user_homeState extends State<user_home> {
       "values": complaintController.text,
       "date": Timestamp.now(),
     });
-
+    FirebaseFirestore.instance.collection("assetid").add({
+      "id": idController.text,
+    });
   }
- // void addcomplaints() async{}
- //  await  FirebaseFirestore.instnce.collection("complaints").add({
- //    "complaint": complaintController.text
- //   });
+   void cleartext(){
+    complaintController.clear();
+    idController.clear();
+   }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +70,8 @@ class _user_homeState extends State<user_home> {
           title:  Text("${widget.user_name}",style: TextStyle(color: Colors.black),),
           actions: [
             GestureDetector(
-                onTap: (){
+                onTap: () async {
+                  await FirebaseAuth.instance.signOut();
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
                 },
                 child: Icon(Icons.logout_outlined,color: Colors.black,)),
@@ -147,7 +151,7 @@ class _user_homeState extends State<user_home> {
 
 
                                   child: TextField(
-                                    controller: nameController,
+                                    controller: idController,
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                       labelText: "Asset Id",
@@ -217,14 +221,15 @@ class _user_homeState extends State<user_home> {
                                   ),
                                 ),
                               ),
-
                               //update button
                               Padding(
                                 padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
                                 child:
                                 GestureDetector(
                                   onTap: (){
+
                                     addcomplaints();
+                                    cleartext();
                                     Navigator.push(context,
                                         MaterialPageRoute(builder: (context)=>
                                             complaints(

@@ -78,7 +78,7 @@ class _complaintsState extends State<complaints> {
      // ),
        body: SafeArea(
          child:  StreamBuilder(
-             stream: FirebaseFirestore.instance.collection("usercomplaints").snapshots(),
+             stream: FirebaseFirestore.instance.collection("usercomplaints").orderBy("values").snapshots(),
              builder: (BuildContext context,AsyncSnapshot<QuerySnapshot>snapshot)
              {
                if (!snapshot.hasData)

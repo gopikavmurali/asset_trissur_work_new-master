@@ -14,7 +14,7 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'package:sizer/sizer.dart';
 
-import 'home_head.dart';
+import 'asset_head_home.dart';
 
 class login extends StatefulWidget {
   @override
@@ -33,9 +33,9 @@ class _loginState extends State<login> {
   ];
   String errorMsg="";
   String selectedPrivilage = "Select Privilage";
-
-  String email = "";
   String password = "";
+  String email = "";
+
   String privi ="";
 
   void validate() async {

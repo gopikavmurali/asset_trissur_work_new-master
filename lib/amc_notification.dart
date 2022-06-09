@@ -2,6 +2,7 @@
 import 'package:asset_trissur_work_new/amc_notification_model.dart';
 import 'package:asset_trissur_work_new/pending_list.dart';
 import 'package:calendar_timeline/calendar_timeline.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'constants.dart';
 import 'login_page.dart';
@@ -98,20 +99,84 @@ class _amc_notifyState extends State<amc_notify> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: ListTile(
-              leading: Text(notification_data[index].pro_id),
+              leading: StreamBuilder(
+                  stream: FirebaseFirestore.instance.collection("description").
+                  doc("LXRqfrRVQEzkQz0psTNk").snapshots(),
+
+                  builder: (context ,AsyncSnapshot snapshot) {
+                    if (!snapshot.hasData) {
+                      return CircularProgressIndicator();
+                    }
+
+                    final userDoc = snapshot.data;
+                    return  Text(userDoc!["asset_id"],
+                      style: TextStyle(color: Colors.black),);
+                  }),//Text(notification_data[index].pro_id),
               title: Padding(
                 padding: const EdgeInsets.all(1.0),
                 child: Row(
                   children: [
-                    Text(notification_data[index].pro_name),
+                    StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("description").
+                        doc("LXRqfrRVQEzkQz0psTNk").snapshots(),
+
+                        builder: (context ,AsyncSnapshot snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          }
+
+                          final userDoc = snapshot.data;
+                          return  Text(userDoc!["asset_name"],
+                            style: TextStyle(color: Colors.black),);
+                        }),
+                   //Text(notification_data[index].pro_name),
                   ],
                 ),
               ),
               subtitle: Column(
                 children: [
-                  Text(notification_data[index].department),
-                  Text(notification_data[index].supplier_name),
-                  Text(notification_data[index].amc_date),
+                  StreamBuilder(
+                      stream: FirebaseFirestore.instance.collection("description").
+                      doc("LXRqfrRVQEzkQz0psTNk").snapshots(),
+
+                      builder: (context ,AsyncSnapshot snapshot) {
+                        if (!snapshot.hasData) {
+                          return CircularProgressIndicator();
+                        }
+
+                        final userDoc = snapshot.data;
+                        return  Text(userDoc!["department"],
+                          style: TextStyle(color: Colors.black),);
+                      }),
+                  StreamBuilder(
+                      stream: FirebaseFirestore.instance.collection("description").
+                      doc("LXRqfrRVQEzkQz0psTNk").snapshots(),
+
+                      builder: (context ,AsyncSnapshot snapshot) {
+                        if (!snapshot.hasData) {
+                          return CircularProgressIndicator();
+                        }
+
+                        final userDoc = snapshot.data;
+                        return  Text(userDoc!["supplier_name"],
+                          style: TextStyle(color: Colors.black),);
+                      }),
+                  StreamBuilder(
+                      stream: FirebaseFirestore.instance.collection("description").
+                      doc("LXRqfrRVQEzkQz0psTNk").snapshots(),
+
+                      builder: (context ,AsyncSnapshot snapshot) {
+                        if (!snapshot.hasData) {
+                          return CircularProgressIndicator();
+                        }
+
+                        final userDoc = snapshot.data;
+                        return  Text(userDoc!["amc_end_date"],
+                          style: TextStyle(color: Colors.black),);
+                      }),
+                  // Text(notification_data[index].department),
+                  // Text(notification_data[index].supplier_name),
+                  // Text(notification_data[index].amc_date),
 
                 ],
               ),

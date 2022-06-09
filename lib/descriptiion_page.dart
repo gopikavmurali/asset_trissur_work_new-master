@@ -24,7 +24,7 @@ class admin_log_2 extends StatefulWidget {
 
 class _admin_log_2State extends State<admin_log_2> {
   final List<String> subjects = ["Asset Head", "BioMedical", "Electrical & maintenance","IT","Housekeeping"];
-  String selectedSubject = "Asset Head";
+  String selectedhead = "Asset Head";
   final List<String> depatmnt = ["Department", "BioMedical", "Electrical & maintenance","IT","Housekeeping"];
   String selecteddepatmnt = "Department";
   final List<String> itemname = ["Item Name", "Computer", "Laptop","Fan","Fridge","Chair","Table"];
@@ -53,13 +53,9 @@ class _admin_log_2State extends State<admin_log_2> {
   final dateIssueController = TextEditingController();
   final amc_start_Controller = TextEditingController();
   final amc_end_Controller = TextEditingController();
-
-
-
   @override
-
   dynamic countofasset(){
-    if (selectedSubject== "BioMedical")
+    if (selectedhead== "BioMedical")
       {
          int number = count+1;
         return
@@ -67,17 +63,12 @@ class _admin_log_2State extends State<admin_log_2> {
       }
 
   }
-
   void alert(){
     showDialog(
         barrierDismissible: false,
         context: context, builder:(ctx) => Container(
-      // height: 700,
-      // width: 500,
-      // decoration: BoxDecoration(border: Border.all(color: Colors.white)),
-      child: AlertDialog(
-        //shape: BoxShape.rectangle,
 
+      child: AlertDialog(
         title: Row(
           children: [
             const Text("Asset ID:",style: TextStyle(color: Colors.black26),),
@@ -110,7 +101,8 @@ class _admin_log_2State extends State<admin_log_2> {
               const SizedBox(width: 10,),
               GestureDetector(
                   onTap: (){
-             Navigator.push(context, MaterialPageRoute(builder: (context)=>admin_log_2()));
+                    Navigator.pop(context);
+             //Navigator.push(context, MaterialPageRoute(builder: (context)=>admin_log_2()));
            },
 
                 child:Container(
@@ -130,11 +122,7 @@ class _admin_log_2State extends State<admin_log_2> {
     )
     );
   }
-  void dispose() {
-    // Clean up the controller when the widget is removed
-    dateController.dispose();
-    super.dispose();
-  }
+
   void add_description(){
     FirebaseFirestore.instance.collection("description").add({
       "asset_id": idController.text,
@@ -148,12 +136,30 @@ class _admin_log_2State extends State<admin_log_2> {
       "serial_no":serialController.text,
       "supplier_name":supController.text,
       "warranty":dateController.text,
+      "asset_types":selectedtype,
+      "asset_head":selectedhead,
+      "asset_name":selecteditem,
+      "department":selecteddepatmnt,
 
     });
   }
   void cleartext(){
     depController.clear();
+    idController.clear();
+    amc_start_Controller.clear();
+    amc_end_Controller.clear();
+    brandController.clear();
+    configController.clear();
+    dateIssueController.clear();
+    valueController.clear();
+    orderController.clear();
+    serialController.clear();
+    supController.clear();
+    dateController.clear();
   }
+  void buildSetState() => setState(() {
+    alert();
+  });
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -279,32 +285,45 @@ class _admin_log_2State extends State<admin_log_2> {
                         border: Border.all(color: Colors.black26),
                         borderRadius: BorderRadius.circular(5)),
 
-                    child:  DropdownButtonHideUnderline(
+                    child:  StreamBuilder(
+                      stream: FirebaseFirestore.instance.collection("items").orderBy("values").snapshots(),
+                        builder: (context,AsyncSnapshot<QuerySnapshot>snapshot){
+                          if(!snapshot.hasData)
+                          {  return CircularProgressIndicator();  }
+                          else
+                          {
+                            return
+                              DropdownButtonHideUnderline(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: DropdownButton<String>(
+                                      elevation: 10,
+                                      iconEnabledColor: Colors.black,
+                                      value: null,
+                                      onChanged: (value){
+                                        print("$value");
+                                        setState(() {
+                                          selecteditem = value!;
+                                        });
+                                      },
+                                      items: snapshot.data?.docs.map((QueryDocumentSnapshot document){
+                                        final dynamic data = document.data();
+                                        return DropdownMenuItem<String>(
+                                            value: data["values"].toString(),
+                                            child: Text(data["values"].toString())
+                                          //child: Text(document["values"].toString)
+                                        );
+                                      }
+                                      ).toList(),
 
 
-                      child: DropdownButton<String>(
-                        elevation: 10,
-                        iconEnabledColor: Colors.black,
-                        value: selecteditem,
-                        onChanged: (value){
-                          setState(() {
-                            selecteditem= value!;
-                          });
-                        },
 
-                        items: itemname.map<DropdownMenuItem<String>>((value){
+                                    ),
+                                  ));
+                          }
 
-                          return DropdownMenuItem(
 
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(    value),
-                            ),
-                            value: value,
-
-                          );
-                        }).toList(),
-                      ),
+                        }
                     ),
 
                   ),
@@ -324,36 +343,45 @@ class _admin_log_2State extends State<admin_log_2> {
                         border: Border.all(color: Colors.black26),
                         borderRadius: BorderRadius.circular(5)),
 
-                    child:  DropdownButtonHideUnderline(
+                    child:  StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("departments").orderBy("values").snapshots(),
+                        builder: (context,AsyncSnapshot<QuerySnapshot>snapshot){
+                          if(!snapshot.hasData)
+                          {  return CircularProgressIndicator();  }
+                          else
+                          {
+                            return
+                              DropdownButtonHideUnderline(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: DropdownButton<String>(
+                                      elevation: 10,
+                                      iconEnabledColor: Colors.black,
+                                      value: null,
+                                      onChanged: (value){
+                                        print("$value");
+                                        setState(() {
+                                          selecteddepatmnt = value!;
+                                        });
+                                      },
+                                      items: snapshot.data?.docs.map((QueryDocumentSnapshot document){
+                                        final dynamic data = document.data();
+                                        return DropdownMenuItem<String>(
+                                            value: data["values"].toString(),
+                                            child: Text(data["values"].toString())
+                                          //child: Text(document["values"].toString)
+                                        );
+                                      }
+                                      ).toList(),
 
 
-                      child: DropdownButton<String>(
-                        // isDense: true,
-                        // isExpanded: false,
 
-                        elevation: 10,
+                                    ),
+                                  ));
+                          }
 
-                        iconEnabledColor: Colors.black,
-                        value: selecteddepatmnt,
-                        onChanged: (value){
-                          setState(() {
-                            selecteddepatmnt = value!;
-                          });
-                        },
 
-                        items: depatmnt.map<DropdownMenuItem<String>>((value){
-
-                          return DropdownMenuItem(
-
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(    value),
-                            ),
-                            value: value,
-
-                          );
-                        }).toList(),
-                      ),
+                        }
                     ),
 
                   ),
@@ -539,38 +567,78 @@ class _admin_log_2State extends State<admin_log_2> {
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.black26),
                         borderRadius: BorderRadius.circular(5)),
+                    child:  StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("asset_types").snapshots(),
+                        builder: (context,AsyncSnapshot<QuerySnapshot>snapshot){
+                          if(!snapshot.hasData)
+                          {  return CircularProgressIndicator();  }
+                          else
+                          {
+                            return
+                              DropdownButtonHideUnderline(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: DropdownButton<String>(
+                                      elevation: 10,
+                                      iconEnabledColor: Colors.black,
+                                      value: null,
+                                      onChanged: (value){
+                                        print("$value");
+                                        setState(() {
+                                          selectedtype= value!;
+                                        });
+                                      },
+                                      items: snapshot.data?.docs.map((QueryDocumentSnapshot document){
+                                        final dynamic data = document.data();
+                                        return DropdownMenuItem<String>(
+                                            value: data["values"].toString(),
+                                            child: Text(data["values"].toString())
+                                          //child: Text(document["values"].toString)
+                                        );
+                                      }
+                                      ).toList(),
 
-                    child:  DropdownButtonHideUnderline(
 
 
-                      child: DropdownButton<String>(
-                        // isDense: true,
-                        // isExpanded: false,
+                                    ),
+                                  ));
+                          }
 
-                        elevation: 10,
 
-                        iconEnabledColor: Colors.black,
-                        value: selectedtype,
-                        onChanged: (value){
-                          setState(() {
-                            selectedtype = value!;
-                          });
-                        },
-
-                        items: asset_types.map<DropdownMenuItem<String>>((value){
-
-                          return DropdownMenuItem(
-
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(    value),
-                            ),
-                            value: value,
-
-                          );
-                        }).toList(),
-                      ),
+                        }
                     ),
+
+                    // child:  DropdownButtonHideUnderline(
+                    //
+                    //
+                    //   child: DropdownButton<String>(
+                    //     // isDense: true,
+                    //     // isExpanded: false,
+                    //
+                    //     elevation: 10,
+                    //
+                    //     iconEnabledColor: Colors.black,
+                    //     value: selectedtype,
+                    //     onChanged: (value){
+                    //       setState(() {
+                    //         selectedtype = value!;
+                    //       });
+                    //     },
+                    //
+                    //     items: asset_types.map<DropdownMenuItem<String>>((value){
+                    //
+                    //       return DropdownMenuItem(
+                    //
+                    //         child: Padding(
+                    //           padding: const EdgeInsets.only(left: 10.0),
+                    //           child: Text(    value),
+                    //         ),
+                    //         value: value,
+                    //
+                    //       );
+                    //     }).toList(),
+                    //   ),
+                    // ),
 
                   ),
                 ),
@@ -589,36 +657,45 @@ class _admin_log_2State extends State<admin_log_2> {
                         border: Border.all(color: Colors.black26),
                         borderRadius: BorderRadius.circular(5)),
 
-                    child:  DropdownButtonHideUnderline(
+                    child:  StreamBuilder(
+                      stream: FirebaseFirestore.instance.collection("assethead").orderBy("values").snapshots(),
+                        builder: (context,AsyncSnapshot<QuerySnapshot>snapshot){
+                          if(!snapshot.hasData)
+                          {  return CircularProgressIndicator();  }
+                          else
+                          {
+                            return
+                              DropdownButtonHideUnderline(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: DropdownButton<String>(
+                                      elevation: 10,
+                                      iconEnabledColor: Colors.black,
+                                      value: null,
+                                      onChanged: (value){
+                                        print("$value");
+                                        setState(() {
+                                          selectedhead = value!;
+                                        });
+                                      },
+                                      items: snapshot.data?.docs.map((QueryDocumentSnapshot document){
+                                        final dynamic data = document.data();
+                                        return DropdownMenuItem<String>(
+                                            value: data["values"].toString(),
+                                            child: Text(data["values"].toString())
+                                          //child: Text(document["values"].toString)
+                                        );
+                                      }
+                                      ).toList(),
 
 
-                      child: DropdownButton<String>(
-                        // isDense: true,
-                        // isExpanded: false,
 
-                        elevation: 10,
+                                    ),
+                                  ));
+                          }
 
-                        iconEnabledColor: Colors.black,
-                        value: selectedSubject,
-                        onChanged: (value){
-                          setState(() {
-                            selectedSubject = value!;
-                          });
-                        },
 
-                        items: subjects.map<DropdownMenuItem<String>>((value){
-
-                          return DropdownMenuItem(
-
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(    value),
-                            ),
-                            value: value,
-
-                          );
-                        }).toList(),
-                      ),
+                        }
                     ),
 
                   ),
@@ -774,6 +851,8 @@ class _admin_log_2State extends State<admin_log_2> {
                 GestureDetector(
                   onTap: (){
                     add_description();
+                    buildSetState();
+
                   },
                   child: Container(
                     height: 35,
@@ -795,22 +874,6 @@ class _admin_log_2State extends State<admin_log_2> {
                   ),
                 ),
                 SizedBox(height: 20,),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
               ],
             )
           ],
@@ -823,3 +886,6 @@ class _admin_log_2State extends State<admin_log_2> {
 
 
 }
+
+
+

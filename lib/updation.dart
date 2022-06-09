@@ -19,6 +19,9 @@ class _updationState extends State<updation> {
   @override
   int count = 0;
 
+  var now;
+
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -46,7 +49,7 @@ class _updationState extends State<updation> {
           ]),
         body: SafeArea(
           child:  StreamBuilder(
-              stream: FirebaseFirestore.instance.collection("masterupdation").snapshots(),
+              stream: FirebaseFirestore.instance.collection("masterupdation").orderBy("values").snapshots(),
               builder: (BuildContext context,AsyncSnapshot<QuerySnapshot>snapshot)
               {
                 if (!snapshot.hasData)
@@ -65,10 +68,12 @@ class _updationState extends State<updation> {
                         return ListTile(
                             title: Text(data["values"].toString()),
                             leading: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              //child: Text(data["date"].toString()),
+                              padding:EdgeInsets.all(8.0),
+                             // child: Text(data["date"].toString()),
+                            //child: Text(data["date"] as Timestamp).toDate();
                               child: Text("dd-mm-yyyy"),
                             )
+
                         );
                         // return Container(
                         //   height: 50,

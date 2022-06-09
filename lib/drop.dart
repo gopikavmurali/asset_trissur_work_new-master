@@ -44,9 +44,7 @@ class _dropState extends State<drop> {
                   stream: FirebaseFirestore.instance.collection("items").orderBy("values").snapshots(),
                   builder: (context,AsyncSnapshot<QuerySnapshot>snapshot){
                     if(!snapshot.hasData)
-                    {
-                      return CircularProgressIndicator();
-                    }
+                    {  return CircularProgressIndicator();  }
                     else
                     {
                       return
@@ -54,27 +52,23 @@ class _dropState extends State<drop> {
                             child: DropdownButton<String>(
                               elevation: 10,
                               iconEnabledColor: Colors.black,
-
+                                value: selecteditem,
                               onChanged: (value){
+                                print("$value");
                                 setState(() {
-                                  selecteditem= value!;
-                                }
-                                );
-
+                                  selecteditem = value!;
+                                });
                               },
-
-
                               items: snapshot.data?.docs.map((QueryDocumentSnapshot document){
                                 final dynamic data = document.data();
                                 return DropdownMenuItem<String>(
-                                    value: data["id"].toString(),
+                                    value: data["values"].toString(),
                                     child: Text(data["values"].toString())
                                   //child: Text(document["values"].toString)
                                 );
                               }
-
                               ).toList(),
-                              value: null
+
 
 
                             ));

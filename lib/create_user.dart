@@ -2,11 +2,11 @@
 import 'package:asset_trissur_work_new/create_page_master.dart';
 import 'package:asset_trissur_work_new/user_home.dart';
 import 'package:asset_trissur_work_new/asset_master_home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'constants.dart';
-
 
 
 class create_user extends StatefulWidget {
@@ -49,22 +49,56 @@ class _create_userState extends State<create_user> {
   void validate(){
     if(formkey.currentState!.validate()&& selectedSubject=="User"|| selectedSubject=="Asset head")
     {
-      //Alert box code for showing status
-      showDialog(context: context, builder:(ctx) => AlertDialog(
-        title: Text("User Created Succesfully",style: TextStyle(color: Colors.black),),
-        content: GestureDetector(
-          onTap: (){
-            clearText();
-            clearDrop();
-            Navigator.pop(context);
-          },
-          child: const Text("Continue",
-            style: TextStyle(color: Colors.green,
-                fontWeight: FontWeight.w900,fontSize: 20),),
-        ),
-      )
+      try{
+        FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: username.text,
+            password: createpass.text);
+      } on FirebaseAuthException catch (e){
+        print (e);
+
+      }
+      setState(() {
+        showDialog(context: context, builder:(ctx) => AlertDialog(
+          title: Text("The email address is already in use by another account",style: TextStyle(color: Colors.black54),),
+          content: GestureDetector(
+            onTap: (){
+              clearText();
+              clearDrop();
+              Navigator.pop(context);
+            },
+            child:  Padding(
+              padding: const EdgeInsets.only(left: 108.0,right: 100),
+              child: Text("Ok",
+                style: TextStyle(color: Colors.red,
+                    fontWeight: FontWeight.w900,fontSize: 20),),
+            ),
+          ),
+        )
+        );
+
+      }
       );
+         //Alert box code for showing status
     }
+
+    // setState(() {
+    //   showDialog(context: context, builder:(ctx) => AlertDialog(
+    //     title: Text("User Created",style: TextStyle(color: Colors.black),),
+    //     content: GestureDetector(
+    //       onTap: (){
+    //         clearText();
+    //         clearDrop();
+    //         Navigator.pop(context);
+    //       },
+    //       child: const Text("Continue",
+    //         style: TextStyle(color: Colors.green,
+    //             fontWeight: FontWeight.w900,fontSize: 20),),
+    //     ),
+    //   )
+    //   );
+    //
+    // })
+
     else{
       showDialog(context: context, builder:(ctx) => const AlertDialog(
         //title: Text("User Creation Failed"),
@@ -75,8 +109,6 @@ class _create_userState extends State<create_user> {
   }
   @override
   Widget build(BuildContext context) {
-    var currentValue;
-
     return WillPopScope(
 
       onWillPop: () async => false,
@@ -197,12 +229,25 @@ class _create_userState extends State<create_user> {
                           padding: const EdgeInsets.fromLTRB(30,390,40,10),
                           // Email validation
                           child:  TextFormField(
-                            validator: validatePassword,
-                            // validator: MultiValidator([
-                            //   RequiredValidator(errorText: "Email can't be blank"),
-                            //   EmailValidator(errorText: 'Not a valid email'),
-                            //
-                            // ]),
+                            validator: (value){
+
+
+                                if(value != null && value.isEmpty){
+                                  return "Passwordn can't be blank";
+                                }
+                                else if (value!.length<6 ||value.length>6){
+                                  return "Should have 6 characters ";
+                                }
+                                if (createpass.text!= cnfrmepass.text)
+                                {
+                                  return "Password does not match";
+                                }
+                                return null;
+
+
+
+
+                            },
                             controller: createpass,
                             autocorrect: true,
                             decoration: const InputDecoration(
@@ -235,7 +280,7 @@ class _create_userState extends State<create_user> {
                                 {
                                   return "Please enter a paswword";
                                 }
-                              if (value.length>6)
+                              if (value.length>6 || value.length <6)
                                 {
                                   return "Should be 6 characters";
                                 }

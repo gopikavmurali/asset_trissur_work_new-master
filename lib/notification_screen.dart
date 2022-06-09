@@ -2,6 +2,7 @@
 import 'package:asset_trissur_work_new/notification_model.dart';
 import 'package:asset_trissur_work_new/pending_list.dart';
 import 'package:calendar_timeline/calendar_timeline.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -13,7 +14,9 @@ import 'login_page.dart';
 
 class notification extends StatefulWidget {
    final String complaintController;
-  const notification({Key? key, required this.complaintController}) : super(key: key);
+  const notification({
+    Key? key,
+    required this.complaintController}) : super(key: key);
   @override
   _notificationState createState() => _notificationState();
 }
@@ -144,7 +147,20 @@ class _notificationState extends State<notification> {
                              Container(
                                height: 60,
                                width: 100,
-                               child: Text("Not working due to technical issues")
+                               child: StreamBuilder(
+                                   stream: FirebaseFirestore.instance.collection("usercomplaints").
+                                   doc("fVUkMD0cGXcTjmoNB7jE").snapshots(),
+
+                                   builder: (context ,AsyncSnapshot snapshot) {
+                                     if (!snapshot.hasData) {
+                                       return CircularProgressIndicator();
+                                     }
+
+                                     final userDoc = snapshot.data;
+                                     return  Text(userDoc!["values"],
+                                       style: TextStyle(color: Colors.black),);
+                                   }),
+                               //Text("Not working due to technical issues")
                                //Text("${widget.complaintController}"),
                              )
                            ],
@@ -201,7 +217,8 @@ class _notificationState extends State<notification> {
                                            FlatButton(
                                              onPressed: () {
                                                Navigator.push(context,
-                                                   MaterialPageRoute(builder: (context)=>pending_list(pendingController: pendingController.text,)));
+                                                   MaterialPageRoute(builder: (context)=>pending_list(
+                                                     pendingController: pendingController.text,)));
                                              },
                                              child: Text("Add ",style: const TextStyle(fontSize: 20,
                                              color: Colors.green,fontWeight: FontWeight.w900)),

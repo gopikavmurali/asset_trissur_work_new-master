@@ -11,6 +11,7 @@ import 'package:asset_trissur_work_new/report.dart';
 import 'package:asset_trissur_work_new/complaints.dart';
 import 'package:asset_trissur_work_new/updation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class asset_head_home extends StatefulWidget {
 class _asset_head_homeState extends State<asset_head_home> {
   String qrCode = 'Scanned Result';
   final descriptionController = TextEditingController();
-  TextEditingController nameController = TextEditingController();
+  TextEditingController idController = TextEditingController();
   TextEditingController moveController = TextEditingController();
   TextEditingController assetController = TextEditingController();
   final List<String> backtostock = ["Back To Stock","Department 1","Department 2","Department 3"];
@@ -46,6 +47,8 @@ class _asset_head_homeState extends State<asset_head_home> {
   String selectedcentre = "Move To Outside";
   final List<String> department = ["Department","Dept 1","Dept  2","Dept 3"];
   String selecteddept = "Department";
+  String reallocate = "Move To Outside";
+  int  selectedRadio = -1;
 
   List<Exercise> reasons= [
     Exercise(name: 'Defective Product'),
@@ -53,14 +56,33 @@ class _asset_head_homeState extends State<asset_head_home> {
     Exercise(name: 'Change in Requirement'),
   ];
 
-  void addupdations() {
-    FirebaseFirestore.instance.collection("masterupdation").add({
-      "values": descriptionController.text,
-      "date": DateTime.now()
-    });
-
+ @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
+
+  void addupdations() {
+    FirebaseFirestore.instance.collection("headupdation").add({
+      "values": descriptionController.text,
+      "date": DateTime.now(),
+      "id":idController.text,
+      "stock":selectedstock,
+      "center": selectedcentre,
+      "reallocate": reallocate,
+      "radiovalue": selectedRadio,
+      "result": qrCode,
+
+    });
+    FirebaseFirestore.instance.collection("assetid").add({
+      "id": idController.text,
+    });
+    // FirebaseFirestore.instance.collection("headupdation").add({
+    //   "id": descriptionController.text,
+    // });
+
+  }
 
 
 
@@ -76,14 +98,11 @@ class _asset_head_homeState extends State<asset_head_home> {
             elevation: 0,
             leading: GestureDetector(
                 onTap: (){
-
-
                   //Navigator.push(context, MaterialPageRoute(builder: (context)=>admin_user(user_name: '',)));
                 },
                 child: const Icon(Icons.perm_identity,color: Colors.black,)),
             title:  Text("${widget.user_name}",style: TextStyle(color: Colors.black),),
             actions: [
-
               GestureDetector(
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(
@@ -99,7 +118,9 @@ class _asset_head_homeState extends State<asset_head_home> {
                   child: Icon(Icons.notification_important,color: Colors.black,)),
               SizedBox(width: 10,),
               GestureDetector(
-                  onTap: (){
+                  onTap: ()async{
+                    await FirebaseAuth.instance.signOut();
+
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
                   },
                   child: Icon(Icons.logout_outlined,color: Colors.black,)),
@@ -178,7 +199,7 @@ class _asset_head_homeState extends State<asset_head_home> {
 
 
                                   child: TextField(
-                                    controller: nameController,
+                                    controller: idController,
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                       labelText: "Asset Id",
@@ -240,7 +261,8 @@ class _asset_head_homeState extends State<asset_head_home> {
                                 child:
                                 GestureDetector(
                                   onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>history()));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                        history(asset_type: '', qrcode: '',)));
                                   },
                                   child: Container(
                                       height: 40,
@@ -313,31 +335,36 @@ class _asset_head_homeState extends State<asset_head_home> {
                                   height: 40,
                                   decoration: BoxDecoration(borderRadius:BorderRadius.circular(05),
                                       border:Border.all(color: Colors.black45)),
-                                  child:   DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
-                                      // isDense: true,
-                                      // isExpanded: false,
-                                      elevation: 10,
-                                      iconEnabledColor: Colors.black,
-                                      value: selectedcentre,
-                                      onChanged: (value)
-                                      {
-                                        setState(() {
-                                          selectedcentre = value!;
-                                        });
-                                      },
+                                  child:   StreamBuilder(
+                                      stream: FirebaseFirestore.instance.collection("servicecenter").orderBy("values").snapshots(),
 
-                                      items: outside.map<DropdownMenuItem<String>>((value){
-                                        return DropdownMenuItem(
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(left: 30.0),
-                                            child: Text(value,style: TextStyle(color:Colors.black45 ),),
-                                          ),
-                                          value: value,
-                                        );
+                                      builder: (context,AsyncSnapshot<QuerySnapshot>snapshot) {
+                                        if(!snapshot.hasData){
+                                          return CircularProgressIndicator();
+                                        }
+                                        else {
+                                          return DropdownButtonHideUnderline(
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: DropdownButton<String>(
+                                                  value: null,//selectedcentre,
+
+                                                  onChanged: (value) {
+                                                    print("$value");
+                                                    setState(() {
+                                                      selectedcentre = value!;
+                                                    });
+                                                  },
+                                                  items: snapshot.data?.docs.map((QueryDocumentSnapshot document){
+                                                    final dynamic data =document.data();
+                                                    return DropdownMenuItem<String>(
+                                                        value: data.toString(),
+                                                        child: Text(document["values"].toString()));
+                                                  }).toList(),
+                                                ),
+                                              ) );
+                                        }
                                       }
-                                      ).toList(),
-                                    ),
                                   ),
                                 ),
                               ),
@@ -349,31 +376,35 @@ class _asset_head_homeState extends State<asset_head_home> {
                                   height: 40,
                                   decoration: BoxDecoration(borderRadius:BorderRadius.circular(05),
                                       border:Border.all(color: Colors.black45)),
-                                  child:   DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
-                                      // isDense: true,
-                                      // isExpanded: false,
-                                      elevation: 10,
-                                      iconEnabledColor: Colors.black,
-                                      value: selectedstock,
-                                      onChanged: (value)
-                                      {
-                                        setState(() {
-                                          selectedstock = value!;
-                                        });
-                                      },
+                                  child:   StreamBuilder(
+                                      stream: FirebaseFirestore.instance.collection("departments").orderBy("values").snapshots(),
+                                      builder: (context,AsyncSnapshot<QuerySnapshot>snapshot) {
+                                        if(!snapshot.hasData){
+                                          return CircularProgressIndicator();
+                                        }
+                                        else {
+                                          return DropdownButtonHideUnderline(
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: DropdownButton<String>(
+                                                  value:null,
 
-                                      items: backtostock.map<DropdownMenuItem<String>>((value){
-                                        return DropdownMenuItem(
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(left: 30.0),
-                                            child: Text(value,style: TextStyle(color:Colors.black45 ),),
-                                          ),
-                                          value: value,
-                                        );
+                                                  onChanged: (value) {
+                                                    print("$value");
+                                                    setState(() {
+                                                      selectedstock = value!;
+                                                    });
+                                                  },
+                                                  items: snapshot.data?.docs.map((QueryDocumentSnapshot document){
+                                                    final dynamic data =document.data();
+                                                    return DropdownMenuItem<String>(
+                                                        value: data.toString(),
+                                                        child: Text(document["values"].toString()));
+                                                  }).toList(),
+                                                ),
+                                              ) );
+                                        }
                                       }
-                                      ).toList(),
-                                    ),
                                   ),
                                 ),
                               ),
@@ -408,6 +439,8 @@ class _asset_head_homeState extends State<asset_head_home> {
                                     addupdations();
                                     Navigator.push(context, MaterialPageRoute(
                                         builder: (context)=>updation(descriptionController: descriptionController.text,)));
+                                    descriptionController.clear();
+                                    idController.clear();
                                   },
                                   child: Container(
                                       height: 40,
@@ -458,10 +491,16 @@ class _asset_head_homeState extends State<asset_head_home> {
   }
 
   Future dispose_alert_box(){
+
     return  showDialog(
       context: context,
       builder: (BuildContext context) {
-        int selectedRadio = -1;
+       // int  selectedRadio = -1;
+        void update() {
+          FirebaseFirestore.instance.collection("disposereason").add({
+            "radio": selectedRadio,
+          });
+        }
         return AlertDialog(
           title:Text("Select Reason to Dispose",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400),),
           content: Column(
@@ -480,7 +519,8 @@ class _asset_head_homeState extends State<asset_head_home> {
                         groupValue: selectedRadio,
                         onChanged:
                             (value) {
-                          setState(() => selectedRadio = value!);
+                          setState(() =>
+                          selectedRadio = value!);
                         },
                       );
                     }),
@@ -535,8 +575,9 @@ class _asset_head_homeState extends State<asset_head_home> {
 
                         child: GestureDetector(
                           onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                                asset_head_home(user_name: "", selectedPrivi:"")));
+                            Navigator.pop(context);
+                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                            //     asset_head_home(user_name: "", selectedPrivi:"")));
                           },
                           child: Container(
                             height: 40,
@@ -556,8 +597,11 @@ class _asset_head_homeState extends State<asset_head_home> {
                       Expanded(
                         child: GestureDetector(
                           onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                                asset_head_home(user_name: "", selectedPrivi:"")));
+
+                             update();
+                            Navigator.pop(context);
+                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                            //     asset_head_home(user_name: "", selectedPrivi:"")));
                           },
                           child: Container(
                             height: 40,
@@ -584,30 +628,38 @@ class _asset_head_homeState extends State<asset_head_home> {
             )
           ],
         );
+
       },);
 
   }
 
   Future reallocation_alert_box() async{
-    return await showDialog(
+    return  await showDialog(
         context: context,
         builder: (BuildContext context){
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState){
                 return AlertDialog(
-
                   title: Text("Reallocate Department"),
                   content: SingleChildScrollView(
                     child:
                     Column(
                       children: [
-                        Row(mainAxisAlignment: MainAxisAlignment.center,
+                        Row(
                           children: [
-
                             Expanded(child: Text("Current Department:",style: TextStyle(color: Colors.black54),)),
-                            SizedBox(width:2,),
+                            SizedBox(width: 5,),
+                            StreamBuilder(
+                                stream: FirebaseFirestore.instance.collection("departments").doc("depart").snapshots(),
+                                builder: (context ,AsyncSnapshot snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return CircularProgressIndicator();
+                                  }
 
-                            Text("Department Name",style: TextStyle(color: Colors.black),),
+                                  final userDoc = snapshot.data;
+                                  return Text(userDoc["values"]);
+                                })
+                            // Text("Department Name",style: TextStyle(color: Colors.black),),
                           ],
                         ),
                         SizedBox(height: 20,),
@@ -626,28 +678,35 @@ class _asset_head_homeState extends State<asset_head_home> {
                             height: 40,
                             decoration: BoxDecoration(borderRadius:BorderRadius.circular(05),
                                 border:Border.all(color: Colors.black45)),
-                            child:   DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                elevation: 10,
-                                iconEnabledColor: Colors.black,
-                                value: selecteddept,
-                                onChanged: (value)
-                                {
-                                  setState(() {
-                                    selecteddept =  value!;
-                                  });
-                                },
-                                items: department.map<DropdownMenuItem<String>>((value){
-                                  return DropdownMenuItem(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 30.0),
-                                      child: Text(value,style: TextStyle(color:Colors.black45 ),),
-                                    ),
-                                    value: value,
-                                  );
+                            child:  StreamBuilder(
+                                stream: FirebaseFirestore.instance.collection("departments").orderBy("values").snapshots(),
+                                builder: (context,AsyncSnapshot<QuerySnapshot>snapshot) {
+                                  if(!snapshot.hasData){
+                                    return CircularProgressIndicator();
+                                  }
+                                  else {
+                                    return DropdownButtonHideUnderline(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: DropdownButton<String>(
+                                            value: null,
+
+                                            onChanged: (value) {
+                                              print("$value");
+                                              setState(() {
+                                                reallocate = value!;
+                                              });
+                                            },
+                                            items: snapshot.data?.docs.map((QueryDocumentSnapshot document){
+                                              final dynamic data =document.data();
+                                              return DropdownMenuItem<String>(
+                                                  value: data.toString(),
+                                                  child: Text(document["values"].toString()));
+                                            }).toList(),
+                                          ),
+                                        ) );
+                                  }
                                 }
-                                ).toList(),
-                              ),
                             ),
                           ),
                         ),
@@ -666,8 +725,9 @@ class _asset_head_homeState extends State<asset_head_home> {
 
                             child: GestureDetector(
                               onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                                    asset_head_home(user_name: "", selectedPrivi: "")));
+                                Navigator.pop(context);
+                                // Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                //     asset_head_home(user_name: "", selectedPrivi: "")));
                               },
                               child: Container(
                                 height: 40,
@@ -687,8 +747,9 @@ class _asset_head_homeState extends State<asset_head_home> {
                           Expanded(
                             child: GestureDetector(
                               onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                                    asset_head_home(user_name:"", selectedPrivi: "")));
+                                Navigator.pop(context);
+                                // Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                //     asset_head_home(user_name: "", selectedPrivi: "")));
                               },
                               child: Container(
                                 height: 40,
@@ -715,10 +776,8 @@ class _asset_head_homeState extends State<asset_head_home> {
 
                 );
               }
-
           );});
   }
-
 
 
 }
