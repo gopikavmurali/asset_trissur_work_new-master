@@ -5,13 +5,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 
 TextStyle buildTextStyle() =>
-    TextStyle(color: Colors.white,fontSize: 14);
+    const TextStyle(color: Colors.white,fontSize: 14);
 
 TextStyle headingText() =>
-    TextStyle(fontSize: 18,fontStyle: FontStyle.normal,color: Colors.black45);
+    const TextStyle(fontSize: 18,fontStyle: FontStyle.normal,color: Colors.black45);
 
 TextStyle dropStyle() => 
-    TextStyle(fontWeight: FontWeight.w600);
+    const TextStyle(fontWeight: FontWeight.w600);
 
 TextStyle buildFontlink() {
   return GoogleFonts.getFont('Nunito Sans',
@@ -47,7 +47,9 @@ String?  validatePhone(value){
   {
     return "Mobile Number must be 10 digit";
   }
-  else return null;
+  else {
+    return null;
+  }
 }
 
 //function for validating password
@@ -59,6 +61,7 @@ String? validatePassword(value){
   else if (value.length<6 ||value.length>6){
     return "Should have 6 characters ";
   }
+  return null;
 
 
 
@@ -90,7 +93,7 @@ Widget ContainerPending({required int height,
     height: 40,
     width: 60,
     decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8), color: Color(0xFF468c90)),
+        borderRadius: BorderRadius.circular(8), color: const Color(0xFF468c90)),
     child: Center(child: Text("Pending", style: buildTextStyle(),)),
   );
 

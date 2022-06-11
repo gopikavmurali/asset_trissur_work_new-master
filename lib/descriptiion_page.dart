@@ -1,11 +1,8 @@
 
-import 'dart:io';
 
 import 'package:asset_trissur_work_new/constants.dart';
 import 'package:asset_trissur_work_new/report.dart';
-import 'package:asset_trissur_work_new/asset_master_home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 
@@ -95,7 +92,7 @@ class _admin_log_2State extends State<admin_log_2> {
               Container(
                 height: 40,
                 width: 150,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),color:  Color(0xFF468c90)),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),color:  const Color(0xFF468c90)),
                 child: Center(child: Text("Print QR code",style: buildTextStyle(),)),
               ),
               const SizedBox(width: 10,),
@@ -161,6 +158,7 @@ class _admin_log_2State extends State<admin_log_2> {
     alert();
   });
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -171,18 +169,18 @@ class _admin_log_2State extends State<admin_log_2> {
           onTap: (){
             Navigator.pop(context);
           },
-            child: Icon(Icons.arrow_back, color: Colors.black,)),
+            child: const Icon(Icons.arrow_back, color: Colors.black,)),
         actions: [
-          Icon(Icons.download, color: Colors.black,),
-          SizedBox(width: 20,),
+          const Icon(Icons.download, color: Colors.black,),
+          const SizedBox(width: 20,),
           GestureDetector(
             onTap: (){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
             },
-              child: Icon(Icons.logout_outlined,color: Colors.black,)),
-          SizedBox(width: 05,),
+              child: const Icon(Icons.logout_outlined,color: Colors.black,)),
+          const SizedBox(width: 05,),
 
-          SizedBox(width: 10,)
+          const SizedBox(width: 10,)
 
         ],
       ),
@@ -191,7 +189,7 @@ class _admin_log_2State extends State<admin_log_2> {
           children: [
             Column(
               children: [
-                SizedBox(width: 50,),
+                const SizedBox(width: 50,),
                 //asset id
                 ListTile(
                   minLeadingWidth : 01,
@@ -200,7 +198,7 @@ class _admin_log_2State extends State<admin_log_2> {
 
                   title: Text("Asset id",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
-                  trailing: Container(
+                  trailing: SizedBox(
                     width: 210,
                     height: 35,
                     child: TextField(
@@ -277,7 +275,7 @@ class _admin_log_2State extends State<admin_log_2> {
                   horizontalTitleGap: 08,
 
                   title: Text("Item Name",style: buildFontlink(),),
-                  leading: Icon(Icons.arrow_right),
+                  leading: const Icon(Icons.arrow_right),
                   trailing: Container(
                     width: 210,
                     height: 35,
@@ -289,7 +287,7 @@ class _admin_log_2State extends State<admin_log_2> {
                       stream: FirebaseFirestore.instance.collection("items").orderBy("values").snapshots(),
                         builder: (context,AsyncSnapshot<QuerySnapshot>snapshot){
                           if(!snapshot.hasData)
-                          {  return CircularProgressIndicator();  }
+                          {  return const CircularProgressIndicator();  }
                           else
                           {
                             return
@@ -335,7 +333,7 @@ class _admin_log_2State extends State<admin_log_2> {
                   horizontalTitleGap: 06,
 
                   title: Text("Department",style: buildFontlink(),),
-                  leading: Icon(Icons.arrow_right),
+                  leading: const Icon(Icons.arrow_right),
                   trailing: Container(
                     width: 212,
                     height: 35,
@@ -347,7 +345,7 @@ class _admin_log_2State extends State<admin_log_2> {
                         stream: FirebaseFirestore.instance.collection("departments").orderBy("values").snapshots(),
                         builder: (context,AsyncSnapshot<QuerySnapshot>snapshot){
                           if(!snapshot.hasData)
-                          {  return CircularProgressIndicator();  }
+                          {  return const CircularProgressIndicator();  }
                           else
                           {
                             return
@@ -394,10 +392,10 @@ class _admin_log_2State extends State<admin_log_2> {
 
                   title: Text("AMC  Start Date",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
-                  trailing: Container(
+                  trailing: SizedBox(
                     width: 210,
                     height: 35,
-                    child: Container(
+                    child: SizedBox(
                       width: 210,
                       height: 35,
                       child: TextField(
@@ -428,10 +426,10 @@ class _admin_log_2State extends State<admin_log_2> {
 
                   title: Text("AMC End Date",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
-                  trailing: Container(
+                  trailing: SizedBox(
                     width: 210,
                     height: 35,
-                    child: Container(
+                    child: SizedBox(
                       width: 210,
                       height: 35,
                       child: TextField(
@@ -462,8 +460,8 @@ class _admin_log_2State extends State<admin_log_2> {
                   horizontalTitleGap: 08,
 
                   title: Text("Purchase Order No",style: buildFontlink(),),
-                  leading: Icon(Icons.arrow_right),
-                  trailing: Container(
+                  leading: const Icon(Icons.arrow_right),
+                  trailing: SizedBox(
                     width: 210,
                     height: 35,
                     child: TextField(
@@ -484,7 +482,7 @@ class _admin_log_2State extends State<admin_log_2> {
 
                   title: Text("Brand Name/Model No",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
-                  trailing: Container(
+                  trailing: SizedBox(
                     width: 210,
                     height: 35,
                     child: TextField(
@@ -504,12 +502,12 @@ class _admin_log_2State extends State<admin_log_2> {
                   horizontalTitleGap: 08,
 
                   title: Text("Serial No/Service Tag",style: buildFontlink(),),
-                  leading: Icon(Icons.arrow_right),
-                  trailing: Container(
+                  leading: const Icon(Icons.arrow_right),
+                  trailing: SizedBox(
                     width: 210,
                     height: 35,
                     child: TextField(
-                      style: TextStyle(color: Colors.black),
+                      style: const TextStyle(color: Colors.black),
                       controller: serialController,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(),
@@ -526,10 +524,10 @@ class _admin_log_2State extends State<admin_log_2> {
 
                   title: Text("Warranty Expire Date",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
-                  trailing: Container(
+                  trailing: SizedBox(
                     width: 210,
                     height: 35,
-                    child: Container(
+                    child: SizedBox(
                       width: 210,
                       height: 35,
                       child: TextField(
@@ -560,7 +558,7 @@ class _admin_log_2State extends State<admin_log_2> {
                   horizontalTitleGap: 06,
 
                   title: Text("Asset Types",style: buildFontlink(),),
-                  leading: Icon(Icons.arrow_right),
+                  leading: const Icon(Icons.arrow_right),
                   trailing: Container(
                     width: 212,
                     height: 35,
@@ -571,7 +569,7 @@ class _admin_log_2State extends State<admin_log_2> {
                         stream: FirebaseFirestore.instance.collection("asset_types").snapshots(),
                         builder: (context,AsyncSnapshot<QuerySnapshot>snapshot){
                           if(!snapshot.hasData)
-                          {  return CircularProgressIndicator();  }
+                          {  return const CircularProgressIndicator();  }
                           else
                           {
                             return
@@ -649,7 +647,7 @@ class _admin_log_2State extends State<admin_log_2> {
                   horizontalTitleGap: 06,
 
                   title: Text("Asset Head",style: buildFontlink(),),
-                  leading: Icon(Icons.arrow_right),
+                  leading: const Icon(Icons.arrow_right),
                   trailing: Container(
                     width: 212,
                     height: 35,
@@ -661,7 +659,7 @@ class _admin_log_2State extends State<admin_log_2> {
                       stream: FirebaseFirestore.instance.collection("assethead").orderBy("values").snapshots(),
                         builder: (context,AsyncSnapshot<QuerySnapshot>snapshot){
                           if(!snapshot.hasData)
-                          {  return CircularProgressIndicator();  }
+                          {  return const CircularProgressIndicator();  }
                           else
                           {
                             return
@@ -708,11 +706,11 @@ class _admin_log_2State extends State<admin_log_2> {
 
                   title: Text("Supplier Name",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
-                  trailing: Container(
+                  trailing: SizedBox(
                     width: 210,
                     height: 35,
                     child: TextField(
-                      style: TextStyle(color: Colors.black),
+                      style: const TextStyle(color: Colors.black),
                       controller: supController,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(),
@@ -729,7 +727,7 @@ class _admin_log_2State extends State<admin_log_2> {
 
                   title: Text("Price",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
-                  trailing:  Container(
+                  trailing:  SizedBox(
                     width: 210,
                     height: 35,
                     child: TextField(
@@ -749,8 +747,8 @@ class _admin_log_2State extends State<admin_log_2> {
                   horizontalTitleGap: 08,
 
                   title: Text("Date of Issue",style: buildFontlink(),),
-                  leading: Icon(Icons.arrow_right),
-                  trailing: Container(
+                  leading: const Icon(Icons.arrow_right),
+                  trailing: SizedBox(
                     width: 210,
                     height: 35,
                     child: TextField(
@@ -781,10 +779,10 @@ class _admin_log_2State extends State<admin_log_2> {
 
                   title: Text("Configuration notes",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
-                  trailing: Container(
+                  trailing: SizedBox(
                     width: 210,
                     height:150,
-                    child:  Container(
+                    child:  SizedBox(
                       height: 150,
                       width: 200,
                       child: TextField(
@@ -806,7 +804,7 @@ class _admin_log_2State extends State<admin_log_2> {
 
                   title: Text("Choose  Image",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
-                  trailing: Container(
+                  trailing: SizedBox(
                     width: 210,
                     height: 40,
                     child:  InkWell(
@@ -817,7 +815,7 @@ class _admin_log_2State extends State<admin_log_2> {
                       child: Container(
                         height: 40,
                         width: MediaQuery.of(context).size.width/2.5,
-                        decoration: BoxDecoration(border: Border.all(color: Color(0xFF468c90)),
+                        decoration: BoxDecoration(border: Border.all(color: const Color(0xFF468c90)),
                           // gradient: const LinearGradient(
                           //   begin: Alignment.topLeft,
                           //   end: Alignment.bottomRight,
@@ -826,7 +824,7 @@ class _admin_log_2State extends State<admin_log_2> {
                           borderRadius: BorderRadius.circular(10),
                           //color: Color(0xFF5663ff)
                         ),
-                        child: Center(
+                        child: const Center(
                           child: Text('Pick Image',style: TextStyle(color:Color(0xFF468c90),fontSize: 14),),
                         ),
                       ),
@@ -873,7 +871,7 @@ class _admin_log_2State extends State<admin_log_2> {
                         "Save & Generate QR Code", style: buildTextStyle())),
                   ),
                 ),
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
               ],
             )
           ],

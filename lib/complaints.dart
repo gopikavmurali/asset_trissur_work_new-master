@@ -1,9 +1,7 @@
 
-import 'package:asset_trissur_work_new/user_home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'constants.dart';
 import 'login_page.dart';
 
 class complaints extends StatefulWidget {
@@ -26,6 +24,7 @@ class _complaintsState extends State<complaints> {
   onDelete(String id){
     FirebaseFirestore.instance.collection("todos").doc(id).delete();
   }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -38,14 +37,14 @@ class _complaintsState extends State<complaints> {
             //Navigator.push(context, MaterialPageRoute(builder: (context)=>admin_user(user_name: '',)));
           },
             child: const Icon(Icons.arrow_back_outlined,color: Colors.black,)),
-        title:  Text("Complaints",style: TextStyle(color: Colors.black),),
+        title:  const Text("Complaints",style: TextStyle(color: Colors.black),),
           actions: [
           GestureDetector(
           onTap: (){
            Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
               },
-           child: Icon(Icons.logout_outlined,color: Colors.black,)),
-          SizedBox(width: 10,),
+           child: const Icon(Icons.logout_outlined,color: Colors.black,)),
+          const SizedBox(width: 10,),
 
 
 
@@ -83,7 +82,7 @@ class _complaintsState extends State<complaints> {
              {
                if (!snapshot.hasData)
                {
-                 return Center(child: CircularProgressIndicator());
+                 return const Center(child: CircularProgressIndicator());
                }
                else
                {
@@ -101,13 +100,13 @@ class _complaintsState extends State<complaints> {
                          },
                          background: Container(
                            color: Colors.red,
-                           child: Icon(Icons.delete),
+                           child: const Icon(Icons.delete),
                          ),
 
                          child: ListTile(
                            title: Text(data["values"].toString()),
-                           leading: Padding(
-                             padding: const EdgeInsets.all(8.0),
+                           leading: const Padding(
+                             padding: EdgeInsets.all(8.0),
                              //child: Text(data["date"].toString()),
                              child: Text("dd-mm-yyyy"),
                            )

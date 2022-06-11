@@ -38,7 +38,7 @@ class _radiobuttonState extends State<radiobutton> {
   Widget build(BuildContext context) {
     return AlertDialog(
 
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
              borderRadius: BorderRadius.all(Radius.circular(20))),
       actions: <Widget>[
         Padding(
@@ -50,28 +50,28 @@ class _radiobuttonState extends State<radiobutton> {
 
                 child: GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>asset_master_home(user_name: "", selectedPrivi: "")));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const asset_master_home(user_name: "", selectedPrivi: "")));
                   },
                   child: Container(
                     height: 40,
-                    decoration: BoxDecoration(border: Border.all(color: Color(0xFF468c90)),
+                    decoration: BoxDecoration(border: Border.all(color: const Color(0xFF468c90)),
                       borderRadius: BorderRadius.circular(10),
 
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Text('Cancel',style: TextStyle(color:Color(0xFF468c90),fontSize: 14),),
                     ),
                   ),
                 ),
               ),
-              SizedBox(width: 10,),
+              const SizedBox(width: 10,),
 
 
               Expanded(
                 child: GestureDetector(
                   onTap: (){
 
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>asset_master_home(user_name: "", selectedPrivi: "")));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const asset_master_home(user_name: "", selectedPrivi: "")));
                   },
                   child: Container(
                     height: 40,
@@ -82,7 +82,7 @@ class _radiobuttonState extends State<radiobutton> {
                           end: Alignment.bottomRight,
                           colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
 
-                        borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+                        borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff)),
                     child:  Center(
                       child: Text('Confirm',style: buildTextStyle(),),
                     ),
@@ -96,13 +96,13 @@ class _radiobuttonState extends State<radiobutton> {
         )
       ],
       content: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
 
           width: 300,
           child: Column(
              mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text("Select Reason to Dispose",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400),),
+              const Text("Select Reason to Dispose",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400),),
               ConstrainedBox(
                 constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(context).size.height * 0.4,
@@ -112,7 +112,7 @@ class _radiobuttonState extends State<radiobutton> {
                     itemCount: reasons.length,
                     itemBuilder: (BuildContext context, int index) {
                       return RadioListTile(
-                        activeColor:  Color(0xFF468c90),
+                        activeColor:  const Color(0xFF468c90),
                           title: Text(reasons[index].name),
                           value: index,
                           groupValue: _selected,

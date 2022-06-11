@@ -4,8 +4,6 @@ import 'package:asset_trissur_work_new/asset_master_home.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'constants.dart';
-import 'create_page_master.dart';
-import 'login_page.dart';
 
 enum ImageSourceType { gallery, camera }
 
@@ -28,19 +26,19 @@ class image_picking extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   child: const Icon(Icons.arrow_back,color: Colors.black,)),
-              title:  Text("Select source",style: TextStyle(color: Colors.black),),
+              title:  const Text("Select source",style: TextStyle(color: Colors.black),),
               actions: [
 
-                SizedBox(width: 10,),
+                const SizedBox(width: 10,),
 
-                SizedBox(width: 10,),
+                const SizedBox(width: 10,),
                 GestureDetector(
                     onTap: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                          asset_master_home(user_name: "", selectedPrivi:"")));
+                          const asset_master_home(user_name: "", selectedPrivi:"")));
                     },
-                    child: Icon(Icons.home,color: Colors.black,)),
-                SizedBox(width: 010,),
+                    child: const Icon(Icons.home,color: Colors.black,)),
+                const SizedBox(width: 010,),
               ]
 
 
@@ -50,7 +48,7 @@ class image_picking extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                  padding: const EdgeInsets.only(left:30,bottom:15,right: 30,),
                   child: GestureDetector(
                     onTap: (){
                       _handleURLButtonPress(context, ImageSourceType.gallery);
@@ -64,7 +62,7 @@ class image_picking extends StatelessWidget {
                               end: Alignment.bottomRight,
                               colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
 
-                            borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+                            borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff)),
 
 
                         child: Center(child: Text("Pick Image From gallery",style:buildTextStyle()))
@@ -73,7 +71,7 @@ class image_picking extends StatelessWidget {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                  padding: const EdgeInsets.only(left:30,bottom:15,right: 30,),
                   child: GestureDetector(
                     onTap: (){
                     //  Navigator.push(context, MaterialPageRoute(builder: (context)=>create_page()));
@@ -88,7 +86,7 @@ class image_picking extends StatelessWidget {
                               end: Alignment.bottomRight,
                               colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
 
-                            borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+                            borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff)),
 
 
                         child: Center(child: Text("Pick Image From Camera",style:buildTextStyle()))
@@ -105,10 +103,10 @@ class image_picking extends StatelessWidget {
 class ImageFromGalleryEx extends StatefulWidget {
   final type;
 
-  ImageFromGalleryEx(this.type);
+  const ImageFromGalleryEx(this.type);
 
   @override
-  ImageFromGalleryExState createState() => ImageFromGalleryExState(this.type);
+  ImageFromGalleryExState createState() => ImageFromGalleryExState(type);
 }
 
 class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
@@ -123,7 +121,7 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
     // ignore: todo
     // TODO: implement initState
     super.initState();
-    imagePicker = new ImagePicker();
+    imagePicker = ImagePicker();
   }
 
   @override
@@ -133,7 +131,7 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-              icon: Icon(Icons.arrow_back,color: Colors.black,),
+              icon: const Icon(Icons.arrow_back,color: Colors.black,),
             onPressed: () {
                 Navigator.pop(context);
             },),
@@ -146,7 +144,7 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
                     // Navigator.push(context, MaterialPageRoute(builder: (context)=>
                     //     asset_master_home(user_name: "", selectedPrivi:"")));
                   },
-                  icon: Icon(Icons.home,color: Colors.black,))
+                  icon: const Icon(Icons.home,color: Colors.black,))
             ],
             title: Text(type == ImageSourceType.camera
                 ? "Image from Camera"
@@ -205,7 +203,7 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
                   },
                 child: Text("Cancel",style: buildFontlink(),)),
 
-                SizedBox(width: 20,),
+                const SizedBox(width: 20,),
 
                 TextButton(onPressed: () {
                   final snackBar = SnackBar(

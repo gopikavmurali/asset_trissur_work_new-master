@@ -21,7 +21,7 @@ class _dropState extends State<drop> {
     return Scaffold(
       backgroundColor: Colors.green,
       appBar: AppBar(
-        title: Text("Dropdown"),
+        title: const Text("Dropdown"),
       ),
       body:  Column(
 
@@ -32,7 +32,7 @@ class _dropState extends State<drop> {
             horizontalTitleGap: 08,
 
             title: Text("Item Name",style: buildFontlink(),),
-            leading: Icon(Icons.arrow_right),
+            leading: const Icon(Icons.arrow_right),
             trailing: Container(
               width: 210,
               height: 35,
@@ -44,7 +44,7 @@ class _dropState extends State<drop> {
                   stream: FirebaseFirestore.instance.collection("items").orderBy("values").snapshots(),
                   builder: (context,AsyncSnapshot<QuerySnapshot>snapshot){
                     if(!snapshot.hasData)
-                    {  return CircularProgressIndicator();  }
+                    {  return const CircularProgressIndicator();  }
                     else
                     {
                       return

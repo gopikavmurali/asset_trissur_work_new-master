@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'descriptiion_page.dart';
 import 'constants.dart';
 import 'create_item.dart';
-import 'create_user.dart';
 import 'login_page.dart';
 
 class create_page_head extends StatefulWidget {
@@ -31,14 +30,14 @@ class _create_page_headState extends State<create_page_head> {
           backgroundColor: Colors.white,
           elevation: 0,
 
-          title: Text("Create Page",style: TextStyle(color: Colors.black,fontSize: 25),),
+          title: const Text("Create Page",style: TextStyle(color: Colors.black,fontSize: 25),),
           actions: [
             GestureDetector(
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
                 },
-                child: Icon(Icons.logout_outlined,color: Colors.black,)),
-            SizedBox(width: 10,),
+                child: const Icon(Icons.logout_outlined,color: Colors.black,)),
+            const SizedBox(width: 10,),
 
           ],
 
@@ -67,14 +66,14 @@ class _create_page_headState extends State<create_page_head> {
                           child: Container(
                             height: MediaQuery.of(context).size.height,
                             width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(color: Colors.white),
+                            decoration: const BoxDecoration(color: Colors.white),
                             //child: Text(qrCode)
                           )
                       ),
 
                     ),
 
-                    SizedBox(height: 20,),
+                    const SizedBox(height: 20,),
                     //create asset head
 
                     //create servie centre
@@ -98,7 +97,7 @@ class _create_page_headState extends State<create_page_head> {
                                 end: Alignment.bottomRight,
                                 colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
 
-                              borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff),),
+                              borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff),),
 
 
                             child: Center(child: Text("Create Items",style:buildTextStyle()))
@@ -136,7 +135,7 @@ class _create_page_headState extends State<create_page_head> {
                       child:
                       GestureDetector(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>admin_log_2()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>const admin_log_2()));
                         },
                         child: Container(
                             height: 50,
@@ -147,7 +146,7 @@ class _create_page_headState extends State<create_page_head> {
                                 end: Alignment.bottomRight,
                                 colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
 
-                              borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff),),
+                              borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff),),
 
 
                             child: Center(child: Text("Description Page",style:buildTextStyle()))

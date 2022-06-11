@@ -1,18 +1,11 @@
-
-
-import 'package:asset_trissur_work_new/create_dept.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:asset_trissur_work_new/authentication.dart';
-import 'package:asset_trissur_work_new/descriptiion_page.dart';
-import 'package:asset_trissur_work_new/constants.dart';
-import 'package:asset_trissur_work_new/sign_up.dart';
+import 'package:asset_trissur_work_new/create_dept.dart';
 import 'package:asset_trissur_work_new/user_home.dart';
 import 'package:asset_trissur_work_new/asset_master_home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-import 'package:flutter_pw_validator/flutter_pw_validator.dart';
-import 'package:sizer/sizer.dart';
 
 import 'asset_head_home.dart';
 
@@ -23,51 +16,74 @@ class login extends StatefulWidget {
 
 class _loginState extends State<login> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
-  final TextEditingController pass_word = new TextEditingController();
-  final TextEditingController user_name = new TextEditingController();
+  final TextEditingController pass_word = TextEditingController();
+  final TextEditingController user_name = TextEditingController();
   final List<String> privilage = [
     "Select Privilage",
     "AssetMaster",
     "AssetHead",
     "User"
   ];
-  String errorMsg="";
+  String errorMsg = "";
   String selectedPrivilage = "Select Privilage";
   String password = "";
   String email = "";
 
-  String privi ="";
+  String privi = "";
+  final _auth = FirebaseAuth.instance;
+
+  UserCredential? authResult;
 
   void validate() async {
     if (formkey.currentState!.validate() && selectedPrivilage == "AssetHead") {
       formkey.currentState?.save();
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: user_name.text, password: pass_word.text);
 
-      setState(() {
-        showDialog(
-            context: context,
-            builder: (ctx) => AlertDialog(
-                  title: const Text(
-                    "Asset Head Login Successfull",
-                  ),
-                  content: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => asset_head_home(
-                                  user_name: user_name.text,
-                                  selectedPrivi: selectedPrivilage)));
-                    },
-                    child: const Text("Continue",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green,
-                            fontSize: 20)),
-                  ),
-                ));
-      });
+      authResult = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: user_name.text, password: pass_word.text);
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(authResult!.user!.uid)
+          .get();
+      if (userDoc.get('role') == selectedPrivilage) {
+        setState(() {
+          showDialog(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                    title: const Text(
+                      "Asset Head Login Successfull",
+                    ),
+                    content: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => asset_head_home(
+                                    user_name: user_name.text,
+                                    selectedPrivi: selectedPrivilage)));
+                      },
+                      child: const Text("Continue",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                              fontSize: 20)),
+                    ),
+                  ));
+        });
+      } else {
+        setState(() {
+          showDialog(
+              context: context,
+              builder: (ctx) => const AlertDialog(
+                    title: Text("Login Failed!"),
+                    content: Text(
+                      "UnAuthorized Access !!",
+                      style: TextStyle(color: Colors.black38),
+                    ),
+                    // content:
+                    //   Text("$errorMsg"),
+                  ));
+        });
+      }
     } else if (formkey.currentState!.validate() &&
         selectedPrivilage == "AssetMaster") {
       formkey.currentState?.save();
@@ -100,55 +116,73 @@ class _loginState extends State<login> {
     } else if (formkey.currentState!.validate() &&
         selectedPrivilage == "User") {
       formkey.currentState?.save();
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      authResult = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: user_name.text, password: pass_word.text);
-      setState(() {
-        showDialog(
-            context: context,
-            builder: (ctx) => AlertDialog(
-                  title: const Text(
-                    "User Login Successfull",
-                  ),
-                  content: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => user_home(
-                                      user_name: user_name.text,
-                                    )));
-                      },
-                      child: const Text("Continue",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.green,
-                              fontSize: 20))),
-                ));
-      });
-    }
-
-    else if(formkey.currentState!.validate()){
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(authResult!.user!.uid)
+          .get();
+      if (userDoc.get('role') == selectedPrivilage) {
+        setState(() {
+          showDialog(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                    title: const Text(
+                      "User Login Successfull",
+                    ),
+                    content: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => user_home(
+                                        user_name: user_name.text,
+                                      )));
+                        },
+                        child: const Text("Continue",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                                fontSize: 20))),
+                  ));
+        });
+      } else {
+        setState(() {
+          showDialog(
+              context: context,
+              builder: (ctx) => const AlertDialog(
+                    title: Text("Login Failed!"),
+                    content: Text(
+                      "UnAuthorized Access !!",
+                      style: TextStyle(color: Colors.black38),
+                    ),
+                    // content:
+                    //   Text("$errorMsg"),
+                  ));
+        });
+      }
+    } else if (formkey.currentState!.validate()) {
       AuthenticationHelper()
-          .signIn(email: email, password: password,privi: selectedPrivilage)
+          .signIn(email: email, password: password, privi: selectedPrivilage)
           .then((result) {
-        if (result == null)
-        {
+        if (result == null) {
           Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => create_dep()));
-        }
-       else {
+              MaterialPageRoute(builder: (context) => CreateDepartment()));
+        } else {
           setState(() {
-                 showDialog(
-                     context: context,
-                     builder: (ctx) =>  const AlertDialog(
-                       title: Text("Login Failed!"),
-                       content: const Text("Invalid User Credetials !!",style: TextStyle(color: Colors.black38),),
-                       // content:
-                       //   Text("$errorMsg"),
-                     ));
-               });
-             }
-
+            showDialog(
+                context: context,
+                builder: (ctx) => const AlertDialog(
+                      title: Text("Login Failed!"),
+                      content: Text(
+                        "Invalid User Credetials !!",
+                        style: TextStyle(color: Colors.black38),
+                      ),
+                      // content:
+                      //   Text("$errorMsg"),
+                    ));
+          });
+        }
       });
     }
 
@@ -225,7 +259,7 @@ class _loginState extends State<login> {
                         //Logo of the app
                         Padding(
                           padding: const EdgeInsets.only(top: 150.0, left: 8),
-                          child: Container(
+                          child: SizedBox(
                               height: 100,
                               width: 200,
                               child: Image.asset(
@@ -389,8 +423,8 @@ class _loginState extends State<login> {
                                           const EdgeInsets.only(left: 30.0),
                                       child: Text(
                                         value,
-                                        style:
-                                            const TextStyle(color: const Color(0xFF468c90)),
+                                        style: const TextStyle(
+                                            color: Color(0xFF468c90)),
                                       ),
                                     ),
                                     value: value,
@@ -412,4 +446,3 @@ class _loginState extends State<login> {
     );
   }
 }
-

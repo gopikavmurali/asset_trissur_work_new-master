@@ -1,21 +1,14 @@
 
 
-import 'dart:io';
-import 'package:asset_trissur_work_new/button_widget.dart';
 import 'package:asset_trissur_work_new/constants.dart';
 import 'package:asset_trissur_work_new/login_page.dart';
-import 'package:asset_trissur_work_new/report.dart';
 import 'package:asset_trissur_work_new/complaints.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'descriptiion_page.dart';
-import 'create_page_master.dart';
 import 'item_request.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class user_home extends StatefulWidget {
@@ -67,15 +60,15 @@ class _user_homeState extends State<user_home> {
                 //Navigator.push(context, MaterialPageRoute(builder: (context)=>admin_user(user_name: '',)));
               },
               child: const Icon(Icons.perm_identity,color: Colors.black,)),
-          title:  Text("${widget.user_name}",style: TextStyle(color: Colors.black),),
+          title:  Text(widget.user_name,style: const TextStyle(color: Colors.black),),
           actions: [
             GestureDetector(
                 onTap: () async {
                   await FirebaseAuth.instance.signOut();
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
                 },
-                child: Icon(Icons.logout_outlined,color: Colors.black,)),
-            SizedBox(width: 10,),
+                child: const Icon(Icons.logout_outlined,color: Colors.black,)),
+            const SizedBox(width: 10,),
 
           ],
 
@@ -118,7 +111,7 @@ class _user_homeState extends State<user_home> {
                                             end: Alignment.bottomRight,
                                             colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
 
-                                          borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+                                          borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff)),
 
 
                                       child: Center(child: Text("Scan QR Code",style:buildTextStyle()))
@@ -127,13 +120,13 @@ class _user_homeState extends State<user_home> {
 
                               ),
                               //or
-                              Padding(
+                              const Padding(
                                 padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
                                 child: Text("OR",style: TextStyle(color: Colors.black),),
                               ),
                               //asset id
                               Padding(
-                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                padding: const EdgeInsets.only(left:30,bottom:15,right: 30,),
                                 child:
                                 Container(
                                   height: 40,
@@ -147,7 +140,7 @@ class _user_homeState extends State<user_home> {
                                         //colors: [Color(0xFF64C9CF), Color(0xFF468c90),],
                                       ),
 
-                                      borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+                                      borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff)),
 
 
                                   child: TextField(
@@ -161,7 +154,7 @@ class _user_homeState extends State<user_home> {
                               ),
                               //scanned result
                               Padding(
-                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                padding: const EdgeInsets.only(left:30,bottom:15,right: 30,),
                                 child:
                                 Container(
                                     height: 40,
@@ -175,12 +168,12 @@ class _user_homeState extends State<user_home> {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                padding: const EdgeInsets.only(left:30,bottom:15,right: 30,),
                                 child:
                                 GestureDetector(
                                   onTap: (){
                                     Navigator.push(context,
-                                        MaterialPageRoute(builder: (context)=> item_req()));
+                                        MaterialPageRoute(builder: (context)=> const item_req()));
                                   },
                                   child: Container(
                                       height: 40,
@@ -191,23 +184,23 @@ class _user_homeState extends State<user_home> {
                                           end: Alignment.bottomRight,
                                           colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
 
-                                        borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff),),
+                                        borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff),),
 
 
                                       child: Center(child: Text(" Item Request",style:buildTextStyle()))
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 40,),
+                              const SizedBox(height: 40,),
                               //complaint caption
                               Padding(
-                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                padding: const EdgeInsets.only(left:30,bottom:15,right: 30,),
                                 child: Text("Enter your Complaints",style: headingText(),),
                               ),
                               //enter your complaints
                               Padding(
-                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
-                                child: Container(
+                                padding: const EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                child: SizedBox(
                                   height: 250,
                                   width: 320,
                                   //decoration: BoxDecoration(border: Border.all(color: Colors.black26)),
@@ -223,7 +216,7 @@ class _user_homeState extends State<user_home> {
                               ),
                               //update button
                               Padding(
-                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                padding: const EdgeInsets.only(left:30,bottom:15,right: 30,),
                                 child:
                                 GestureDetector(
                                   onTap: (){
@@ -245,7 +238,7 @@ class _user_homeState extends State<user_home> {
                                           end: Alignment.bottomRight,
                                           colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
 
-                                        borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff),),
+                                        borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff),),
 
 
                                       child: Center(child: Text("Send",style:buildTextStyle()))

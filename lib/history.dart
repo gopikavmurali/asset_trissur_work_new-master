@@ -3,9 +3,7 @@
 import 'package:asset_trissur_work_new/constants.dart';
 import 'package:asset_trissur_work_new/report.dart';
 import 'package:asset_trissur_work_new/service_history.dart';
-import 'package:asset_trissur_work_new/asset_master_home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 
@@ -105,14 +103,14 @@ class _historyState extends State<history> {
               Container(
                   height: 40,
                   width: 150,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),color:  Color(0xFF468c90)),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),color:  const Color(0xFF468c90)),
                   child: Center(child: Text("Print QR code",style: buildTextStyle(),)),
                 ),
 
-              SizedBox(width: 10,),
+              const SizedBox(width: 10,),
               GestureDetector(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>history(asset_type: '', qrcode: '', )));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const history(asset_type: '', qrcode: '', )));
                 },
 
                 child:Container(
@@ -129,6 +127,7 @@ class _historyState extends State<history> {
     )
     );
   }
+  @override
   void dispose() {
     // Clean up the controller when the widget is removed
     dateController.dispose();
@@ -136,6 +135,7 @@ class _historyState extends State<history> {
   }
   
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -146,10 +146,10 @@ class _historyState extends State<history> {
             onTap: (){
               Navigator.pop(context);
             },
-            child: Icon(Icons.arrow_back, color: Colors.black,)),
+            child: const Icon(Icons.arrow_back, color: Colors.black,)),
         actions: [
-          Icon(Icons.download, color: Colors.black,),
-          SizedBox(width: 10,),
+          const Icon(Icons.download, color: Colors.black,),
+          const SizedBox(width: 10,),
           PopupMenuButton(
               icon: const Icon(Icons.menu_outlined, color: Colors.black,),
               itemBuilder: (context) =>
@@ -157,7 +157,7 @@ class _historyState extends State<history> {
                 PopupMenuItem(
                   child: InkWell(
                     onTap: (){  Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                        history(asset_type: '', qrcode: '', )));},
+                        const history(asset_type: '', qrcode: '', )));},
                       child: Text("Edit",style: dropStyle())),
                   value: 2,),
                 PopupMenuItem(
@@ -167,7 +167,7 @@ class _historyState extends State<history> {
                       },
                         child: Text("Logout",style: dropStyle())))
               ]),
-          SizedBox(width: 10,)
+          const SizedBox(width: 10,)
           //Center(child: Text("Logout  ",style: TextStyle(color: Color(0xFF468c90),fontSize: 20)))
         ],
       ),
@@ -178,7 +178,7 @@ class _historyState extends State<history> {
           children: [
             Column(
               children: [
-                SizedBox(width: 50,),
+                const SizedBox(width: 50,),
                 ListTile(
                   minLeadingWidth : 01,
                   minVerticalPadding: 10,
@@ -186,7 +186,7 @@ class _historyState extends State<history> {
 
                   title: Text("Asset id",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
-                  trailing: Container(
+                  trailing: SizedBox(
                     width: 210,
                     height: 35,
                     child: StreamBuilder(
@@ -195,7 +195,7 @@ class _historyState extends State<history> {
 
                         builder: (context ,AsyncSnapshot snapshot) {
                           if (!snapshot.hasData) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           }
 
                           final userDoc = snapshot.data;
@@ -259,20 +259,20 @@ class _historyState extends State<history> {
                    horizontalTitleGap: 05,
 
                   title: Text("Item Name",style: buildFontlink(),),
-                  leading: Icon(Icons.arrow_right),
-                  trailing: Container(
+                  leading: const Icon(Icons.arrow_right),
+                  trailing: SizedBox(
                     height: 35,
                   width: 210,
                   // width: 35,
                     child: StreamBuilder(
                         stream: FirebaseFirestore.instance.collection("description").
-                            where("asset_id" , isEqualTo: "${widget.qrcode}").
+                            where("asset_id" , isEqualTo: widget.qrcode).
                         //doc("5MepDMRTcSk49pMB2n5w")
                             snapshots(),
 
                         builder: (context ,AsyncSnapshot snapshot) {
                           if (!snapshot.hasData) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           }
 
                           final userDoc = snapshot.data;
@@ -334,8 +334,8 @@ class _historyState extends State<history> {
                   horizontalTitleGap: 06,
 
                   title: Text("Department",style: buildFontlink(),),
-                  leading: Icon(Icons.arrow_right),
-                  trailing: Container(
+                  leading: const Icon(Icons.arrow_right),
+                  trailing: SizedBox(
                     height: 35,
                     width: 210,
                     child: StreamBuilder(
@@ -344,12 +344,12 @@ class _historyState extends State<history> {
 
                         builder: (context ,AsyncSnapshot snapshot) {
                           if (!snapshot.hasData) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           }
 
                           final userDoc = snapshot.data;
                           return  Center(child: Text(userDoc!["department"],
-                            style: TextStyle(color: Colors.black),));
+                            style: const TextStyle(color: Colors.black),));
                         }),
                   ),
                   // trailing: Container(
@@ -407,7 +407,7 @@ class _historyState extends State<history> {
 
                   title: Text("AMC Start Date",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
-                  trailing: Container(
+                  trailing: SizedBox(
                     height: 35,
                     width: 210,
                     child: StreamBuilder(
@@ -416,7 +416,7 @@ class _historyState extends State<history> {
 
                         builder: (context ,AsyncSnapshot snapshot) {
                           if (!snapshot.hasData) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           }
 
                           final userDoc = snapshot.data;
@@ -456,7 +456,7 @@ class _historyState extends State<history> {
 
                   title: Text("AMC End Date",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
-                  trailing: Container(
+                  trailing: SizedBox(
                     height: 35,
                     width: 210,
 
@@ -466,7 +466,7 @@ class _historyState extends State<history> {
 
                         builder: (context ,AsyncSnapshot snapshot) {
                           if (!snapshot.hasData) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           }
 
                           final userDoc = snapshot.data;
@@ -505,8 +505,8 @@ class _historyState extends State<history> {
                   horizontalTitleGap: 08,
 
                   title: Text("Purchase Order No",style: buildFontlink(),),
-                  leading: Icon(Icons.arrow_right),
-                  trailing: Container(
+                  leading: const Icon(Icons.arrow_right),
+                  trailing: SizedBox(
                     height: 35,
                     width: 219,
                     child: StreamBuilder(
@@ -515,7 +515,7 @@ class _historyState extends State<history> {
 
                         builder: (context ,AsyncSnapshot snapshot) {
                           if (!snapshot.hasData) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           }
 
                           final userDoc = snapshot.data;
@@ -542,7 +542,7 @@ class _historyState extends State<history> {
 
                   title: Text("Brand Name/Model No",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
-                  trailing: Container(
+                  trailing: SizedBox(
                     height: 35,
                     width: 210,
                     child: StreamBuilder(
@@ -551,7 +551,7 @@ class _historyState extends State<history> {
 
                         builder: (context ,AsyncSnapshot snapshot) {
                           if (!snapshot.hasData) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           }
 
                           final userDoc = snapshot.data;
@@ -577,8 +577,8 @@ class _historyState extends State<history> {
                   horizontalTitleGap: 08,
 
                   title: Text("Serial No/Service Tag",style: buildFontlink(),),
-                  leading: Icon(Icons.arrow_right),
-                  trailing: Container(
+                  leading: const Icon(Icons.arrow_right),
+                  trailing: SizedBox(
                     height: 35,
                     width: 210,
                     child: StreamBuilder(
@@ -587,7 +587,7 @@ class _historyState extends State<history> {
 
                         builder: (context ,AsyncSnapshot snapshot) {
                           if (!snapshot.hasData) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           }
 
                           final userDoc = snapshot.data;
@@ -614,7 +614,7 @@ class _historyState extends State<history> {
 
                   title: Text("Warranty Expire Date",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
-                  trailing: Container(
+                  trailing: SizedBox(
                     width: 210,
                       height: 35,
                     child: StreamBuilder(
@@ -623,7 +623,7 @@ class _historyState extends State<history> {
 
                         builder: (context ,AsyncSnapshot snapshot) {
                           if (!snapshot.hasData) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           }
 
                           final userDoc = snapshot.data;
@@ -664,8 +664,8 @@ class _historyState extends State<history> {
                     horizontalTitleGap: 06,
 
                     title: Text("Asset Types",style: buildFontlink(),),
-                    leading: Icon(Icons.arrow_right),
-                    trailing: Container(
+                    leading: const Icon(Icons.arrow_right),
+                    trailing: SizedBox(
                       width: 210,
                       height: 35,
                       child: StreamBuilder(
@@ -674,7 +674,7 @@ class _historyState extends State<history> {
 
                           builder: (context ,AsyncSnapshot snapshot) {
                             if (!snapshot.hasData) {
-                              return CircularProgressIndicator();
+                              return const CircularProgressIndicator();
                             }
 
                             final userDoc = snapshot.data;
@@ -734,8 +734,8 @@ class _historyState extends State<history> {
                   horizontalTitleGap: 06,
 
                   title: Text("Asset Head",style: buildFontlink(),),
-                  leading: Icon(Icons.arrow_right),
-                  trailing: Container(
+                  leading: const Icon(Icons.arrow_right),
+                  trailing: SizedBox(
                     width: 210,
                     height: 35,
                     child: StreamBuilder(
@@ -744,7 +744,7 @@ class _historyState extends State<history> {
 
                         builder: (context ,AsyncSnapshot snapshot) {
                           if (!snapshot.hasData) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           }
 
                           final userDoc = snapshot.data;
@@ -805,7 +805,7 @@ class _historyState extends State<history> {
 
                   title: Text("Supplier Name",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
-                  trailing: Container(
+                  trailing: SizedBox(
                     width: 210,
                     height: 35,
                     child: StreamBuilder(
@@ -814,7 +814,7 @@ class _historyState extends State<history> {
 
                         builder: (context ,AsyncSnapshot snapshot) {
                           if (!snapshot.hasData) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           }
 
                           final userDoc = snapshot.data;
@@ -840,7 +840,7 @@ class _historyState extends State<history> {
 
                   title: Text("Price",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
-                  trailing: Container(
+                  trailing: SizedBox(
                     width: 210,
                     height: 35,
                     child: StreamBuilder(
@@ -849,7 +849,7 @@ class _historyState extends State<history> {
 
                         builder: (context ,AsyncSnapshot snapshot) {
                           if (!snapshot.hasData) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           }
 
                           final userDoc = snapshot.data;
@@ -874,8 +874,8 @@ class _historyState extends State<history> {
                   horizontalTitleGap: 08,
 
                   title: Text("Date of Issue",style: buildFontlink(),),
-                  leading: Icon(Icons.arrow_right),
-                  trailing: Container(
+                  leading: const Icon(Icons.arrow_right),
+                  trailing: SizedBox(
                     height: 35,
                     width: 210,
 
@@ -885,7 +885,7 @@ class _historyState extends State<history> {
 
                         builder: (context ,AsyncSnapshot snapshot) {
                           if (!snapshot.hasData) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           }
 
                           final userDoc = snapshot.data;
@@ -922,7 +922,7 @@ class _historyState extends State<history> {
 
                   title: Text("Configuration notes",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
-                  trailing: Container(
+                  trailing: SizedBox(
                     width: 210,
                     height: 35,
                     child: StreamBuilder(
@@ -931,7 +931,7 @@ class _historyState extends State<history> {
 
                         builder: (context ,AsyncSnapshot snapshot) {
                           if (!snapshot.hasData) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           }
 
                           final userDoc = snapshot.data;
@@ -961,7 +961,7 @@ class _historyState extends State<history> {
 
                   title: Text("Choose  Image",style: buildFontlink(),),
                   leading: const Icon(Icons.arrow_right),
-                  trailing: Container(
+                  trailing: SizedBox(
                     width: 210,
                     height: 40,
                     child:  InkWell(
@@ -972,7 +972,7 @@ class _historyState extends State<history> {
                       child: Container(
                         height: 40,
                         width: MediaQuery.of(context).size.width/2.5,
-                        decoration: BoxDecoration(border: Border.all(color: Color(0xFF468c90)),
+                        decoration: BoxDecoration(border: Border.all(color: const Color(0xFF468c90)),
                           // gradient: const LinearGradient(
                           //   begin: Alignment.topLeft,
                           //   end: Alignment.bottomRight,
@@ -981,7 +981,7 @@ class _historyState extends State<history> {
                           borderRadius: BorderRadius.circular(10),
                           //color: Color(0xFF5663ff)
                         ),
-                        child: Center(
+                        child: const Center(
                           child: Text('Pick Image',style: TextStyle(color:Color(0xFF468c90),fontSize: 14),),
                         ),
                       ),
@@ -1024,11 +1024,11 @@ class _historyState extends State<history> {
                         "Save & Generate QR Code", style: buildTextStyle())),
                   ),
                 ),
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
                 GestureDetector(
                   onTap: () {
                      Navigator.push(context, MaterialPageRoute(
-                         builder: (context)=>service_history(descriptionTextController: '',)));
+                         builder: (context)=>const service_history(descriptionTextController: '',)));
                   },
                   child: Container(
                     height: 40,

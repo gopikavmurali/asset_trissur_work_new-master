@@ -1,9 +1,7 @@
 
-import 'package:asset_trissur_work_new/user_home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'constants.dart';
 import 'login_page.dart';
 
 class updation extends StatefulWidget {
@@ -22,6 +20,7 @@ class _updationState extends State<updation> {
   var now;
 
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -34,14 +33,14 @@ class _updationState extends State<updation> {
                 //Navigator.push(context, MaterialPageRoute(builder: (context)=>admin_user(user_name: '',)));
               },
               child: const Icon(Icons.arrow_back_outlined,color: Colors.black,)),
-          title:  Text("Updations Screen",style: TextStyle(color: Colors.black),),
+          title:  const Text("Updations Screen",style: TextStyle(color: Colors.black),),
           actions: [
             GestureDetector(
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
                 },
-                child: Icon(Icons.logout_outlined,color: Colors.black,)),
-            SizedBox(width: 05,),
+                child: const Icon(Icons.logout_outlined,color: Colors.black,)),
+            const SizedBox(width: 05,),
 
 
 
@@ -54,7 +53,7 @@ class _updationState extends State<updation> {
               {
                 if (!snapshot.hasData)
                 {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
                 else
                 {
@@ -67,7 +66,7 @@ class _updationState extends State<updation> {
                         final dynamic data = document.data();
                         return ListTile(
                             title: Text(data["values"].toString()),
-                            leading: Padding(
+                            leading: const Padding(
                               padding:EdgeInsets.all(8.0),
                              // child: Text(data["date"].toString()),
                             //child: Text(data["date"] as Timestamp).toDate();

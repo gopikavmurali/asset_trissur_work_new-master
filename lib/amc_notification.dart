@@ -1,7 +1,5 @@
 
 import 'package:asset_trissur_work_new/amc_notification_model.dart';
-import 'package:asset_trissur_work_new/pending_list.dart';
-import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'constants.dart';
@@ -52,11 +50,11 @@ class _amc_notifyState extends State<amc_notify> {
   final List<notify_model> notification_data= List.generate(
       amc_date.length, (index) => notify_model
     (
-      '${amc_date[index]}',false,
-      '${pro_name[index]}',
-      '${product_id[index]}',
-      '${department[index]}',
-      '${supplier_name[index]}'));
+      amc_date[index],false,
+      pro_name[index],
+      product_id[index],
+      department[index],
+      supplier_name[index]));
 
   @override
   void initState() {
@@ -65,7 +63,7 @@ class _amc_notifyState extends State<amc_notify> {
   }
 
   void _resetSelectedDate() {
-    _selectedDate = DateTime.now().add(Duration(days: 0));
+    _selectedDate = DateTime.now().add(const Duration(days: 0));
   }
 
   @override
@@ -79,14 +77,14 @@ class _amc_notifyState extends State<amc_notify> {
               Navigator.pop(context);
             },
             child: const Icon(Icons.arrow_back_outlined,color: Colors.black,)),
-        title:  Text(" Amc Notification",style: TextStyle(color: Colors.black),),
+        title:  const Text(" Amc Notification",style: TextStyle(color: Colors.black),),
         actions: [
           GestureDetector(
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
               },
-              child: Icon(Icons.logout_outlined,color: Colors.black,)),
-          SizedBox(width: 05,),
+              child: const Icon(Icons.logout_outlined,color: Colors.black,)),
+          const SizedBox(width: 05,),
         ],
 
       ),
@@ -105,12 +103,12 @@ class _amc_notifyState extends State<amc_notify> {
 
                   builder: (context ,AsyncSnapshot snapshot) {
                     if (!snapshot.hasData) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     }
 
                     final userDoc = snapshot.data;
                     return  Text(userDoc!["asset_id"],
-                      style: TextStyle(color: Colors.black),);
+                      style: const TextStyle(color: Colors.black),);
                   }),//Text(notification_data[index].pro_id),
               title: Padding(
                 padding: const EdgeInsets.all(1.0),
@@ -122,12 +120,12 @@ class _amc_notifyState extends State<amc_notify> {
 
                         builder: (context ,AsyncSnapshot snapshot) {
                           if (!snapshot.hasData) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           }
 
                           final userDoc = snapshot.data;
                           return  Text(userDoc!["asset_name"],
-                            style: TextStyle(color: Colors.black),);
+                            style: const TextStyle(color: Colors.black),);
                         }),
                    //Text(notification_data[index].pro_name),
                   ],
@@ -141,12 +139,12 @@ class _amc_notifyState extends State<amc_notify> {
 
                       builder: (context ,AsyncSnapshot snapshot) {
                         if (!snapshot.hasData) {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         }
 
                         final userDoc = snapshot.data;
                         return  Text(userDoc!["department"],
-                          style: TextStyle(color: Colors.black),);
+                          style: const TextStyle(color: Colors.black),);
                       }),
                   StreamBuilder(
                       stream: FirebaseFirestore.instance.collection("description").
@@ -154,12 +152,12 @@ class _amc_notifyState extends State<amc_notify> {
 
                       builder: (context ,AsyncSnapshot snapshot) {
                         if (!snapshot.hasData) {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         }
 
                         final userDoc = snapshot.data;
                         return  Text(userDoc!["supplier_name"],
-                          style: TextStyle(color: Colors.black),);
+                          style: const TextStyle(color: Colors.black),);
                       }),
                   StreamBuilder(
                       stream: FirebaseFirestore.instance.collection("description").
@@ -167,12 +165,12 @@ class _amc_notifyState extends State<amc_notify> {
 
                       builder: (context ,AsyncSnapshot snapshot) {
                         if (!snapshot.hasData) {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         }
 
                         final userDoc = snapshot.data;
                         return  Text(userDoc!["amc_end_date"],
-                          style: TextStyle(color: Colors.black),);
+                          style: const TextStyle(color: Colors.black),);
                       }),
                   // Text(notification_data[index].department),
                   // Text(notification_data[index].supplier_name),
@@ -202,7 +200,7 @@ class _amc_notifyState extends State<amc_notify> {
             ),
           );
           }, separatorBuilder: (BuildContext context, int index) {
-          return Divider();
+          return const Divider();
           },),
     );
 

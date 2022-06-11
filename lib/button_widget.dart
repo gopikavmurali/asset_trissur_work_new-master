@@ -13,11 +13,11 @@ class ButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => RaisedButton(
     child: Text(text,
-      style: TextStyle(fontSize: 24),
+      style: const TextStyle(fontSize: 24),
     ),
-    shape: StadiumBorder(),
+    shape: const StadiumBorder(),
     color: Theme.of(context).primaryColor,
-    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     textColor: Colors.white,
     onPressed: onClicked,
   );

@@ -5,48 +5,51 @@ import 'package:asset_trissur_work_new/constants.dart';
 
 import 'login_page.dart';
 
-class create_item extends StatefulWidget {
-  // const user_log({Key? key}) : super(key: key);
+class AssetHeadScreen extends StatefulWidget {
+  const AssetHeadScreen({Key? key}) : super(key: key);
+
   @override
-  _create_itemState createState() => _create_itemState();
+  State<AssetHeadScreen> createState() => _AssetHeadScreenState();
 }
 
-class _create_itemState extends State<create_item> {
-  TextEditingController _itemController = TextEditingController();
+class _AssetHeadScreenState extends State<AssetHeadScreen> {
+  var asset_head;
+  int index = 0;
+  TextEditingController _assetheadController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
-  var item;
-  int index = 0;
+  String? assetHead;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _itemController.dispose();
+    _assetheadController.dispose();
   }
 
-  void cleartext() {
-    _itemController.clear();
-  }
-
-  void addItem() async {
+  void addassethead() async {
     User? user = FirebaseAuth.instance.currentUser;
     final _uid = user!.uid;
     final isValid = _formKey.currentState!.validate();
-
     if (isValid) {
       setState(() {
         _isLoading = true;
       });
       try {
         final depDoc =
-            await FirebaseFirestore.instance.collection('items').doc();
+            await FirebaseFirestore.instance.collection('assethead').doc();
         Map<String, dynamic> depData = {
-          'itemId': depDoc.id,
+          'assetId': depDoc.id,
           'uploaded_By': _uid,
-          'values': _itemController.text,
+          'values': _assetheadController.text,
         };
         depDoc.set(depData);
-        _itemController.clear();
+        _assetheadController.clear();
       } finally {
         setState(() {
           _isLoading = false;
@@ -57,9 +60,13 @@ class _create_itemState extends State<create_item> {
     }
   }
 
-  _deleteItem(String itemId) async {
+  void cleartext() {
+    _assetheadController.clear();
+  }
+
+  _deleteAssetHead(String depId) async {
     final depDoc =
-        await FirebaseFirestore.instance.collection('items').doc(itemId);
+        await FirebaseFirestore.instance.collection('assethead').doc(depId);
 
     depDoc.delete();
   }
@@ -73,6 +80,8 @@ class _create_itemState extends State<create_item> {
         leading: GestureDetector(
             onTap: () {
               Navigator.pop(context);
+
+              //Navigator.push(context, MaterialPageRoute(builder: (context)=>admin_user(user_name: '',)));
             },
             child: const Icon(
               Icons.arrow_back_outlined,
@@ -80,7 +89,7 @@ class _create_itemState extends State<create_item> {
             )),
         //leading: const Icon(Icons.person,color: Colors.black,),
         title: const Text(
-          "Create Item",
+          "Create Asset Head",
           style: TextStyle(color: Colors.black, fontSize: 25),
         ),
         actions: [
@@ -138,7 +147,7 @@ class _create_itemState extends State<create_item> {
                       Padding(
                         padding: const EdgeInsets.only(top: 70.0, left: 40),
                         child: Text(
-                          "Item Name",
+                          "Asset Head",
                           style: buildFontlink(),
                         ),
                       ),
@@ -159,7 +168,6 @@ class _create_itemState extends State<create_item> {
                               borderRadius: BorderRadius.circular(10),
                               color: const Color(0xFF5663ff)),
                           child: TextFormField(
-                            controller: _itemController,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return "Please enter a Value";
@@ -167,8 +175,11 @@ class _create_itemState extends State<create_item> {
                                 return null;
                               }
                             },
+                            controller: _assetheadController,
                             decoration: const InputDecoration(
                               border: OutlineInputBorder(),
+
+                              // labelText: 'Item Name',
                             ),
                           ),
                         ),
@@ -177,10 +188,10 @@ class _create_itemState extends State<create_item> {
                         padding: const EdgeInsets.only(top: 180.0, left: 120),
                         child: GestureDetector(
                           onTap: () {
-                            addItem();
+                            addassethead();
                             // cleartext();
                             // setState(() {
-                            //   item = _itemController.text;
+                            //   asset_head = assetheadController.text;
                             //   index++;
                             // });
                           },
@@ -205,62 +216,50 @@ class _create_itemState extends State<create_item> {
                       Padding(
                         padding: const EdgeInsets.only(top: 300, left: 40),
                         child: Text(
-                          "List of Items",
+                          "List of Asset Head",
                           style: buildFontlink(),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
                             top: 350.0, left: 40, right: 40),
-                        child: Container(
-                          height: 100,
-                          width: MediaQuery.of(context).size.width * 2,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.black45)),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 8.0, left: 8),
-                            child: StreamBuilder(
-                                stream: FirebaseFirestore.instance
-                                    .collection("items")
-                                    .snapshots(),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return const CircularProgressIndicator();
-                                  } else {
-                                    return Expanded(
-                                      child: ListView(
-                                        children:
-                                            snapshot.data!.docs.map((document) {
-                                          final dynamic data = document.data();
-                                          return Dismissible(
-                                            key: Key(document.id),
-                                            onDismissed: (direction) {
-                                              print(document.id);
-                                              _deleteItem(document.id);
-                                              //onDelete(document.id);
-                                            },
-                                            background: Container(
-                                              color: Colors.red,
-                                              child: const Icon(Icons.delete),
-                                            ),
-                                            child: ListTile(
-                                                //   onTap: _deleteDepartment,
+                        child: StreamBuilder(
+                            stream: FirebaseFirestore.instance
+                                .collection("assethead")
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (!snapshot.hasData) {
+                                return const CircularProgressIndicator();
+                              } else {
+                                return Expanded(
+                                  child: ListView(
+                                    children:
+                                        snapshot.data!.docs.map((document) {
+                                      final dynamic data = document.data();
+                                      return Dismissible(
+                                        key: Key(document.id),
+                                        onDismissed: (direction) {
+                                          _deleteAssetHead(document.id);
+                                        },
+                                        background: Container(
+                                          color: Colors.red,
+                                          child: const Icon(Icons.delete),
+                                        ),
+                                        child: ListTile(
+                                            //   onTap: _deleteDepartment,
 
-                                                title: Text(
-                                                    data["values"].toString()),
-                                                leading: const Icon(
-                                                    Icons.arrow_right)),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    );
-                                  }
-                                }),
-                          ),
-                        ),
-                      )
+                                            title:
+                                                Text(data["values"].toString()),
+                                            leading:
+                                                const Icon(Icons.arrow_right)),
+                                      );
+                                    }).toList(),
+                                  ),
+                                );
+                              }
+                            }),
+                      ),
                     ],
                   ),
                 ))

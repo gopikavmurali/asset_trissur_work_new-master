@@ -1,9 +1,7 @@
 
-import 'dart:io';
 
 import'package:flutter/material.dart';
 import 'package:asset_trissur_work_new/constants.dart';
-import 'package:flutter/cupertino.dart';
 
 import 'login_page.dart';
 class create_inst extends StatefulWidget {
@@ -34,14 +32,14 @@ class _create_instState extends State<create_inst> {
             },
             child: const Icon(Icons.arrow_back_outlined,color: Colors.black,)),
         //leading: const Icon(Icons.person,color: Colors.black,),
-        title: Text("Create Institution",style: TextStyle(color: Colors.black,fontSize: 25),),
+        title: const Text("Create Institution",style: TextStyle(color: Colors.black,fontSize: 25),),
         actions: [
           GestureDetector(
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
               },
-              child: Icon(Icons.logout_outlined,color: Colors.black,)),
-          SizedBox(width: 10,),
+              child: const Icon(Icons.logout_outlined,color: Colors.black,)),
+          const SizedBox(width: 10,),
 
            ],
 
@@ -70,7 +68,7 @@ class _create_instState extends State<create_inst> {
                         child: Container(
                           height: MediaQuery.of(context).size.height,
                           width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(color: Colors.white),
+                          decoration: const BoxDecoration(color: Colors.white),
                           //child: Text(qrCode)
                         )
                     ),
@@ -78,7 +76,7 @@ class _create_instState extends State<create_inst> {
                   ),
 
 
-                  SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
                   Padding(
                     padding: const EdgeInsets.only(top:70.0,left: 40),
                     child: Text("Institution",style: buildFontlink(),),
@@ -99,7 +97,7 @@ class _create_instState extends State<create_inst> {
                             //colors: [Color(0xFF64C9CF), Color(0xFF468c90),],
                           ),
 
-                          borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+                          borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff)),
 
 
                       child: TextField(
@@ -130,7 +128,7 @@ class _create_instState extends State<create_inst> {
                                 end: Alignment.bottomRight,
                                 colors: [Color(0xFF64C9CF),  Color(0xFF468c90),],),
 
-                              borderRadius: BorderRadius.circular(5),color: Color(0xFF5663ff)),
+                              borderRadius: BorderRadius.circular(5),color: const Color(0xFF5663ff)),
                           child: Center(child: Text("Add",style:buildTextStyle()))
 
                       ),

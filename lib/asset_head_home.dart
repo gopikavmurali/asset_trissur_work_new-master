@@ -1,25 +1,18 @@
 
 
-import 'dart:io';
 import 'package:asset_trissur_work_new/amc_notification.dart';
-import 'package:asset_trissur_work_new/button_widget.dart';
 import 'package:asset_trissur_work_new/constants.dart';
 import 'package:asset_trissur_work_new/create_page_head.dart';
 import 'package:asset_trissur_work_new/login_page.dart';
 import 'package:asset_trissur_work_new/notification_screen.dart';
-import 'package:asset_trissur_work_new/report.dart';
-import 'package:asset_trissur_work_new/complaints.dart';
 import 'package:asset_trissur_work_new/updation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import 'defect_reason.dart';
-import 'descriptiion_page.dart';
-import 'create_page_master.dart';
 import 'history.dart';
 import 'image_picker_two.dart';
 
@@ -101,30 +94,30 @@ class _asset_head_homeState extends State<asset_head_home> {
                   //Navigator.push(context, MaterialPageRoute(builder: (context)=>admin_user(user_name: '',)));
                 },
                 child: const Icon(Icons.perm_identity,color: Colors.black,)),
-            title:  Text("${widget.user_name}",style: TextStyle(color: Colors.black),),
+            title:  Text(widget.user_name,style: const TextStyle(color: Colors.black),),
             actions: [
               GestureDetector(
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(
-                        builder: (context)=>notification(complaintController:"")));
+                        builder: (context)=>const notification(complaintController:"")));
                   },
-                  child: Icon(Icons.notification_important_outlined,color: Colors.black,)),
-              SizedBox(width: 10,),
+                  child: const Icon(Icons.notification_important_outlined,color: Colors.black,)),
+              const SizedBox(width: 10,),
               GestureDetector(
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(
-                        builder: (context)=>amc_notify()));
+                        builder: (context)=>const amc_notify()));
                   },
-                  child: Icon(Icons.notification_important,color: Colors.black,)),
-              SizedBox(width: 10,),
+                  child: const Icon(Icons.notification_important,color: Colors.black,)),
+              const SizedBox(width: 10,),
               GestureDetector(
                   onTap: ()async{
                     await FirebaseAuth.instance.signOut();
 
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
                   },
-                  child: Icon(Icons.logout_outlined,color: Colors.black,)),
-              SizedBox(width: 010,),
+                  child: const Icon(Icons.logout_outlined,color: Colors.black,)),
+              const SizedBox(width: 010,),
             ]
 
 
@@ -166,7 +159,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                                             end: Alignment.bottomRight,
                                             colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
 
-                                          borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+                                          borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff)),
 
 
                                       child: Center(child: Text("Scan QR Code",style:buildTextStyle()))
@@ -175,13 +168,13 @@ class _asset_head_homeState extends State<asset_head_home> {
 
                               ),
                               //or
-                              Padding(
+                              const Padding(
                                 padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
                                 child: Text("OR",style: TextStyle(color: Colors.black),),
                               ),
                               //asset id
                               Padding(
-                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                padding: const EdgeInsets.only(left:30,bottom:15,right: 30,),
                                 child:
                                 Container(
                                   height: 40,
@@ -195,7 +188,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                                         //colors: [Color(0xFF64C9CF), Color(0xFF468c90),],
                                       ),
 
-                                      borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+                                      borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff)),
 
 
                                   child: TextField(
@@ -209,7 +202,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                               ),
                               //scanned result
                               Padding(
-                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                padding: const EdgeInsets.only(left:30,bottom:15,right: 30,),
                                 child:
                                 Container(
                                     height: 40,
@@ -224,11 +217,11 @@ class _asset_head_homeState extends State<asset_head_home> {
                               ),
                               //create
                               Padding(
-                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                padding: const EdgeInsets.only(left:30,bottom:15,right: 30,),
                                 child:
                                 GestureDetector(
                                   onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>create_page_head()));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const create_page_head()));
                                     // if (widget.selectedPrivi =="AssetMaster")
                                     // {
                                     //   Navigator.push(context, MaterialPageRoute(builder: (context)=>create_page()));
@@ -248,7 +241,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                                             end: Alignment.bottomRight,
                                             colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
 
-                                          borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+                                          borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff)),
 
 
                                       child: Center(child: Text("Create",style:buildTextStyle()))
@@ -257,12 +250,12 @@ class _asset_head_homeState extends State<asset_head_home> {
                               ),
                               //history
                               Padding(
-                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                padding: const EdgeInsets.only(left:30,bottom:15,right: 30,),
                                 child:
                                 GestureDetector(
                                   onTap: (){
                                     Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                                        history(asset_type: '', qrcode: '',)));
+                                        const history(asset_type: '', qrcode: '',)));
                                   },
                                   child: Container(
                                       height: 40,
@@ -273,7 +266,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                                             end: Alignment.bottomRight,
                                             colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
 
-                                          borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+                                          borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff)),
 
 
                                       child: Center(
@@ -286,7 +279,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                               ),
                               //reallocation
                               Padding(
-                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                padding: const EdgeInsets.only(left:30,bottom:15,right: 30,),
                                 child: GestureDetector(
                                   onTap: (){
                                     reallocation_alert_box();
@@ -300,7 +293,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                                             end: Alignment.bottomRight,
                                             colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
 
-                                          borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+                                          borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff)),
 
 
                                       child: Center(child: Text("Realloction",style:buildTextStyle()))
@@ -309,7 +302,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                               ),
                               //dispose
                               Padding(
-                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                padding: const EdgeInsets.only(left:30,bottom:15,right: 30,),
                                 child: GestureDetector(
                                   onTap: (){
                                     dispose_alert_box();
@@ -322,14 +315,14 @@ class _asset_head_homeState extends State<asset_head_home> {
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,
                                             colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
-                                          borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+                                          borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff)),
                                       child: Center(child: Text("Dispose",style:buildTextStyle()))
                                   ),
                                 ),
                               ),
                               //move to outside
                               Padding(
-                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                padding: const EdgeInsets.only(left:30,bottom:15,right: 30,),
                                 child: Container(
                                   width: MediaQuery.of(context).size.width*2,
                                   height: 40,
@@ -340,7 +333,7 @@ class _asset_head_homeState extends State<asset_head_home> {
 
                                       builder: (context,AsyncSnapshot<QuerySnapshot>snapshot) {
                                         if(!snapshot.hasData){
-                                          return CircularProgressIndicator();
+                                          return const CircularProgressIndicator();
                                         }
                                         else {
                                           return DropdownButtonHideUnderline(
@@ -370,7 +363,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                               ),
                               //back to stock
                               Padding(
-                                padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+                                padding: const EdgeInsets.only(left:30,bottom:15,right: 30,),
                                 child: Container(
                                   width: MediaQuery.of(context).size.width*2,
                                   height: 40,
@@ -380,7 +373,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                                       stream: FirebaseFirestore.instance.collection("departments").orderBy("values").snapshots(),
                                       builder: (context,AsyncSnapshot<QuerySnapshot>snapshot) {
                                         if(!snapshot.hasData){
-                                          return CircularProgressIndicator();
+                                          return const CircularProgressIndicator();
                                         }
                                         else {
                                           return DropdownButtonHideUnderline(
@@ -410,12 +403,12 @@ class _asset_head_homeState extends State<asset_head_home> {
                               ),
                               //updte notes
                               Padding(
-                                padding: EdgeInsets.only(left:10,bottom:15,right: 30,),
+                                padding: const EdgeInsets.only(left:10,bottom:15,right: 30,),
                                 child: Text("Update Notes",style: headingText(),),
                               ),
                               //Complaints
                               Padding(
-                                padding: EdgeInsets.only(left:30,bottom:30,right: 30,),
+                                padding: const EdgeInsets.only(left:30,bottom:30,right: 30,),
                                 child: Container(
                                   height: 200,
                                   width: MediaQuery.of(context).size.width*2,
@@ -432,7 +425,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                               ),
                               //update
                               Padding(
-                                padding: EdgeInsets.only(left:50,bottom:30,right: 50,),
+                                padding: const EdgeInsets.only(left:50,bottom:30,right: 50,),
                                 child:
                                 GestureDetector(
                                   onTap: (){
@@ -451,7 +444,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                                           end: Alignment.bottomRight,
                                           colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
 
-                                        borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff),),
+                                        borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff),),
                                       child: Center(child: Text("Update",style:buildTextStyle()))
                                   ),
                                 ),
@@ -502,7 +495,7 @@ class _asset_head_homeState extends State<asset_head_home> {
           });
         }
         return AlertDialog(
-          title:Text("Select Reason to Dispose",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400),),
+          title:const Text("Select Reason to Dispose",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400),),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -514,7 +507,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                     children: List<Widget>.generate(reasons.length, (int index) {
                       return RadioListTile<int>(
                         title: Text(reasons[index].name),
-                        activeColor:  Color(0xFF468c90),
+                        activeColor:  const Color(0xFF468c90),
                         value: index,
                         groupValue: selectedRadio,
                         onChanged:
@@ -527,7 +520,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                   );
                 },
               ),
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
               Row(
                 children: [
                   Expanded(
@@ -545,7 +538,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                               end: Alignment.bottomRight,
                               colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
 
-                            borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+                            borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff)),
                         child:  Center(
                           child: Text('Pick Image',style: buildTextStyle(),),
                         ),
@@ -581,7 +574,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                           },
                           child: Container(
                             height: 40,
-                            decoration: BoxDecoration(border: Border.all(color: Color(0xFF468c90)),
+                            decoration: BoxDecoration(border: Border.all(color: const Color(0xFF468c90)),
                               borderRadius: BorderRadius.circular(10),
 
                             ),
@@ -591,7 +584,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                           ),
                         ),
                       ),
-                      SizedBox(width: 10,),
+                      const SizedBox(width: 10,),
 
 
                       Expanded(
@@ -612,7 +605,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                                   end: Alignment.bottomRight,
                                   colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
 
-                                borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+                                borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff)),
                             child:  Center(
                               child: Text('Confirm',style: buildTextStyle(),),
                             ),
@@ -640,20 +633,20 @@ class _asset_head_homeState extends State<asset_head_home> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState){
                 return AlertDialog(
-                  title: Text("Reallocate Department"),
+                  title: const Text("Reallocate Department"),
                   content: SingleChildScrollView(
                     child:
                     Column(
                       children: [
                         Row(
                           children: [
-                            Expanded(child: Text("Current Department:",style: TextStyle(color: Colors.black54),)),
-                            SizedBox(width: 5,),
+                            const Expanded(child: Text("Current Department:",style: TextStyle(color: Colors.black54),)),
+                            const SizedBox(width: 5,),
                             StreamBuilder(
                                 stream: FirebaseFirestore.instance.collection("departments").doc("depart").snapshots(),
                                 builder: (context ,AsyncSnapshot snapshot) {
                                   if (!snapshot.hasData) {
-                                    return CircularProgressIndicator();
+                                    return const CircularProgressIndicator();
                                   }
 
                                   final userDoc = snapshot.data;
@@ -662,17 +655,17 @@ class _asset_head_homeState extends State<asset_head_home> {
                             // Text("Department Name",style: TextStyle(color: Colors.black),),
                           ],
                         ),
-                        SizedBox(height: 20,),
+                        const SizedBox(height: 20,),
                         Padding(
                           padding: const EdgeInsets.only(bottom:20),
                           child: Row(
-                            children: [
+                            children: const [
                               Text("Select New Department:",style: TextStyle(color: Colors.black54),),
                             ],
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: 0,),
+                          padding: const EdgeInsets.only(right: 0,),
                           child: Container(
                             width: MediaQuery.of(context).size.width*2,
                             height: 40,
@@ -682,7 +675,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                                 stream: FirebaseFirestore.instance.collection("departments").orderBy("values").snapshots(),
                                 builder: (context,AsyncSnapshot<QuerySnapshot>snapshot) {
                                   if(!snapshot.hasData){
-                                    return CircularProgressIndicator();
+                                    return const CircularProgressIndicator();
                                   }
                                   else {
                                     return DropdownButtonHideUnderline(
@@ -731,17 +724,17 @@ class _asset_head_homeState extends State<asset_head_home> {
                               },
                               child: Container(
                                 height: 40,
-                                decoration: BoxDecoration(border: Border.all(color: Color(0xFF468c90)),
+                                decoration: BoxDecoration(border: Border.all(color: const Color(0xFF468c90)),
                                   borderRadius: BorderRadius.circular(10),
 
                                 ),
-                                child: Center(
+                                child: const Center(
                                   child: Text('Cancel',style: TextStyle(color:Color(0xFF468c90),fontSize: 14),),
                                 ),
                               ),
                             ),
                           ),
-                          SizedBox(width: 10,),
+                          const SizedBox(width: 10,),
 
 
                           Expanded(
@@ -760,7 +753,7 @@ class _asset_head_homeState extends State<asset_head_home> {
                                       end: Alignment.bottomRight,
                                       colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
 
-                                    borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+                                    borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff)),
                                 child:  Center(
                                   child: Text('Confirm',style: buildTextStyle(),),
                                 ),

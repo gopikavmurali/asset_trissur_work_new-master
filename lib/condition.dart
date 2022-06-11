@@ -1,10 +1,8 @@
 
 
-import 'package:asset_trissur_work_new/user_home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'constants.dart';
 import 'login_page.dart';
 
 class condtion extends StatefulWidget {
@@ -25,6 +23,7 @@ class _condtionState extends State<condtion> {
   @override
   int count = 0;
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -37,14 +36,14 @@ class _condtionState extends State<condtion> {
                   //Navigator.push(context, MaterialPageRoute(builder: (context)=>admin_user(user_name: '',)));
                 },
                 child: const Icon(Icons.arrow_back_outlined,color: Colors.black,)),
-            title:  Text("Conditions",style: TextStyle(color: Colors.black),),
+            title:  const Text("Conditions",style: TextStyle(color: Colors.black),),
             actions: [
               GestureDetector(
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
                   },
-                  child: Icon(Icons.logout_outlined,color: Colors.black,)),
-              SizedBox(width: 10,),
+                  child: const Icon(Icons.logout_outlined,color: Colors.black,)),
+              const SizedBox(width: 10,),
 
 
 
@@ -60,7 +59,7 @@ class _condtionState extends State<condtion> {
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   if (!snapshot.hasData)
             {
-              return Center(
+              return const Center(
                   child: CircularProgressIndicator());
             }
             else
@@ -79,13 +78,13 @@ class _condtionState extends State<condtion> {
                       // },
                       background: Container(
                         color: Colors.red,
-                        child: Icon(Icons.delete),
+                        child: const Icon(Icons.delete),
                       ),
 
                       child: ListTile(
                           title: Text(data["asset_name"].toString()),
-                          leading: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                          leading: const Padding(
+                            padding: EdgeInsets.all(8.0),
                             //child: Text(data["date"].toString()),
                             child: Text("dd-mm-yyyy"),
                           )

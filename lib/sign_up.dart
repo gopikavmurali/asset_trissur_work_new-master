@@ -1,14 +1,9 @@
 
-import 'package:asset_trissur_work_new/create_page_master.dart';
-import 'package:asset_trissur_work_new/asset_master_home.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:asset_trissur_work_new/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
-import 'descriptiion_page.dart';
 import 'constants.dart';
-import 'login_page.dart';
 
 
 
@@ -43,7 +38,7 @@ class _sign_upState extends State<sign_up> {
 
       //Alert box code for showing status
       showDialog(context: context, builder:(ctx) =>  AlertDialog(
-        title: Text("User Created Succesfully",
+        title: const Text("User Created Succesfully",
           style: TextStyle(color: Colors.black,fontWeight: FontWeight.w900,fontSize: 20),),
         content: GestureDetector(
             onTap:  (){
@@ -51,7 +46,7 @@ class _sign_upState extends State<sign_up> {
               Navigator.pop(context);
 
             },
-            child: Text("Continue",style: TextStyle(color: Colors.green,fontWeight: FontWeight.w900,fontSize: 20),)),
+            child: const Text("Continue",style: TextStyle(color: Colors.green,fontWeight: FontWeight.w900,fontSize: 20),)),
 
 
       )
@@ -111,7 +106,7 @@ class _sign_upState extends State<sign_up> {
                         Padding(
                           padding: const EdgeInsets.only(top:80.0,left: 8),
                           child:
-                          Container(
+                          SizedBox(
                               height: 100,
                               width: 200,
                               child: Image.asset('images/room_logo.jpg',fit: BoxFit.cover,)),
@@ -258,7 +253,7 @@ class _sign_upState extends State<sign_up> {
                                 child: Container(
                                   height: 40,
                                   width: MediaQuery.of(context).size.width/2.5,
-                                  decoration: BoxDecoration(border: Border.all(color: Color(0xFF468c90)),
+                                  decoration: BoxDecoration(border: Border.all(color: const Color(0xFF468c90)),
                                     // gradient: const LinearGradient(
                                     //   begin: Alignment.topLeft,
                                     //   end: Alignment.bottomRight,
@@ -267,12 +262,12 @@ class _sign_upState extends State<sign_up> {
                                     borderRadius: BorderRadius.circular(10),
                                     //color: Color(0xFF5663ff)
                                   ),
-                                  child: Center(
+                                  child: const Center(
                                     child: Text('Cancel',style: TextStyle(color:Color(0xFF468c90),fontSize: 14),),
                                   ),
                                 ),
                               ),
-                              SizedBox(width: 10,),
+                              const SizedBox(width: 10,),
                               GestureDetector(
                                 //onTap: validatethis,
                                 onTap: validate,// (){
@@ -287,7 +282,7 @@ class _sign_upState extends State<sign_up> {
                                         end: Alignment.bottomRight,
                                         colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
 
-                                      borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff)),
+                                      borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff)),
                                   child:  Center(
                                     child: Text('Create',style: buildTextStyle(),),
                                   ),

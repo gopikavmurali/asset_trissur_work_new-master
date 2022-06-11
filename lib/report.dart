@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'descriptiion_page.dart';
 
 class report_page extends StatefulWidget {
   final String text2;
@@ -40,7 +39,7 @@ class _report_pageState extends State<report_page> {
 
                   ),
                   child:   Center(child: Text("name:${widget.text2}",
-                    style: TextStyle(fontSize: 26,color: Colors.black),)),
+                    style: const TextStyle(fontSize: 26,color: Colors.black),)),
                 ),
               ),
             ],
@@ -57,7 +56,7 @@ class _report_pageState extends State<report_page> {
 
                   ),
                   child:   Center(child: Text('No.of total assets : ${widget.number1}',
-                    style: TextStyle(fontSize: 26,color: Colors.black),)),
+                    style: const TextStyle(fontSize: 26,color: Colors.black),)),
                 ),
               ),
             ],

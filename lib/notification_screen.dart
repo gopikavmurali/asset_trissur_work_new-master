@@ -4,7 +4,6 @@ import 'package:asset_trissur_work_new/pending_list.dart';
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'constants.dart';
 import 'login_page.dart';
@@ -37,8 +36,8 @@ class _notificationState extends State<notification> {
   final List<notification_model> notification_data= List.generate(
       item_name.length, (index) => notification_model(
       false,false,
-      '${item_name[index]}',
-      '${department[index]}',
+      item_name[index],
+      department[index],
 
       ));
 
@@ -52,7 +51,7 @@ class _notificationState extends State<notification> {
   }
 
   void _resetSelectedDate() {
-    _selectedDate = DateTime.now().add(Duration(days: 0));
+    _selectedDate = DateTime.now().add(const Duration(days: 0));
   }
 
   @override
@@ -66,14 +65,14 @@ class _notificationState extends State<notification> {
             Navigator.pop(context);
           },
           child: const Icon(Icons.arrow_back_outlined,color: Colors.black,)),
-        title:  Text("Notification",style: TextStyle(color: Colors.black),),
+        title:  const Text("Notification",style: TextStyle(color: Colors.black),),
         actions: [
           GestureDetector(
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
               },
-              child: Icon(Icons.logout_outlined,color: Colors.black,)),
-          SizedBox(width: 05,),
+              child: const Icon(Icons.logout_outlined,color: Colors.black,)),
+          const SizedBox(width: 05,),
         ],
 
       ),
@@ -82,38 +81,38 @@ class _notificationState extends State<notification> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
 
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           CalendarTimeline(
             showYears: true,
             initialDate: _selectedDate,
-            firstDate: DateTime.now().subtract(Duration(days: 730)),
-            lastDate: DateTime.now().add(Duration(days: 730)),
+            firstDate: DateTime.now().subtract(const Duration(days: 730)),
+            lastDate: DateTime.now().add(const Duration(days: 730)),
             onDateSelected: (date) {
               setState(() {
                 _selectedDate = date!;
               });
             },
             leftMargin: 20,
-            monthColor: Color(0xFF468c90),
-            dayColor: Color(0xFF468c97),
-            dayNameColor: Color(0xFF333A47),//Color(0xFF333A47),
-            activeDayColor: Color(0xFF333A47),
-            activeBackgroundDayColor: Color(0xFFe0f4f5),
-            dotsColor: Color(0xFF333A47),
+            monthColor: const Color(0xFF468c90),
+            dayColor: const Color(0xFF468c97),
+            dayNameColor: const Color(0xFF333A47),//Color(0xFF333A47),
+            activeDayColor: const Color(0xFF333A47),
+            activeBackgroundDayColor: const Color(0xFFe0f4f5),
+            dotsColor: const Color(0xFF333A47),
             //selectableDayPredicate: (date) => date.day != 23,
             //locale: 'en',
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.only(left: 16),
             child: TextButton(
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Color(0xFF468c90))),
-              child: Text('RESET', style: TextStyle(color: Colors.white)),
+              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color(0xFF468c90))),
+              child: const Text('RESET', style: TextStyle(color: Colors.white)),
               onPressed: () => setState(() => _resetSelectedDate()),
             ),
           ),
           //SizedBox(height: 20),
-          Divider(
+          const Divider(
             thickness: 3,
             color: Colors.black12,
           ),
@@ -130,21 +129,21 @@ class _notificationState extends State<notification> {
 
                  ),
                  child: ListTile(
-                   leading: Icon(Icons.notification_important_outlined),
+                   leading: const Icon(Icons.notification_important_outlined),
                    title: Container(
                      child: Column(
                        children: [
                          Row(
                            children: [
                              Text(notification_data[index].department),
-                             SizedBox(width: 20,),
+                             const SizedBox(width: 20,),
                              Text(notification_data[index].item_name),
                            ],
                          ),
-                         SizedBox(height: 30,),
+                         const SizedBox(height: 30,),
                          Row(
                            children: [
-                             Container(
+                             SizedBox(
                                height: 60,
                                width: 100,
                                child: StreamBuilder(
@@ -153,12 +152,12 @@ class _notificationState extends State<notification> {
 
                                    builder: (context ,AsyncSnapshot snapshot) {
                                      if (!snapshot.hasData) {
-                                       return CircularProgressIndicator();
+                                       return const CircularProgressIndicator();
                                      }
 
                                      final userDoc = snapshot.data;
                                      return  Text(userDoc!["values"],
-                                       style: TextStyle(color: Colors.black),);
+                                       style: const TextStyle(color: Colors.black),);
                                    }),
                                //Text("Not working due to technical issues")
                                //Text("${widget.complaintController}"),
@@ -175,7 +174,7 @@ class _notificationState extends State<notification> {
                        //crossAxisAlignment: CrossAxisAlignment.start,
                        direction: Axis.horizontal,
                        children: [
-                         SizedBox(height: 20,),
+                         const SizedBox(height: 20,),
                          GestureDetector(
                              onTap: () {
                                setState(() {
@@ -199,17 +198,17 @@ class _notificationState extends State<notification> {
                                  )
                              )
                          ),
-                         SizedBox(width: 2,),
+                         const SizedBox(width: 2,),
                          GestureDetector(
                              onTap: (){
                                showDialog(context: context,
                                    builder:(ctx) =>  AlertDialog(
-                                     title: Text("Enter reason for pending"),
+                                     title: const Text("Enter reason for pending"),
 
                                     content: TextField(
                                       maxLines: 3,
                                       controller: pendingController,
-                                      decoration: InputDecoration(
+                                      decoration: const InputDecoration(
                                       border: OutlineInputBorder(),)),
                                      actions: [
                                        Center(
@@ -220,7 +219,7 @@ class _notificationState extends State<notification> {
                                                    MaterialPageRoute(builder: (context)=>pending_list(
                                                      pendingController: pendingController.text,)));
                                              },
-                                             child: Text("Add ",style: const TextStyle(fontSize: 20,
+                                             child: const Text("Add ",style: TextStyle(fontSize: 20,
                                              color: Colors.green,fontWeight: FontWeight.w900)),
                                            )),
 
@@ -234,10 +233,10 @@ class _notificationState extends State<notification> {
                              ContainerPending(
                                    height: 40,
                                    width: 62,
-                                   decoration: BoxDecoration(),
-                                   child: Text("")),
+                                   decoration: const BoxDecoration(),
+                                   child: const Text("")),
                              ),
-                         SizedBox(width: 2,),
+                         const SizedBox(width: 2,),
                      GestureDetector(
                        onTap: () {
                          setState(() {
@@ -262,13 +261,13 @@ class _notificationState extends State<notification> {
 
                      ),
                    ),
-                   trailing: Text("12.00 am"),
+                   trailing: const Text("12.00 am"),
 
                  ),
                );
              },
                  separatorBuilder: (ctx,index){
-                 return Divider();
+                 return const Divider();
                   },
                  itemCount: item_name.length),
            ),

@@ -1,50 +1,21 @@
-
-import 'dart:math';
-import 'package:asset_trissur_work_new/condition.dart';
-import 'package:asset_trissur_work_new/defect_reason.dart';
-import 'package:asset_trissur_work_new/descriptiion_page.dart';
-import 'package:asset_trissur_work_new/amc_notification.dart';
-import 'package:asset_trissur_work_new/button_widget.dart';
-import 'package:asset_trissur_work_new/drop.dart';
-import 'package:asset_trissur_work_new/asset_head_home.dart';
-import 'package:asset_trissur_work_new/notification_screen.dart';
-import 'package:asset_trissur_work_new/create_institution.dart';
-import 'package:asset_trissur_work_new/create_item.dart';
-import 'package:asset_trissur_work_new/create_page_master.dart';
-import 'package:asset_trissur_work_new/create_user.dart';
-import 'package:asset_trissur_work_new/history.dart';
-import 'package:asset_trissur_work_new/pending_list.dart';
-import 'package:asset_trissur_work_new/report.dart';
-import 'package:asset_trissur_work_new/service_history.dart';
-import 'package:asset_trissur_work_new/sign_up.dart';
-import 'package:asset_trissur_work_new/complaints.dart';
-import 'package:asset_trissur_work_new/updation.dart';
-import 'package:asset_trissur_work_new/user_home.dart';
 import 'package:asset_trissur_work_new/asset_master_home.dart';
+import 'package:asset_trissur_work_new/splash_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'create_asset_head.dart';
-import 'create_dept.dart';
-import 'create_page_head.dart';
-import 'create_service_center.dart';
-import 'image_picker_two.dart';
 import 'login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'firebase_options.dart';
-
+//import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+      // options: DefaultFirebaseOptions.currentPlatform,
+      );
   //initilization of Firebase app
   // other Firebase service initialization
-  runApp(MyApp());
+  runApp(const MyApp());
 }
-
-
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -59,11 +30,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: mainPage(),
+      home: const mainPage(),
     );
   }
 }
-
 
 class mainPage extends StatefulWidget {
   const mainPage({Key? key}) : super(key: key);
@@ -77,18 +47,19 @@ class _mainPageState extends State<mainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<User?>(
-        stream:  FirebaseAuth.instance.authStateChanges(),
-        builder: (context,snapshot){
-          if(snapshot.hasData){
-            return asset_master_home(user_name: "", selectedPrivi: "");
-
-          }
-          else  {
-            return login();
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return SplashScreen();
             }
-          }
-      ),
+            if (snapshot.hasData) {
+              //  print('shanidha:${snapshot.data}');
+
+              return const asset_master_home(user_name: "", selectedPrivi: "");
+            } else {
+              return login();
+            }
+          }),
     );
   }
 }
-

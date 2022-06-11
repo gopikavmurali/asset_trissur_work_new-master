@@ -38,14 +38,14 @@ class _item_reqState extends State<item_req> {
               Navigator.pop(context);
             },
             child: const Icon(Icons.arrow_back_outlined,color: Colors.black,)),
-        title:  Text("Request Items",style: TextStyle(color: Colors.black),),
+        title:  const Text("Request Items",style: TextStyle(color: Colors.black),),
         actions: [
           GestureDetector(
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
               },
-              child: Icon(Icons.logout_outlined,color: Colors.black,)),
-          SizedBox(width: 05,),
+              child: const Icon(Icons.logout_outlined,color: Colors.black,)),
+          const SizedBox(width: 05,),
           //Icons.notification_important,
 
         ],
@@ -54,7 +54,7 @@ class _item_reqState extends State<item_req> {
 
         child: Column(
           children: [
-            SizedBox(height: 30,),
+            const SizedBox(height: 30,),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Row(
@@ -64,7 +64,7 @@ class _item_reqState extends State<item_req> {
                   ],
                 ),
               ),
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             ListTile(
               minLeadingWidth : 01,
               minVerticalPadding: 10,
@@ -113,7 +113,7 @@ class _item_reqState extends State<item_req> {
 
               ),
             ),
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Row(
@@ -123,10 +123,10 @@ class _item_reqState extends State<item_req> {
                 ],
               ),
             ),
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             Padding(
-              padding: EdgeInsets.only(left:20,bottom:50,right: 30,),
-              child: Container(
+              padding: const EdgeInsets.only(left:20,bottom:50,right: 30,),
+              child: SizedBox(
                  height: 100,
                 // width: 320,
                 //decoration: BoxDecoration(border: Border.all(color: Colors.black26)),
@@ -141,7 +141,7 @@ class _item_reqState extends State<item_req> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left:30,bottom:15,right: 30,),
+              padding: const EdgeInsets.only(left:30,bottom:15,right: 30,),
               child:
               GestureDetector(
                 onTap: (){
@@ -161,7 +161,7 @@ class _item_reqState extends State<item_req> {
                         end: Alignment.bottomRight,
                         colors: [Color(0xFF64C9CF), Color(0xFF468c90),],),
 
-                      borderRadius: BorderRadius.circular(10),color: Color(0xFF5663ff),),
+                      borderRadius: BorderRadius.circular(10),color: const Color(0xFF5663ff),),
 
 
                     child: Center(child: Text("Send Request",style:buildTextStyle()))

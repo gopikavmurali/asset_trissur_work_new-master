@@ -9,7 +9,7 @@ class pending_list extends StatefulWidget {
 
   final pendingController;
 
-   pending_list({Key? key, this.pendingController}) : super(key: key);
+   const pending_list({Key? key, this.pendingController}) : super(key: key);
 
   @override
   _pending_listState createState() => _pending_listState();
@@ -30,8 +30,8 @@ class _pending_listState extends State<pending_list> {
   final List<pending_model> notification_data= List.generate(
       item_name.length, (index) => pending_model(
     false,
-    '${item_name[index]}',
-    '${department[index]}',
+    item_name[index],
+    department[index],
 
   ));
 
@@ -49,14 +49,14 @@ class _pending_listState extends State<pending_list> {
               Navigator.pop(context);
             },
             child: const Icon(Icons.arrow_back_outlined,color: Colors.black,)),
-        title:  Text("Pending List",style: TextStyle(color: Colors.black),),
+        title:  const Text("Pending List",style: TextStyle(color: Colors.black),),
         actions: [
           GestureDetector(
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>login()));
               },
-              child: Icon(Icons.logout_outlined,color: Colors.black,)),
-                SizedBox(width: 05,),
+              child: const Icon(Icons.logout_outlined,color: Colors.black,)),
+                const SizedBox(width: 05,),
           //Icons.notification_important,
 
         ],
@@ -64,7 +64,7 @@ class _pending_listState extends State<pending_list> {
 
       body: SafeArea(child: ListView.separated(
                   itemBuilder: (ctx,index){
-               SizedBox(height:20);
+               const SizedBox(height:20);
 
 
                 return  ListTile(
@@ -80,7 +80,7 @@ class _pending_listState extends State<pending_list> {
                     ),
                       subtitle: Padding(
                         padding: const EdgeInsets.only(top: 20.0),
-                        child: Text("${widget.pendingController}",style: TextStyle(color: Colors.black26,fontSize: 20),),
+                        child: Text("${widget.pendingController}",style: const TextStyle(color: Colors.black26,fontSize: 20),),
                       ),
                   trailing: GestureDetector(
                     onTap: (){
@@ -102,7 +102,7 @@ class _pending_listState extends State<pending_list> {
                 );
                },
                 separatorBuilder: (ctx,index){
-              return Divider();
+              return const Divider();
              },
                itemCount:item_name.length,
     ),
